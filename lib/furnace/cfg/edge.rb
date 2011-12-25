@@ -29,7 +29,7 @@ module Furnace
       end
 
       def to_ast_node(parameters)
-        AST::Node.new("apply", [ @target_label, *parameters ])
+        AST::ApplyNode.new(@target_label, parameters)
       end
 
       def inspect

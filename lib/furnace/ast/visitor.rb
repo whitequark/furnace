@@ -1,18 +1,13 @@
 module Furnace
   module AST
     module Visitor
-      def visit(node, options={})
+      def visit(node)
         node.children.map! do |child|
           if child.is_a? Node
-            visit child, options
+            visit child
 
-            # Normalize the tree, as nodes can only update themselves
-            if options[:normalize]
-              if child.type == :expand
-                child = child.children
-              elsif child.type == :remove
-                child = nil
-              end
+            if child.type == :expand
+              child = child.children
             end
           end
 
@@ -20,11 +15,12 @@ module Furnace
         end
 
         node.children.flatten!
-        node.children.compact!
 
-        node.children.each do |child|
+        node.children.delete_if do |child|
           if child.is_a? Node
             child.parent = node
+
+            child.type == :remove
           end
         end
 

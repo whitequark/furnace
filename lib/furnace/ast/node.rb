@@ -65,5 +65,15 @@ module Furnace
         end
       end
     end
+
+    class ApplyNode < Node
+      def initialize(label, parameters)
+        super(:apply, [label, *parameters])
+      end
+
+      def parameters
+        @children.skip(1)
+      end
+    end
   end
 end

@@ -17,7 +17,7 @@ module Furnace
 
             # Transform the AST for each node, removing redundant operations.
             node.operations.delete_if do |operation|
-              visit operation, :normalize => true
+              visit operation
 
               operation.type == :remove
             end
@@ -37,8 +37,12 @@ module Furnace
             # Is the name rebound?
             if @locals.include?(name)
               @locals[name]
-            else
+            # Is it the middle of function?
+            elsif @node.entering_edges.any?
               name
+            # Locals default to nil.
+            else
+              nil
             end
           end
         end
@@ -68,11 +72,12 @@ module Furnace
         end
 
         # Locals are immutable now.
-        # (get-local x) -> x
         alias :on_get_local :expand_node
 
-        # Fixnums no more need to carry metadata with them.
-        # (fixnum i) -> i
+        # Immediates do not have to carry metadata anymore.
+        alias :on_true :expand_node
+        alias :on_false :expand_node
+        alias :on_nil :expand_node
         alias :on_fixnum :expand_node
       end
     end

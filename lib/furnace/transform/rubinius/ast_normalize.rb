@@ -7,7 +7,7 @@ module Furnace
         def transform(ast, method)
           @locals = method.local_names
 
-          visit ast, :normalize => true
+          visit ast
 
           [ ast, method ]
         end
@@ -32,7 +32,7 @@ module Furnace
           node.update(:fixnum, nil, :constant => true)
         end
 
-        # (rbx-push-nil) -> nil
+        # (rbx-push-nil) -> (nil)
         def on_rbx_push_nil(node)
           node.update(:nil, nil, :constant => true)
         end
