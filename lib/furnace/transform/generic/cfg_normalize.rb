@@ -2,7 +2,7 @@ module Furnace
   module Transform
     module Generic
       class CFGNormalize
-        def transform(cfg)
+        def transform(cfg, method)
           cfg.nodes.each do |node|
             # If a last operation is an unconditional jump, optimize it out.
             last = node.operations.last
@@ -23,7 +23,7 @@ module Furnace
           cfg.nodes.delete_if do |node|
             if node.operations.empty?
               node.entering_edges.each do |edge|
-                edge.target = node.leaving_edge.target
+                edge.target = node.default_leaving_edge.target
               end
               cfg.edges.subtract node.leaving_edges
 
@@ -33,7 +33,7 @@ module Furnace
             end
           end
 
-          [ cfg ]
+          [ cfg, method ]
         end
       end
     end

@@ -11,6 +11,8 @@ pipeline = Furnace::Transform::Pipeline.new(*[
   Furnace::Transform::Generic::LabelNormalize.new,
   Furnace::Transform::Generic::CFGBuild.new,
   Furnace::Transform::Generic::CFGNormalize.new,
+
+  Furnace::Transform::Generic::ANFBuild.new,
 ])
 
 cfg, = pipeline.run(method(:main).executable)

@@ -42,7 +42,7 @@ module Furnace
         str = "#{"  " * indent}(#{fancy_type}"
 
         children.each do |child|
-          if child.is_a? Node
+          if child.respond_to? :to_sexp
             str << "\n#{child.to_sexp(indent + 1)}"
           else
             str << " #{child.inspect}"

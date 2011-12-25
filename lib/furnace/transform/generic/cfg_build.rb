@@ -38,7 +38,7 @@ module Furnace
       end
 
       class CFGBuild
-        def transform(ast, target_map)
+        def transform(ast, target_map, method)
           cfg = CFG::Graph.new
 
           tracer = VariableTracer.new
@@ -70,7 +70,7 @@ module Furnace
               cfg.transfer({ label => child.children[0],
                              nil   => child.next.metadata[:label] })
             elsif child.type == :return
-              cfg.transfer({ nil => nil })
+              cfg.transfer({ })
             elsif tracer.conflict?
               # Reset tracer below.
             else
@@ -81,7 +81,7 @@ module Furnace
             tracer.reset
           end
 
-          [ cfg ]
+          [ cfg, method ]
         end
       end
     end

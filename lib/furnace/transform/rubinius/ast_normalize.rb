@@ -8,6 +8,8 @@ module Furnace
           @locals = method.local_names
 
           visit ast, :normalize => true
+
+          [ ast, method ]
         end
 
         # (rbx-meta-push-0) -> 0

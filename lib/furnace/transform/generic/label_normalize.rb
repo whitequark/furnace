@@ -4,7 +4,7 @@ module Furnace
       class LabelNormalize
         include AST::Visitor
 
-        def transform(ast)
+        def transform(ast, method)
           # Find the minimal label in each operation sub-tree.
           # It's the operation entry point.
           visit ast
@@ -41,7 +41,7 @@ module Furnace
             end
           end
 
-          [ ast, target_map ]
+          [ ast, target_map, method ]
         end
 
         def on_any(node)

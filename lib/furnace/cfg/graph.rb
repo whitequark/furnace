@@ -43,8 +43,6 @@ module Furnace
         code << "rankdir=LR;"
         code << "K=1;"
 
-        code << "lexit [label=EXIT];\n";
-
         @nodes.each do |node|
           content = node.operations.map(&:to_sexp).join("\n")
           content.gsub!("&", "&amp;")
@@ -58,7 +56,7 @@ module Furnace
         @edges.each do |edge|
           label = edge.source_operation || "~"
 
-          code << %Q{l#{edge.source_label} -> l#{edge.target_label || 'exit'} [label="#{label}"];\n}
+          code << %Q{l#{edge.source_label} -> l#{edge.target_label} [label="#{label}"];\n}
         end
 
         code << "}"

@@ -15,8 +15,12 @@ module Furnace
         @cfg.edges.select { |e| e.source == self }
       end
 
-      def leaving_edge(source=nil)
+      def leaving_edge(source)
         leaving_edges.find { |e| e.source_operation == source }
+      end
+
+      def default_leaving_edge
+        leaving_edge(nil)
       end
 
       def ==(other)

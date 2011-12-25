@@ -17,6 +17,7 @@ require "furnace/transform/rubinius/ast_normalize"
 require "furnace/transform/generic/label_normalize"
 require "furnace/transform/generic/cfg_build"
 require "furnace/transform/generic/cfg_normalize"
+require "furnace/transform/generic/anf_build"
 
 if RUBY_ENGINE != "rbx"
   raise "Sorry, Furnace only works on Rubinius."
