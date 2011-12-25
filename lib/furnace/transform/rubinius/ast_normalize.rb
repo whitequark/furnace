@@ -77,24 +77,27 @@ module Furnace
 
         # (rbx-send-method msg receiver) -> (send msg receiver)
         def on_rbx_send_method(node)
-          node.update(:send)
+          node.update(:send, [
+            AST::MethodName.new(node.children[0]),
+            node.children[1]
+          ])
         end
 
         # (rbx-send-stack msg count receiver args...) -> (send msg receiver args...)
         def on_rbx_send_stack(node)
           node.update(:send, [
-            node.children[0],       # message
-            node.children[2],       # receiver
-            *node.children[3..-1]   # args
+            AST::MethodName.new(node.children[0]),  # message
+            node.children[2],                       # receiver
+            *node.children[3..-1]                   # args
           ])
         end
 
         # (rbx-send-stack-with-block msg count receiver args... block) -> (send-with-block msg receiver args... block)
         def on_rbx_send_stack_with_block(node)
           node.update(:send_with_block, [
-            node.children[0],       # message
-            node.children[2],       # receiver
-            *node.children[3..-1]   # args
+            AST::MethodName.new(node.children[0]),  # message
+            node.children[2],                       # receiver
+            *node.children[3..-1]                   # args
           ])
         end
 
@@ -106,7 +109,10 @@ module Furnace
 
         # (rbx-meta-send-op-* op receiver arg) -> (send op receiver arg)
         def on_rbx_send_op_any(node)
-          node.update(:send)
+          node.update(:send, [
+            AST::MethodName.new(node.children[0]),
+            node.children[1..-1]
+          ])
         end
         alias :on_rbx_meta_send_op_plus :on_rbx_send_op_any
         alias :on_rbx_meta_send_op_minus :on_rbx_send_op_any

@@ -38,30 +38,15 @@ module Furnace
       end
 
       def to_graphviz
-        code = "digraph {\n"
-        code << "node [labeljust=l,nojustify=true,fontname=monospace];"
-        code << "rankdir=LR;"
-        code << "K=1;"
+        Graphviz.new do |graph|
+          @nodes.each do |node|
+            graph.node node.label, node.operations.map(&:to_sexp).join("\n")
+          end
 
-        @nodes.each do |node|
-          content = node.operations.map(&:to_sexp).join("\n")
-          content.gsub!("&", "&amp;")
-          content.gsub!(">", "&gt;")
-          content.gsub!("<", "&lt;")
-          content = content.lines.map { |l| %Q{<tr><td align="left">#{l}</td></tr>} }.join
-
-          code << %Q{l#{node.label} [shape=box,label=<<table border="0">#{content}</table>>];\n}
+          @edges.each do |edge|
+            graph.edge edge.source_label, edge.target_label, (edge.source_operation || "~")
+          end
         end
-
-        @edges.each do |edge|
-          label = edge.source_operation || "~"
-
-          code << %Q{l#{edge.source_label} -> l#{edge.target_label} [label="#{label}"];\n}
-        end
-
-        code << "}"
-
-        code
       end
     end
   end

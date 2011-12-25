@@ -6,6 +6,7 @@ module Furnace
 
         def transform(cfg, method)
           @method_locals = method.local_names
+          @anf = ANF::Graph.new
 
           cfg.nodes.each do |node|
             @locals = {}
@@ -15,21 +16,21 @@ module Furnace
             @default_edge = node.default_leaving_edge
             @other_edge   = node.leaving_edge(node.operations.last.metadata[:label])
 
-            # Transform the AST for each node, removing redundant operations.
+            # Transform the AST for each node to ANF, removing redundant root nodes
+            # in the process.
             node.operations.delete_if do |operation|
               visit operation
 
               operation.type == :remove
             end
 
-            # If a node does not have a conditional in it (i.e. it was inserted as a part
-            # of SSA-induction process), add an explicit tailcall.
+            # If nothing is left, make it an application.
             if node.operations.empty?
-              node.operations << node.default_leaving_edge.to_ast_node(passed_locals)
+              @anf.add ANF::ApplyNode.new(@anf, @anf.build_apply(@default_edge, passed_locals), node.label)
             end
           end
 
-          [ cfg, method ]
+          [ @anf, method ]
         end
 
         def passed_locals
@@ -48,23 +49,35 @@ module Furnace
         end
 
         # (set-local :var value) -> .
-        def on_set_local(node)
-          @locals[node.children.first] = node.children.last
+        def on_set_local(ast_node)
+          @locals[ast_node.children.first] = ast_node.children.last
 
-          node.update(:remove)
+          ast_node.update(:remove)
         end
 
         # (jump-if compare_to condition) -> (if condition if_true if_false)
-        def on_jump_if(node)
-          if node.children.first == true
-            if_true, if_false = @default_edge, @other_edge
-          else
+        def on_jump_if(ast_node)
+          if ast_node.children.first == true
             if_true, if_false = @other_edge, @default_edge
+          else
+            if_true, if_false = @default_edge, @other_edge
           end
 
-          node.update(:if, [ node.children.last,
-                             if_true.to_ast_node(passed_locals),
-                             if_false.to_ast_node(passed_locals) ])
+          ast_node.update(:if, [ ast_node.children.last,
+                             @anf.build_apply(if_true, passed_locals),
+                             @anf.build_apply(if_false, passed_locals) ])
+
+          @anf.add ANF::IfNode.new(@anf, ast_node, @node.label)
+        end
+
+        # (return expression)
+        def on_return(ast_node)
+          @anf.add ANF::ReturnNode.new(@anf, ast_node, @node.label)
+        end
+
+        # AST node labels do not make sense.
+        def on_any(ast_node)
+          ast_node.metadata.delete :label
         end
 
         def expand_node(node)

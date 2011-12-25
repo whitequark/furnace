@@ -66,13 +66,17 @@ module Furnace
       end
     end
 
-    class ApplyNode < Node
-      def initialize(label, parameters)
-        super(:apply, [label, *parameters])
+    class MethodName
+      def initialize(name)
+        @name = name
       end
 
-      def parameters
-        @children.skip(1)
+      def to_sym
+        @name.to_sym
+      end
+
+      def inspect
+        ".#{@name}"
       end
     end
   end
