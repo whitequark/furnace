@@ -1,5 +1,5 @@
 module Furnace
-  module AST
+  module Transform
     class Pipeline
       def initialize(*stages)
         @stages = stages

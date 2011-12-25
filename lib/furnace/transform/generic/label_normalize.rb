@@ -45,6 +45,8 @@ module Furnace
         end
 
         def on_any(node)
+          return if node.type == :root
+
           child_nodes = node.children.select { |c| c.is_a? AST::Node }
 
           new_label = child_nodes.map { |c| c.metadata[:label] }.compact.min

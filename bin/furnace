@@ -4,17 +4,15 @@ require 'furnace'
 
 load ARGV[0]
 
-opcodes = method(:main).executable.decode
-
-pipeline = Furnace::AST::Pipeline.new(
-  Furnace::Transform::Rubinius::Opcode.new,
-  Furnace::Transform::Rubinius::Normalize.new,
+pipeline = Furnace::Transform::Pipeline.new(*[
+  Furnace::Transform::Rubinius::ASTBuild.new,
+  Furnace::Transform::Rubinius::ASTNormalize.new,
 
   Furnace::Transform::Generic::LabelNormalize.new,
   Furnace::Transform::Generic::CFGBuild.new,
-  Furnace::Transform::Generic::CFGNormalize.new
-)
+  Furnace::Transform::Generic::CFGNormalize.new,
+])
 
-cfg, = pipeline.run(opcodes)
+cfg, = pipeline.run(method(:main).executable)
 
 puts cfg.to_graphviz

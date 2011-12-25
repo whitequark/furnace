@@ -47,6 +47,7 @@ module Furnace
 
         @nodes.each do |node|
           content = node.operations.map(&:to_sexp).join("\n")
+          content.gsub!("&", "&amp;")
           content.gsub!(">", "&gt;")
           content.gsub!("<", "&lt;")
           content = content.lines.map { |l| %Q{<tr><td align="left">#{l}</td></tr>} }.join

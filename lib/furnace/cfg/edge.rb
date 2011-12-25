@@ -16,8 +16,16 @@ module Furnace
         @cfg.find_node(@target_label) if @target_label
       end
 
-      def redirect_by(edge)
-        @target_label = edge.target_label
+      def source=(node)
+        @source_label = node.label
+      end
+
+      def target=(node)
+        if node
+          @target_label = node.label
+        else
+          @target_label = nil
+        end
       end
 
       def inspect

@@ -6,17 +6,6 @@ module Furnace
           if child.is_a? Node
             visit child, options
 
-            # Invoke a specific handler
-            on_handler = :"on_#{child.type}"
-            if respond_to? on_handler
-              send on_handler, child
-            end
-
-            # Invoke a generic handler
-            if respond_to? :on_any
-              send :on_any, child
-            end
-
             # Normalize the tree, as nodes can only update themselves
             if options[:normalize]
               if child.type == :expand
@@ -37,6 +26,17 @@ module Furnace
           if child.is_a? Node
             child.parent = node
           end
+        end
+
+        # Invoke a specific handler
+        on_handler = :"on_#{node.type}"
+        if respond_to? on_handler
+          send on_handler, node
+        end
+
+        # Invoke a generic handler
+        if respond_to? :on_any
+          send :on_any, node
         end
 
         node

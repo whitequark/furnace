@@ -23,7 +23,7 @@ module Furnace
           cfg.nodes.delete_if do |node|
             if node.operations.empty?
               node.entering_edges.each do |edge|
-                edge.redirect_by node.leaving_edge
+                edge.target = node.leaving_edge.target
               end
               cfg.edges.subtract node.leaving_edges
 

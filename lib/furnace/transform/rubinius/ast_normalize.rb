@@ -1,10 +1,12 @@
 module Furnace
   module Transform
     module Rubinius
-      class Normalize
+      class ASTNormalize
         include AST::Visitor
 
-        def transform(ast)
+        def transform(ast, method)
+          @locals = method.local_names
+
           visit ast, :normalize => true
         end
 
@@ -58,12 +60,12 @@ module Furnace
 
         # (rbx-push-local x) -> (get-local x)
         def on_rbx_push_local(node)
-          node.update(:get_local)
+          node.update(:get_local, [@locals[node.children.first]])
         end
 
         # (rbx-set-local x) -> (set-local x)
         def on_rbx_set_local(node)
-          node.update(:set_local)
+          node.update(:set_local, [@locals[node.children.first], node.children.last])
         end
 
         # (rbx-ret x) -> (return x)
@@ -79,9 +81,25 @@ module Furnace
         # (rbx-send-stack msg count receiver args...) -> (send msg receiver args...)
         def on_rbx_send_stack(node)
           node.update(:send, [
-              node.children[0],       # message
-              node.children[2],       # receiver
-            ] + node.children[3..-1]) # args
+            node.children[0],       # message
+            node.children[2],       # receiver
+            *node.children[3..-1]   # args
+          ])
+        end
+
+        # (rbx-send-stack-with-block msg count receiver args... block) -> (send-with-block msg receiver args... block)
+        def on_rbx_send_stack_with_block(node)
+          node.update(:send_with_block, [
+            node.children[0],       # message
+            node.children[2],       # receiver
+            *node.children[3..-1]   # args
+          ])
+        end
+
+        # (rbx-create-block block) -> (lambda block)
+        def on_rbx_create_block(node)
+          $block = node.children.first
+          node.update(:lambda, ["FAIL"])
         end
 
         # (rbx-meta-send-op-* op receiver arg) -> (send op receiver arg)

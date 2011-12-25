@@ -1,15 +1,15 @@
 module Furnace
   module Transform
     module Rubinius
-      class Opcode
-        def transform(opcodes)
+      class ASTBuild
+        def transform(method)
           stack    = []
           map      = {}
           serial   = 0
 
           ast = AST::Node.new(:root)
 
-          opcodes.each do |opcode|
+          method.decode.each do |opcode|
             ins = opcode.instruction
 
             node = AST::Node.new("rbx_#{ins.opcode}")
@@ -44,7 +44,7 @@ module Furnace
             end
           end
 
-          ast
+          [ ast, method ]
         end
       end
     end
