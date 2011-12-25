@@ -1,3 +1,20 @@
 #!/usr/bin/env ruby
 
 require 'furnace'
+
+load ARGV[0]
+
+opcodes = method(:main).executable.decode
+
+pipeline = Furnace::AST::Pipeline.new(
+  Furnace::Transform::Rubinius::Opcode.new,
+  Furnace::Transform::Rubinius::Normalize.new,
+
+  Furnace::Transform::Generic::LabelNormalize.new,
+  Furnace::Transform::Generic::CFGBuild.new,
+  Furnace::Transform::Generic::CFGNormalize.new
+)
+
+cfg, = pipeline.run(opcodes)
+
+puts cfg.to_graphviz
