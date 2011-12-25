@@ -25,29 +25,30 @@ module Furnace
         @astlet.children.all? { |c| ANF.static? c }
       end
 
+      def arms
+        [ target ]
+      end
+
       def terminal?
         false
       end
     end
 
     class IfNode < Node
-      def initialize(graph, astlet, label)
-        super
-
-        @true_expr  = ApplyNode.new(graph, astlet.children[1])
-        @false_expr = ApplyNode.new(graph, astlet.children[2])
-      end
-
       def condition
         @astlet.children[0]
       end
 
-      def true_expr
-        @true_expr
+      def true_target
+        @graph.find(@astlet.children[1])
       end
 
-      def false_expr
-        @false_expr
+      def false_target
+        @graph.find(@astlet.children[2])
+      end
+
+      def arms
+        [ true_target, false_target ]
       end
 
       def terminal?
@@ -58,6 +59,10 @@ module Furnace
     class ReturnNode < Node
       def result
         @astlet.children[0]
+      end
+
+      def arms
+        [ ]
       end
 
       def terminal?

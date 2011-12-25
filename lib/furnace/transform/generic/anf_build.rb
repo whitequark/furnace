@@ -26,7 +26,7 @@ module Furnace
 
             # If nothing is left, make it an application.
             if node.operations.empty?
-              @anf.add ANF::ApplyNode.new(@anf, @anf.build_apply(@default_edge, passed_locals), node.label)
+              @anf.build_apply(@default_edge, passed_locals, node.label)
             end
           end
 
@@ -58,14 +58,15 @@ module Furnace
         # (jump-if compare_to condition) -> (if condition if_true if_false)
         def on_jump_if(ast_node)
           if ast_node.children.first == true
-            if_true, if_false = @other_edge, @default_edge
+            true_edge, false_edge = @other_edge, @default_edge
           else
-            if_true, if_false = @default_edge, @other_edge
+            false_edge, true_edge = @default_edge, @other_edge
           end
 
-          ast_node.update(:if, [ ast_node.children.last,
-                             @anf.build_apply(if_true, passed_locals),
-                             @anf.build_apply(if_false, passed_locals) ])
+          true_label  = @anf.build_apply(true_edge, passed_locals)
+          false_label = @anf.build_apply(false_edge, passed_locals)
+
+          ast_node.update(:if, [ ast_node.children.last, true_label, false_label ])
 
           @anf.add ANF::IfNode.new(@anf, ast_node, @node.label)
         end

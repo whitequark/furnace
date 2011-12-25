@@ -4,8 +4,9 @@ module Furnace
       attr_reader :nodes, :root
 
       def initialize
-        @root = nil
-        @nodes = Set.new
+        @root       = nil
+        @nodes      = Set.new
+        @last_label = 0
       end
 
       def add(node)
@@ -21,8 +22,16 @@ module Furnace
         @nodes.find { |node| node.label == label }
       end
 
-      def build_apply(edge, parameters, metadata={})
-        AST::Node.new(:apply, [ edge.target.label, *parameters ], metadata)
+      def build_apply(edge, parameters, label=make_label)
+        ast_node = AST::Node.new(:apply, [ edge.target.label, *parameters ])
+
+        add ANF::ApplyNode.new(self, ast_node, label)
+
+        label
+      end
+
+      def make_label
+        @last_label -= 1
       end
 
       def to_graphviz
@@ -32,8 +41,8 @@ module Furnace
 
             case node
             when ANF::IfNode
-              graph.edge node.label, node.true_expr.target.label, "true"
-              graph.edge node.label, node.false_expr.target.label, "false"
+              graph.edge node.label, node.true_target.label, "true"
+              graph.edge node.label, node.false_target.label, "false"
             when ANF::ApplyNode
               graph.edge node.label, node.target.label
             end
