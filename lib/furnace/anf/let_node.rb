@@ -18,14 +18,15 @@ module Furnace
       end
 
       def identity?
-        @arguments.reduce(true) { |r, (k, v)| r && (k == v) }
+        @arguments.reduce(true) { |r, (k, v)| r && (v === k) }
       end
 
       def try_propagate
       end
 
       def static?(node)
-        [ NilClass, TrueClass, FalseClass, Fixnum, Symbol ].include? node.class
+        [ NilClass, TrueClass, FalseClass, Fixnum, Symbol,
+          AST::LocalVariable, AST::InstanceVariable ].include? node.class
       end
 
       def to_human_readable

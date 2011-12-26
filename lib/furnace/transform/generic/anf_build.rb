@@ -74,7 +74,7 @@ module Furnace
               [ name, @locals[name] ]
             # Is it the middle of function?
             elsif @node.entering_edges.any?
-              [ name, name ]
+              [ name, AST::LocalVariable.new(name) ]
             # Locals default to nil.
             else
               [ name, nil ]
@@ -84,8 +84,8 @@ module Furnace
           Hash[*map.flatten]
         end
 
-        # (set-local :var value)
-        def on_set_local(ast_node)
+        # (set-lvar :var value)
+        def on_set_lvar(ast_node)
           @locals[ast_node.children.first] = ast_node.children.last
 
           ast_node.update(:remove)
@@ -122,6 +122,11 @@ module Furnace
           ast_node.update(:remove)
         end
 
+        # (get-lvar :x) -> %x
+        def on_get_lvar(node)
+          node.update(:expand, AST::LocalVariable.new(node.children.first))
+        end
+
         # AST node labels do not make sense.
         def on_any(ast_node)
           ast_node.metadata.delete :label
@@ -131,14 +136,12 @@ module Furnace
           node.update(:expand)
         end
 
-        # Locals are immutable now.
-        alias :on_get_local :expand_node
-
         # Immediates do not have to carry metadata anymore.
         alias :on_true :expand_node
         alias :on_false :expand_node
         alias :on_nil :expand_node
         alias :on_fixnum :expand_node
+        alias :on_literal :expand_node
 
         # We have a near infinite supply of small, unoccupied labels.
         def make_label

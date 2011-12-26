@@ -3,6 +3,7 @@ require "furnace/version"
 require "set"
 
 require "furnace/ast/node"
+require "furnace/ast/symbolic_node"
 require "furnace/ast/visitor"
 
 require "furnace/cfg/node"

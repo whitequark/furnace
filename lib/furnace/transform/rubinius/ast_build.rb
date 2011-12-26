@@ -21,7 +21,8 @@ module Furnace
             when Fixnum
               consumed = ins.stack_consumed
             when Array
-              consumed = ins.stack_consumed[0] + opcode.args[1]
+              #p ins.stack_consumed, opcode.args
+              consumed = ins.stack_consumed[0] + opcode.args.last
             end
 
             # Pop consumed values and attach to current node.

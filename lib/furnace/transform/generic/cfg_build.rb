@@ -22,14 +22,14 @@ module Furnace
           @conflict
         end
 
-        def on_set_local(node)
+        def on_set_lvar(node)
           var = node.children.first
 
           @write_set.add var
           @conflict ||= @read_set.include?(var)
         end
 
-        def on_get_local(node)
+        def on_get_lvar(node)
           var = node.children.first
 
           @read_set.add var

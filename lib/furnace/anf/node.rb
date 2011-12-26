@@ -20,7 +20,7 @@ module Furnace
       end
 
       def humanize(node)
-        if node.respond_to? :to_sexp
+        if node.is_a? AST::Node
           node.to_sexp
         else
           node.inspect

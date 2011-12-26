@@ -5,7 +5,8 @@ module Furnace
         include AST::Visitor
 
         def transform(ast, method)
-          @locals = method.local_names
+          @locals   = method.local_names
+          @literals = method.literals
 
           visit ast
 
@@ -27,14 +28,24 @@ module Furnace
           node.update(:fixnum, [2], :constant => true)
         end
 
-        # (rbx-push-int x) -> x
+        # (rbx-push-int f) -> f
         def on_rbx_push_int(node)
           node.update(:fixnum, nil, :constant => true)
+        end
+
+        # (rbx-push-literal l) -> l
+        def on_rbx_push_literal(node)
+          node.update(:literal, nil, :constant => true)
         end
 
         # (rbx-push-nil) -> (nil)
         def on_rbx_push_nil(node)
           node.update(:nil, nil, :constant => true)
+        end
+
+        # (rbx-string-dup s) -> (dup s)
+        def on_rbx_string_dup(node)
+          node.update(:dup)
         end
 
         # (rbx-pop x) -> x
@@ -60,14 +71,34 @@ module Furnace
           node.update(:self)
         end
 
-        # (rbx-push-local x) -> (get-local x)
+        # (rbx-push-local n) -> (get-local n)
         def on_rbx_push_local(node)
-          node.update(:get_local, [@locals[node.children.first]])
+          node.update(:get_lvar, [ @locals[node.children.first] ])
         end
 
-        # (rbx-set-local x) -> (set-local x)
+        # (rbx-set-local n v) -> (set-local n v)
         def on_rbx_set_local(node)
-          node.update(:set_local, [@locals[node.children.first], node.children.last])
+          node.update(:set_lvar, [ @locals[node.children.first], node.children.last ])
+        end
+
+        # (rbx-push-ivar n) -> (get-ivar n)
+        def on_rbx_push_ivar(node)
+          node.update(:get_ivar, [ @literals[node.children.first] ])
+        end
+
+        # (rbx-set-ivar n v) -> (set-ivar n v)
+        def on_rbx_set_ivar(node)
+          node.update(:set_ivar, [ @literals[node.children.first], node.children.last ])
+        end
+
+        # (rbx-push-const-fast n x) -> (const n)
+        def on_rbx_push_const_fast(node)
+          node.update(:const, [ node.children.first ])
+        end
+
+        # (rbx-find-const n c) -> (const n c)
+        def on_rbx_find_const(node)
+          node.update(:const, [ @literals[node.children.first], node.children.last ])
         end
 
         # (rbx-ret x) -> (return x)
@@ -104,28 +135,29 @@ module Furnace
         # (rbx-create-block block) -> (lambda block)
         def on_rbx_create_block(node)
           $block = node.children.first
-          node.update(:lambda, ["FAIL"])
+          node.update(:lambda, [ "FAIL" ])
         end
 
-        # (rbx-meta-send-op-* op receiver arg) -> (send op receiver arg)
+        # (rbx-meta-* op receiver arg) -> (send op receiver arg)
         def on_rbx_send_op_any(node)
           node.update(:send, [
             AST::MethodName.new(node.children[0]),
-            node.children[1..-1]
+            *node.children[1..-1]
           ])
         end
         alias :on_rbx_meta_send_op_plus :on_rbx_send_op_any
         alias :on_rbx_meta_send_op_minus :on_rbx_send_op_any
         alias :on_rbx_meta_send_op_gt :on_rbx_send_op_any
         alias :on_rbx_meta_send_op_lt :on_rbx_send_op_any
+        alias :on_rbx_meta_to_s :on_rbx_send_op_any
 
         # (rbx-goto-if-* block condition) -> (jump-if block value condition)
         def on_rbx_goto_if_false(node)
-          node.update(:jump_if, [node.children[0], false, node.children[1]])
+          node.update(:jump_if, [ node.children[0], false, node.children[1] ])
         end
 
         def on_rbx_goto_if_true(node)
-          node.update(:jump_if, [node.children[0], true, node.children[1]])
+          node.update(:jump_if, [ node.children[0], true, node.children[1] ])
         end
 
         # (rbx-goto block) -> (jump block)

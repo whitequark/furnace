@@ -42,7 +42,7 @@ module Furnace
         str = "#{"  " * indent}(#{fancy_type}"
 
         children.each do |child|
-          if child.respond_to? :to_sexp
+          if child.is_a? Node
             str << "\n#{child.to_sexp(indent + 1)}"
           else
             str << " #{child.inspect}"
@@ -63,20 +63,6 @@ module Furnace
         else
           dasherized
         end
-      end
-    end
-
-    class MethodName
-      def initialize(name)
-        @name = name
-      end
-
-      def to_sym
-        @name.to_sym
-      end
-
-      def inspect
-        ".#{@name}"
       end
     end
   end
