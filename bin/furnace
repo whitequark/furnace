@@ -13,6 +13,8 @@ pipeline = Furnace::Transform::Pipeline.new(*[
   Furnace::Transform::Generic::CFGNormalize.new,
 
   Furnace::Transform::Generic::ANFBuild.new,
+
+  Furnace::Transform::Optimizing::FoldConstants.new,
 ])
 
 cfg, = pipeline.run(method(:main).executable)
