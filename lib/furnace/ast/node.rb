@@ -53,6 +53,7 @@ module Furnace
 
         str
       end
+      alias :to_s :to_sexp
 
       protected
 
