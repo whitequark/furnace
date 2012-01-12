@@ -44,7 +44,13 @@ module Furnace
           end
 
           @edges.each do |edge|
-            graph.edge edge.source_label, edge.target_label, (edge.source_operation || "~")
+            if edge.source_operation.nil?
+              label = "~"
+            else
+              label = edge.source_operation
+            end
+
+            graph.edge edge.source_label, edge.target_label, label
           end
         end
       end
