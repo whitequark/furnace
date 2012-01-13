@@ -34,7 +34,7 @@ module Furnace
         parent.children[index - 1]
       end
 
-      def inspect
+      def to_s
         "(#{fancy_type} ...)"
       end
 
@@ -53,7 +53,7 @@ module Furnace
 
         str
       end
-      alias :to_s :to_sexp
+      alias :inspect :to_sexp
 
       protected
 

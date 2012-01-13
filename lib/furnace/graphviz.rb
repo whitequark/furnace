@@ -3,7 +3,7 @@ module Furnace
     def initialize
       @code = "digraph {\n"
       @code << "node [labeljust=l,nojustify=true,fontname=monospace];"
-      @code << "rankdir=LR;"
+      @code << "rankdir=TB;"
 
       yield self
 

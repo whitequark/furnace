@@ -40,7 +40,7 @@ module Furnace
       def to_graphviz
         Graphviz.new do |graph|
           @nodes.each do |node|
-            graph.node node.label, node.operations.map(&:to_s).join("\n")
+            graph.node node.label, node.operations.map(&:inspect).join("\n")
           end
 
           @edges.each do |edge|
