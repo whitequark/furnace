@@ -4,9 +4,20 @@ module Furnace::AST
 
     def initialize(type, children=[], metadata={})
       @type, @children, @metadata = type.to_sym, children, metadata
+    end
+
+    def normalize_hierarchy!
       @children.each do |child|
-        child.parent = self
+        if child.respond_to? :parent=
+          child.parent = self
+        end
+
+        if child.respond_to? :normalize_hierarchy!
+          child.normalize_hierarchy!
+        end
       end
+
+      self
     end
 
     def update(type, children=nil, metadata={})
@@ -58,6 +69,10 @@ module Furnace::AST
       str
     end
     alias :inspect :to_sexp
+
+    def to_astlet
+      self
+    end
 
     protected
 

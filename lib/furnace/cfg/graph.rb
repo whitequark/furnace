@@ -26,10 +26,10 @@ module Furnace::CFG
     def transfer(targets)
       return unless @pending_label
 
-      @nodes << CFG::Node.new(self, @pending_label, @pending_operations)
+      @nodes << Node.new(self, @pending_label, @pending_operations)
 
       targets.each do |operation, target|
-        @edges << CFG::Edge.new(self, operation, @pending_label, target)
+        @edges << Edge.new(self, operation, @pending_label, target)
       end
 
       @pending_label      = nil
@@ -37,7 +37,7 @@ module Furnace::CFG
     end
 
     def to_graphviz
-      Graphviz.new do |graph|
+      Furnace::Graphviz.new do |graph|
         @nodes.each do |node|
           graph.node node.label, node.operations.map(&:inspect).join("\n")
         end
