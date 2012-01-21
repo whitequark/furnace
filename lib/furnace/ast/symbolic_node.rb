@@ -1,36 +1,34 @@
-module Furnace
-  module AST
-    class SymbolicNode
-      def initialize(name)
-        @name = name.to_sym
-      end
-
-      def to_sym
-        @name
-      end
-
-      def ===(name)
-        @name == name.to_sym
-      end
-
-      def inspect
-        @name.to_s
-      end
+module Furnace::AST
+  class SymbolicNode
+    def initialize(name)
+      @name = name.to_sym
     end
 
-    class MethodName < SymbolicNode
-      def inspect
-        ".#{@name}"
-      end
+    def to_sym
+      @name
     end
 
-    class LocalVariable < SymbolicNode
-      def inspect
-        "%#{@name}"
-      end
+    def ===(name)
+      @name == name.to_sym
     end
 
-    class Constant < SymbolicNode
+    def inspect
+      @name.to_s
     end
+  end
+
+  class MethodName < SymbolicNode
+    def inspect
+      ".#{@name}"
+    end
+  end
+
+  class LocalVariable < SymbolicNode
+    def inspect
+      "%#{@name}"
+    end
+  end
+
+  class Constant < SymbolicNode
   end
 end
