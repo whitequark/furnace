@@ -57,7 +57,8 @@ module Furnace::AST
       children.each do |child|
         if (!children[0].is_a?(Node) && child.is_a?(Node)) ||
             (children[0].is_a?(Node) && child.is_a?(Node) &&
-              child.children.any? { |c| c.is_a?(Node) })
+              child.children.any? { |c| c.is_a?(Node) }) ||
+            (child.is_a?(Node) && child.metadata[:label])
           str << "\n#{child.to_sexp(indent + 1)}"
         else
           str << " #{child.inspect}"
