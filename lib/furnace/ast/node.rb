@@ -35,6 +35,13 @@ module Furnace::AST
       self
     end
 
+    def dup
+      node = super
+      node.children = @children.dup
+      node.metadata = @metadata.dup
+      node
+    end
+
     def index
       parent.children.find_index(self)
     end
@@ -57,7 +64,7 @@ module Furnace::AST
       children.each do |child|
         if (!children[0].is_a?(Node) && child.is_a?(Node)) ||
             (children[0].is_a?(Node) && child.is_a?(Node) &&
-              child.children.any? { |c| c.is_a?(Node) }) ||
+              child.children.any? { |c| c.is_a?(Node) || c.is_a?(Array) }) ||
             (child.is_a?(Node) && child.metadata[:label])
           str << "\n#{child.to_sexp(indent + 1)}"
         else
