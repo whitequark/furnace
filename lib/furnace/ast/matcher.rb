@@ -1,14 +1,17 @@
 module Furnace::AST
   class Matcher
-    SpecialAny    = MatcherSpecial.new(:any)
-    SpecialSubset = MatcherSpecial.define(:subset)
-
     def initialize(&block)
       @pattern = self.class.class_exec(&block)
     end
 
     def match(object)
-      genmatch(object.to_astlet, @pattern)
+      captures = {}
+
+      if genmatch(object.to_astlet, @pattern, captures)
+        captures
+      else
+        nil
+      end
     end
 
     def find_one(collection)
@@ -27,6 +30,9 @@ module Furnace::AST
       end
     end
 
+    SpecialAny    = MatcherSpecial.new(:any)
+    SpecialSubset = MatcherSpecial.define(:subset)
+
     class << self
       def any
         SpecialAny
@@ -39,51 +45,66 @@ module Furnace::AST
       def capture(name)
         MatcherSpecial.new(:capture, name)
       end
+
+      def backref(name)
+        MatcherSpecial.new(:backref, name)
+      end
     end
 
     protected
 
-    def submatch(array, pattern)
+    def submatch(array, pattern, captures)
       matches = true
+      nested_captures = captures.dup
 
-      pattern.each_with_index do |subpattern, index|
-        if array[index].nil?
-          return false
-        end
+      pattern.each_with_index do |nested_pattern, index|
+        return false if index > array.length
 
-        case subpattern
-        when SpecialAny
+        case nested_pattern
+        when Array
+          matches &&= genmatch(array[index], nested_pattern, nested_captures)
+        when MatcherSpecial.kind(:any)
           # it matches
-        when MatcherSpecial
-          if subpattern.type == :subset
-            all_submatches = true
+        when MatcherSpecial.kind(:capture)
+          # it matches and captures
+          nested_captures[nested_pattern.param] = array[index]
+        when MatcherSpecial.kind(:backref)
+          matches &&= (nested_captures[nested_pattern.param] == array[index])
+        when MatcherSpecial.kind(:subset)
+          all_submatches = true
 
-            subpattern.params.each do |pattern_case|
-              submatches = false
-              array[index..-1].each do |subset_elem|
-                submatches ||= genmatch(subset_elem, pattern_case)
-                break if submatches
+          workset = Set.new array[index..-1]
+
+          nested_pattern.param.each do |subset_pattern|
+            sub_matches  = false
+
+            workset.each do |subset_elem|
+              sub_matches ||= genmatch(subset_elem, subset_pattern, nested_captures)
+
+              if sub_matches
+                workset.delete subset_elem
+                break
               end
-
-              all_submatches &&= submatches
-              break unless all_submatches
             end
 
-            matches &&= all_submatches
+            all_submatches &&= sub_matches
+            break unless all_submatches
           end
-        when Array
-          matches &&= genmatch(array[index], subpattern)
+
+          matches &&= all_submatches
         else
-          matches &&= array[index] == subpattern
+          matches &&= (array[index] == nested_pattern)
         end
 
         break unless matches
       end
 
+      captures.replace(nested_captures) if matches
+
       matches
     end
 
-    def genmatch(astlet, pattern)
+    def genmatch(astlet, pattern, captures)
 #       if astlet.respond_to? :to_sexp
 #         puts "match #{astlet.to_sexp} of #{pattern}"
 #       else
@@ -96,7 +117,7 @@ module Furnace::AST
 
         if astlet.is_a? Node
           if astlet.type == type
-            submatch(astlet.children, rest)
+            submatch(astlet.children, rest, captures)
           else
             false
           end
@@ -106,7 +127,7 @@ module Furnace::AST
       else
         # Match an array
         if astlet.is_a? Array
-          submatch(astlet, pattern)
+          submatch(astlet, pattern, captures)
         else
           false
         end
