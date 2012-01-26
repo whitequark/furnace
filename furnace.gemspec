@@ -8,9 +8,9 @@ Gem::Specification.new do |s|
   s.authors     = ["Peter Zotov"]
   s.email       = ["whitequark@whitequark.org"]
   s.homepage    = "http://github.com/whitequark/furnace"
-  s.summary     = %q{A static Ruby compiler}
-  s.description = %q{Furnace aims to compile Ruby code into small static } <<
-                  %q{executables by restricting its metaprogramming features.}
+  s.summary     = %q{A static code analysis framework}
+  s.description = %q{Furnace is a static code analysis framework for dynamic languages, } <<
+                  %q{aimed at efficient type and behavior inference.}
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
