@@ -3,7 +3,7 @@ module Furnace::AST
 
   class Matcher
     def initialize(&block)
-      @pattern = self.class.class_exec(&block)
+      @pattern = MatcherDSL.new.instance_exec(&block)
     end
 
     def match(object, captures={})
@@ -53,32 +53,6 @@ module Furnace::AST
       end
     end
 
-    SpecialAny    = MatcherSpecial.new(:any)
-    SpecialSkip   = MatcherSpecial.new(:skip)
-    SpecialSubset = MatcherSpecial.define(:subset)
-
-    class << self
-      def any
-        SpecialAny
-      end
-
-      def skip
-        SpecialSkip
-      end
-
-      def subset
-        SpecialSubset
-      end
-
-      def capture(name)
-        MatcherSpecial.new(:capture, name)
-      end
-
-      def backref(name)
-        MatcherSpecial.new(:backref, name)
-      end
-    end
-
     protected
 
     def submatch(array, pattern, captures)
@@ -91,9 +65,9 @@ module Furnace::AST
         case nested_pattern
         when Array
           matches &&= genmatch(array[index], nested_pattern, nested_captures)
-        when SpecialAny
+        when MatcherDSL::SpecialAny
           # it matches
-        when SpecialSkip
+        when MatcherDSL::SpecialSkip
           # it matches all remaining elements
           break
         when MatcherSpecial.kind(:capture)
