@@ -1,4 +1,6 @@
 module Furnace::AST
+  class MatcherError < StandardError; end
+
   class Matcher
     def initialize(&block)
       @pattern = self.class.class_exec(&block)
@@ -20,6 +22,25 @@ module Furnace::AST
         yield elem, result if block_given? && result
         result
       end
+    end
+
+    def find_one!(collection)
+      found = nil
+
+      collection.each do |elem|
+        result = match elem
+
+        if result
+          raise MatcherError, "already matched" if found
+
+          found = elem
+          yield elem, result if block_given?
+        end
+      end
+
+      raise MatcherError, "no match found" unless found
+
+      found
     end
 
     def find_all(collection)
