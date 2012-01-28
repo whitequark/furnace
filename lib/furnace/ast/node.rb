@@ -42,6 +42,16 @@ module Furnace::AST
       node
     end
 
+    def ==(other)
+      if other.respond_to? :to_astlet
+        other = other.to_astlet
+        other.type == self.type &&
+          other.children == self.children
+      else
+        false
+      end
+    end
+
     def index
       parent.children.find_index(self)
     end
