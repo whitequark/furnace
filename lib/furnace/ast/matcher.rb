@@ -31,11 +31,16 @@ module Furnace::AST
     end
 
     SpecialAny    = MatcherSpecial.new(:any)
+    SpecialSkip   = MatcherSpecial.new(:skip)
     SpecialSubset = MatcherSpecial.define(:subset)
 
     class << self
       def any
         SpecialAny
+      end
+
+      def skip
+        SpecialSkip
       end
 
       def subset
@@ -63,8 +68,11 @@ module Furnace::AST
         case nested_pattern
         when Array
           matches &&= genmatch(array[index], nested_pattern, nested_captures)
-        when MatcherSpecial.kind(:any)
+        when SpecialAny
           # it matches
+        when SpecialSkip
+          # it matches all remaining elements
+          break
         when MatcherSpecial.kind(:capture)
           # it matches and captures
           nested_captures[nested_pattern.param] = array[index]
