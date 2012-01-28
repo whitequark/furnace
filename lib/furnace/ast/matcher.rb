@@ -6,9 +6,7 @@ module Furnace::AST
       @pattern = self.class.class_exec(&block)
     end
 
-    def match(object)
-      captures = {}
-
+    def match(object, captures={})
       if genmatch(object.to_astlet, @pattern, captures)
         captures
       else
@@ -16,19 +14,23 @@ module Furnace::AST
       end
     end
 
-    def find_one(collection)
+    def find_one(collection, initial_captures={})
       collection.find do |elem|
-        result = match elem
-        yield elem, result if block_given? && result
-        result
+        result = match elem, initial_captures.dup
+
+        if block_given? && result
+          yield elem, result
+        else
+          result
+        end
       end
     end
 
-    def find_one!(collection)
+    def find_one!(collection, initial_captures={})
       found = nil
 
       collection.each do |elem|
-        result = match elem
+        result = match elem, initial_captures.dup
 
         if result
           raise MatcherError, "already matched" if found
@@ -43,9 +45,9 @@ module Furnace::AST
       found
     end
 
-    def find_all(collection)
+    def find_all(collection, initial_captures={})
       collection.select do |elem|
-        result = match elem
+        result = match elem, initial_captures.dup
         yield elem, result if block_given? && result
         result
       end
@@ -134,11 +136,13 @@ module Furnace::AST
     end
 
     def genmatch(astlet, pattern, captures)
-#       if astlet.respond_to? :to_sexp
-#         puts "match #{astlet.to_sexp} of #{pattern}"
-#       else
-#         puts "match #{astlet} of #{pattern}"
-#       end
+      if $DEBUG
+        if astlet.respond_to? :to_sexp
+          puts "match #{astlet.to_sexp} of #{pattern}"
+        else
+          puts "match #{astlet} of #{pattern}"
+        end
+      end
 
       if pattern.first.is_a?(Symbol)
         # Match an astlet
