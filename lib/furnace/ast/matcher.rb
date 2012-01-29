@@ -58,23 +58,28 @@ module Furnace::AST
     def submatch(array, pattern, captures)
       matches = true
       nested_captures = captures.dup
+      index   = 0
 
-      pattern.each_with_index do |nested_pattern, index|
+      pattern.each_with_index do |nested_pattern|
         return false if index > array.length
 
         case nested_pattern
         when Array
           matches &&= genmatch(array[index], nested_pattern, nested_captures)
+          index += 1
         when MatcherDSL::SpecialAny
           # it matches
+          index += 1
         when MatcherDSL::SpecialSkip
           # it matches all remaining elements
           break
         when MatcherSpecial.kind(:capture)
           # it matches and captures
           nested_captures[nested_pattern.param] = array[index]
+          index += 1
         when MatcherSpecial.kind(:backref)
           matches &&= (nested_captures[nested_pattern.param] == array[index])
+          index += 1
         when MatcherSpecial.kind(:subset)
           all_submatches = true
 
@@ -96,9 +101,35 @@ module Furnace::AST
             break unless all_submatches
           end
 
+          index += 1
           matches &&= all_submatches
+        when MatcherSpecial.kind(:map)
+          captures_key, patterns = nested_pattern.param
+          nested_captures[captures_key] = []
+
+          while index < array.length
+            sub_found = false
+
+            patterns.each do |subset_key, subset_pattern|
+              subset_slice    = array[index..-1]
+              subset_captures = captures.dup
+
+              if matched = submatch(subset_slice, subset_pattern, subset_captures)
+                nested_captures[captures_key].push [subset_key, subset_captures]
+
+                sub_found = true
+                index += matched
+
+                break
+              end
+            end
+
+            matches &&= sub_found
+            break unless matches
+          end
         else
-          matches &&= (array[index] == nested_pattern)
+          matches &&= (nested_pattern === array[index])
+          index += 1
         end
 
         break unless matches
@@ -106,7 +137,7 @@ module Furnace::AST
 
       captures.replace(nested_captures) if matches
 
-      matches
+      index if matches
     end
 
     def genmatch(astlet, pattern, captures)

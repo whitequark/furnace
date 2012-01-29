@@ -1,5 +1,5 @@
 module Furnace::AST
-  class MatcherDSL < BasicObject
+  class MatcherDSL
     SpecialAny    = MatcherSpecial.new(:any)
     SpecialSkip   = MatcherSpecial.new(:skip)
     SpecialSubset = MatcherSpecial.define(:subset)
@@ -14,6 +14,10 @@ module Furnace::AST
 
     def subset
       SpecialSubset
+    end
+
+    def map(name)
+      ->(hash) { MatcherSpecial.new(:map, [name, hash]) }
     end
 
     def capture(name)
