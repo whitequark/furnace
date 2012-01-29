@@ -113,11 +113,23 @@ module Furnace::AST
           nested_pattern.param.each do |subset_pattern|
             if genmatch(array[index], subset_pattern, nested_captures)
               sub_found = true
+              index += 1
               break
             end
           end
 
-          index += 1
+          matches &&= sub_found
+        when MatcherSpecial.kind(:either_multi)
+          sub_found = false
+
+          nested_pattern.param.each do |subset_pattern|
+            if matched = genmatch(array[index..-1], subset_pattern, nested_captures)
+              sub_found = true
+              index += matched
+              break
+            end
+          end
+
           matches &&= sub_found
         when MatcherSpecial.kind(:map)
           captures_key, patterns = nested_pattern.param
@@ -164,26 +176,14 @@ module Furnace::AST
         end
       end
 
-      if pattern.first.is_a?(Symbol)
-        # Match an astlet
-        type, *rest = pattern
-
-        if astlet.is_a? Node
-          if astlet.type == type
-            submatch(astlet.children, rest, captures)
-          else
-            false
-          end
-        else
-          false
-        end
+      if pattern === astlet
+        true
+      elsif astlet.is_a? Node
+        submatch([astlet.type].concat(astlet.children), pattern, captures)
+      elsif astlet.is_a? Array
+        submatch(astlet, pattern, captures)
       else
-        # Match an array
-        if astlet.is_a? Array
-          submatch(astlet, pattern, captures)
-        else
-          false
-        end
+        false
       end
     end
   end
