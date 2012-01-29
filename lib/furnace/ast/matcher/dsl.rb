@@ -2,7 +2,9 @@ module Furnace::AST
   class MatcherDSL
     SpecialAny    = MatcherSpecial.new(:any)
     SpecialSkip   = MatcherSpecial.new(:skip)
-    SpecialSubset = MatcherSpecial.define(:subset)
+    SpecialEach   = MatcherSpecial.define(:each)
+    SpecialEither = MatcherSpecial.define(:either)
+    SpecialMaybe  = MatcherSpecial.define(:maybe)
 
     def any
       SpecialAny
@@ -12,8 +14,16 @@ module Furnace::AST
       SpecialSkip
     end
 
-    def subset
-      SpecialSubset
+    def each
+      SpecialEach
+    end
+
+    def either
+      SpecialEither
+    end
+
+    def maybe
+      SpecialMaybe
     end
 
     def map(name)

@@ -61,7 +61,7 @@ module Furnace::AST
       index   = 0
 
       pattern.each_with_index do |nested_pattern|
-        return false if index > array.length
+        return nil if index > array.length
 
         case nested_pattern
         when Array
@@ -72,7 +72,7 @@ module Furnace::AST
           index += 1
         when MatcherDSL::SpecialSkip
           # it matches all remaining elements
-          break
+          index = array.length
         when MatcherSpecial.kind(:capture)
           # it matches and captures
           nested_captures[nested_pattern.param] = array[index]
@@ -80,7 +80,11 @@ module Furnace::AST
         when MatcherSpecial.kind(:backref)
           matches &&= (nested_captures[nested_pattern.param] == array[index])
           index += 1
-        when MatcherSpecial.kind(:subset)
+        when MatcherSpecial.kind(:maybe)
+          if advance = submatch(array[index..-1], nested_pattern.param, nested_captures)
+            index += advance
+          end
+        when MatcherSpecial.kind(:each)
           all_submatches = true
 
           workset = Set.new array[index..-1]
@@ -103,6 +107,18 @@ module Furnace::AST
 
           index += 1
           matches &&= all_submatches
+        when MatcherSpecial.kind(:either)
+          sub_found = false
+
+          nested_pattern.param.each do |subset_pattern|
+            if genmatch(array[index], subset_pattern, nested_captures)
+              sub_found = true
+              break
+            end
+          end
+
+          index += 1
+          matches &&= sub_found
         when MatcherSpecial.kind(:map)
           captures_key, patterns = nested_pattern.param
           nested_captures[captures_key] = []
@@ -111,10 +127,9 @@ module Furnace::AST
             sub_found = false
 
             patterns.each do |subset_key, subset_pattern|
-              subset_slice    = array[index..-1]
               subset_captures = captures.dup
 
-              if matched = submatch(subset_slice, subset_pattern, subset_captures)
+              if matched = submatch(array[index..-1], subset_pattern, subset_captures)
                 nested_captures[captures_key].push [subset_key, subset_captures]
 
                 sub_found = true
