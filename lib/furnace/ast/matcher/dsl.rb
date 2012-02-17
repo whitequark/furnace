@@ -39,6 +39,10 @@ module Furnace::AST
       MatcherSpecial.new(:capture, name)
     end
 
+    def capture_rest(name)
+      MatcherSpecial.new(:capture_rest, name)
+    end
+
     def backref(name)
       MatcherSpecial.new(:backref, name)
     end

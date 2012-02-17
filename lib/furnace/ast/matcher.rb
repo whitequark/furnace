@@ -77,6 +77,10 @@ module Furnace::AST
           # it matches and captures
           nested_captures[nested_pattern.param] = array[index]
           index += 1
+        when MatcherSpecial.kind(:capture_rest)
+          # it matches and captures all remaining
+          nested_captures[nested_pattern.param] = array[index..-1]
+          index = array.length
         when MatcherSpecial.kind(:backref)
           matches &&= (nested_captures[nested_pattern.param] == array[index])
           index += 1
@@ -142,7 +146,9 @@ module Furnace::AST
               subset_captures = captures.dup
 
               if matched = submatch(array[index..-1], subset_pattern, subset_captures)
-                nested_captures[captures_key].push [subset_key, subset_captures]
+                if subset_key
+                  nested_captures[captures_key].push [subset_key, subset_captures]
+                end
 
                 sub_found = true
                 index += matched
