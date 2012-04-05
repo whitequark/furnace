@@ -9,7 +9,7 @@ module Furnace
       end
 
       def self.type
-        @type ||= name.sub(/^.*::/, '').to_sym
+        @type ||= name.sub(/^.*::/, '').sub(/Token$/, '').to_sym
       end
 
       def type
@@ -35,7 +35,11 @@ module Furnace
       protected
 
       def indent(code, options)
-        code.to_s.gsub(/^/, (options[:indent_with] || '  ') * (options[:level] || 1))
+        unless code.empty?
+          code.to_s.gsub(/^/, (options[:indent_with] || '  ') * (options[:level] || 1))
+        else
+          ""
+        end
       end
 
       def structurize(comment, options)
