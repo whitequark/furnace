@@ -2,6 +2,7 @@ require "furnace/version"
 
 require "furnace/ast"
 require "furnace/cfg"
+require "furnace/code"
 
 require "furnace/anf/node"
 require "furnace/anf/edge"
