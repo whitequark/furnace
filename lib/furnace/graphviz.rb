@@ -1,6 +1,6 @@
 require 'furnace/base'
 
-module Furnace::Graphviz
+class Furnace::Graphviz
   def initialize
     @code = "digraph {\n"
     @code << "node [labeljust=l,nojustify=true,fontname=monospace];"
