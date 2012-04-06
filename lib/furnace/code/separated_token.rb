@@ -1,6 +1,6 @@
 module Furnace
   module Code
-    class SeparatedToken < NonterminalToken
+    class SeparatedToken < SurroundedToken
       def text_between
         ""
       end
