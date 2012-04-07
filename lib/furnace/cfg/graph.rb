@@ -1,10 +1,10 @@
 module Furnace::CFG
   class Graph
-    attr_reader :nodes, :edges
+    attr_reader   :nodes
+    attr_accessor :entry, :exit
 
     def initialize
       @nodes = Set.new
-      @edges = Set.new
 
       @pending_label      = nil
       @pending_operations = []
@@ -18,38 +18,93 @@ module Furnace::CFG
       end
     end
 
-    def expand(label, operation)
-      @pending_label ||= label
-      @pending_operations << operation
+    def eliminate_unreachable!
+      worklist = @nodes.dup
+      while worklist.any?
+        node = worklist.first
+        worklist.delete node
+
+        next if node == @entry
+
+        if node.sources.count == 0
+          @nodes.delete node
+
+          flush
+        end
+      end
     end
 
-    def transfer(targets)
-      return unless @pending_label
+    def merge_redundant!
+      worklist = @nodes.dup
+      while worklist.any?
+        node = worklist.first
+        worklist.delete node
 
-      @nodes << Node.new(self, @pending_label, @pending_operations)
+        target = node.targets[0]
+        next if target == @exit
 
-      targets.each do |operation, target|
-        @edges << Edge.new(self, operation, @pending_label, target)
+        if node.targets.count == 1 &&
+            target.sources.count == 1
+          node.insns.delete node.cfi
+          @nodes.delete node
+          @nodes.delete target
+
+          new_node = Node.new(self,
+              node.label,
+              node.insns + target.insns,
+              target.cfi,
+              target.target_labels)
+          @nodes.add new_node
+          worklist.add new_node
+
+          if @entry == node
+            @entry = new_node
+          end
+
+          flush
+        end
+      end
+    end
+
+    def source_map
+      unless @source_map
+        @source_map = Hash.new { |h, k| h[k] = [] }
+
+        @nodes.each do |node|
+          node.targets.each do |target|
+            @source_map[target] << node
+          end
+        end
       end
 
-      @pending_label      = nil
-      @pending_operations = []
+      @source_map
+    end
+
+    def flush
+      @source_map = nil
     end
 
     def to_graphviz
       Furnace::Graphviz.new do |graph|
         @nodes.each do |node|
-          graph.node node.label, node.operations.map(&:inspect).join("\n")
-        end
-
-        @edges.each do |edge|
-          if edge.source_operation.nil?
-            label = "~"
+          if node.label == nil
+            contents = "<exit>"
           else
-            label = edge.source_operation
+            contents = node.insns.map(&:inspect).join("\n")
           end
 
-          graph.edge edge.source_label, edge.target_label, label
+          options = {}
+          if @entry == node
+            options.merge! color: 'green'
+          elsif @exit == node
+            options.merge! color: 'red'
+          end
+
+          graph.node node.label, contents, options
+
+          node.target_labels.each_with_index do |label, idx|
+            graph.edge node.label, label, "#{idx}"
+          end
         end
       end
     end

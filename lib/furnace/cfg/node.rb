@@ -1,25 +1,21 @@
 module Furnace::CFG
   class Node
-    attr_reader :label, :operations
+    attr_reader   :cfg, :label, :insns, :cfi, :target_labels
+    attr_accessor :sources
 
-    def initialize(cfg, label, operations)
-      @cfg, @label, @operations = cfg, label, operations
+    def initialize(cfg, label=nil, insns=[], cfi=nil, targets=[])
+      @cfg, @label, @insns, @cfi = cfg, label, insns, cfi
+      @target_labels = targets
     end
 
-    def entering_edges
-      @cfg.edges.select { |e| e.target == self }
+    def targets
+      @target_labels.map do |label|
+        @cfg.find_node label
+      end
     end
 
-    def leaving_edges
-      @cfg.edges.select { |e| e.source == self }
-    end
-
-    def leaving_edge(source)
-      leaving_edges.find { |e| e.source_operation == source }
-    end
-
-    def default_leaving_edge
-      leaving_edge(nil)
+    def sources
+      @cfg.source_map[self]
     end
 
     def ==(other)
@@ -27,10 +23,10 @@ module Furnace::CFG
     end
 
     def inspect
-      if @label
-        "<#{@label}:#{@operations.map(&:inspect).join ", "}>"
+      if @label || @insns.any?
+        "<#{@label}:#{@insns.map(&:inspect).join ", "}>"
       else
-        "<!exit>"
+        "<!dummy>"
       end
     end
   end
