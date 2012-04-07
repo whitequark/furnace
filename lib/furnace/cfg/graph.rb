@@ -5,9 +5,6 @@ module Furnace::CFG
 
     def initialize
       @nodes = Set.new
-
-      @pending_label      = nil
-      @pending_operations = []
     end
 
     def find_node(label)
@@ -19,6 +16,8 @@ module Furnace::CFG
     end
 
     def eliminate_unreachable!
+      unreachable = Set.new
+
       worklist = @nodes.dup
       while worklist.any?
         node = worklist.first
@@ -27,11 +26,12 @@ module Furnace::CFG
         next if node == @entry
 
         if node.sources.count == 0
-          @nodes.delete node
-
-          flush
+          unreachable.add node
         end
       end
+
+      @nodes = @nodes - unreachable
+      flush
     end
 
     def merge_redundant!

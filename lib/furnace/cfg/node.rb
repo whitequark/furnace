@@ -1,17 +1,32 @@
 module Furnace::CFG
   class Node
-    attr_reader   :cfg, :label, :insns, :cfi, :target_labels
-    attr_accessor :sources
+    attr_reader   :cfg, :label
 
-    def initialize(cfg, label=nil, insns=[], cfi=nil, targets=[])
-      @cfg, @label, @insns, @cfi = cfg, label, insns, cfi
-      @target_labels = targets
+    attr_reader   :instructions, :control_flow_instruction
+    alias :insns :instructions
+    alias :cfi   :control_flow_instruction
+
+    def initialize(cfg, label=nil, insns=[], cfi=nil, target_labels=[])
+      @cfg, @label  = cfg, label
+
+      @instructions = insns
+      @control_flow_instruction = cfi
+
+      @target_labels = target_labels
+    end
+
+    def target_labels
+      @target_labels
     end
 
     def targets
       @target_labels.map do |label|
         @cfg.find_node label
       end
+    end
+
+    def source_labels
+      sources.map &:label
     end
 
     def sources
