@@ -38,10 +38,12 @@ module Furnace::CFG
     end
 
     def inspect
-      if @label || @insns.any?
+      if @label && @insns
         "<#{@label}:#{@insns.map(&:inspect).join ", "}>"
+      elsif @insns
+        "<!unlabeled>"
       else
-        "<!dummy>"
+        "<!exit>"
       end
     end
   end

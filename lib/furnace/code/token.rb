@@ -34,7 +34,7 @@ module Furnace
 
       protected
 
-      def indent(code, options)
+      def indent(code, options=@options)
         unless code.empty?
           code.to_s.gsub(/^/, (options[:indent_with] || '  ') * (options[:level] || 1))
         else
