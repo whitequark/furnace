@@ -66,6 +66,38 @@ module Furnace::CFG
       end
     end
 
+    # Shamelessly stolen from
+    # http://www.cs.colostate.edu/~mstrout/CS553/slides/lecture04.pdf
+    def dominators
+      # values of β will give rise to dom!
+      dom = { @entry => Set[@entry] }
+
+      @nodes.each do |node|
+        next if node == @entry
+        dom[node] = @nodes.dup
+      end
+
+      change = true
+      while change
+        change = false
+        @nodes.each do |node|
+          next if node == @entry
+
+          pred = node.sources.map do |source|
+            dom[source]
+          end.reduce(:&)
+
+          current = Set[node].merge(pred)
+          if current != dom[node]
+            dom[node] = current
+            change = true
+          end
+        end
+      end
+
+      dom
+    end
+
     def source_map
       unless @source_map
         @source_map = Hash.new { |h, k| h[k] = [] }
@@ -90,7 +122,7 @@ module Furnace::CFG
           if node.label == nil
             contents = "<exit>"
           else
-            contents = node.insns.map(&:inspect).join("\n")
+            contents = "<#{node.label.inspect}>\n#{node.insns.map(&:inspect).join("\n")}"
           end
 
           options = {}
