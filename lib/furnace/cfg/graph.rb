@@ -69,33 +69,79 @@ module Furnace::CFG
     # Shamelessly stolen from
     # http://www.cs.colostate.edu/~mstrout/CS553/slides/lecture04.pdf
     def dominators
-      # values of β will give rise to dom!
-      dom = { @entry => Set[@entry] }
+      unless @dominators
+        # values of β will give rise to dom!
+        dom = { @entry => Set[@entry] }
 
-      @nodes.each do |node|
-        next if node == @entry
-        dom[node] = @nodes.dup
-      end
-
-      change = true
-      while change
-        change = false
         @nodes.each do |node|
           next if node == @entry
+          dom[node] = @nodes.dup
+        end
 
-          pred = node.sources.map do |source|
-            dom[source]
-          end.reduce(:&)
+        change = true
+        while change
+          change = false
+          @nodes.each do |node|
+            next if node == @entry
 
-          current = Set[node].merge(pred)
-          if current != dom[node]
-            dom[node] = current
-            change = true
+            #   Key Idea
+            # If a node dominates all
+            # predecessors of node n, then it
+            # also dominates node n.
+            pred = node.sources.map do |source|
+              dom[source]
+            end.reduce(:&)
+
+            current = Set[node].merge(pred)
+            if current != dom[node]
+              dom[node] = current
+              change = true
+            end
+          end
+        end
+
+        @dominators = dom
+      end
+
+      @dominators
+    end
+
+    # See also {#dominators} for references.
+    def identify_loops
+      loops = Hash.new { |h,k| h[k] = Set.new }
+
+      dom = dominators
+      @nodes.each do |node|
+        node.targets.each do |target|
+          #  Back edges
+          # A back edge of a natural loop is one whose
+          # target dominates its source.
+          if dom[node].include? target
+            loops[target].add node
           end
         end
       end
 
-      dom
+      # At this point, +loops+ contains a list of all nodes
+      # which have a back edge to the loop header. Expand
+      # it to the list of all nodes in the loop.
+      loops.each do |header, nodes|
+        #   Natural loop
+        # The natural loop of a back edge (m→n), where
+        # n dominates m, is the set of nodes x such that n
+        # dominates x and there is a path from x to m not
+        # containing n.
+        pre_header = dom[header]
+        all_nodes  = Set[]
+
+        nodes.each do |node|
+          all_nodes.merge(dom[node] - pre_header)
+        end
+
+        nodes.replace all_nodes
+      end
+
+      loops
     end
 
     def source_map
