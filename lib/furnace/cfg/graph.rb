@@ -16,8 +16,6 @@ module Furnace::CFG
     end
 
     def eliminate_unreachable!
-      unreachable = Set.new
-
       worklist = @nodes.dup
       while worklist.any?
         node = worklist.first
@@ -25,13 +23,12 @@ module Furnace::CFG
 
         next if node == @entry
 
-        if node.sources.count == 0
-          unreachable.add node
+        if node.sources.count == 0 ||
+              node.sources == [node]
+          @nodes.delete node
+          flush
         end
       end
-
-      @nodes = @nodes - unreachable
-      flush
     end
 
     def merge_redundant!

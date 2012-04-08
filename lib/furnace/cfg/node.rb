@@ -33,13 +33,19 @@ module Furnace::CFG
       @cfg.source_map[self]
     end
 
+    def exits?
+      targets == [@cfg.exit]
+    end
+
     def ==(other)
       self.label == other.label
     end
 
     def inspect
-      if @label && @insns
-        "<#{@label}:#{@insns.map(&:inspect).join ", "}>"
+      if @label && @instructions
+        "<#{@label}:#{@instructions.join ", "}>"
+      elsif @label
+        "<#{@label}>"
       elsif @insns
         "<!unlabeled>"
       else
