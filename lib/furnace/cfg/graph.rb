@@ -122,7 +122,7 @@ module Furnace::CFG
       dom = dominators
       @nodes.each do |node|
         node.targets.each do |target|
-          #  Back edges
+          #   Back edges
           # A back edge of a natural loop is one whose
           # target dominates its source.
           if dom[node].include? target
@@ -141,7 +141,7 @@ module Furnace::CFG
         # dominates x and there is a path from x to m not
         # containing n.
         pre_header = dom[header]
-        all_nodes  = Set[]
+        all_nodes  = Set[header]
 
         nodes.each do |node|
           all_nodes.merge(dom[node] - pre_header)
