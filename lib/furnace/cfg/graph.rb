@@ -42,14 +42,14 @@ module Furnace::CFG
 
         if node.targets.count == 1 &&
             target.sources.count == 1
-          node.insns.delete node.cfi
+          node.insns.delete node.cti
           @nodes.delete node
           @nodes.delete target
 
           new_node = Node.new(self,
               node.label,
               node.insns + target.insns,
-              target.cfi,
+              target.cti,
               target.target_labels)
           @nodes.add new_node
           worklist.add new_node
@@ -57,6 +57,18 @@ module Furnace::CFG
           if @entry == node
             @entry = new_node
           end
+
+          flush
+        elsif node.targets.count == 1 &&
+            node.insns.empty?
+          target = node.targets.first
+
+          node.sources.each do |source|
+            index = source.targets.index(node)
+            source.target_labels[index] = target.label
+          end
+
+          @nodes.delete node
 
           flush
         end

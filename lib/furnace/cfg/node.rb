@@ -2,15 +2,15 @@ module Furnace::CFG
   class Node
     attr_reader   :cfg, :label
 
-    attr_reader   :instructions, :control_flow_instruction
+    attr_reader   :instructions, :control_transfer_instruction
     alias :insns :instructions
-    alias :cfi   :control_flow_instruction
+    alias :cti   :control_transfer_instruction
 
-    def initialize(cfg, label=nil, insns=[], cfi=nil, target_labels=[])
+    def initialize(cfg, label=nil, insns=[], cti=nil, target_labels=[])
       @cfg, @label  = cfg, label
 
       @instructions = insns
-      @control_flow_instruction = cfi
+      @control_transfer_instruction = cti
 
       @target_labels = target_labels
     end
@@ -38,7 +38,7 @@ module Furnace::CFG
     end
 
     def ==(other)
-      self.label == other.label
+      other.is_a?(Node) && self.label == other.label
     end
 
     def inspect
