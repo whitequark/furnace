@@ -1,19 +1,31 @@
 module Furnace::AST
   module Visitor
     def visit(node)
-      node.children.map! do |child|
+      replacements = {}
+
+      node.children.each_with_index do |child, index|
         if child.is_a? Node
           visit child
 
           if child.type == :expand
-            child = child.children
+            replacements[index] = child.children
+          end
+        end
+      end
+
+      if replacements.any?
+        new_children = []
+
+        node.children.each_with_index do |child, index|
+          if replacements[index]
+            new_children.concat replacements[index]
+          else
+            new_children.push child
           end
         end
 
-        child
+        node.children.replace new_children
       end
-
-      node.children.flatten!
 
       node.children.delete_if do |child|
         if child.is_a? Node
