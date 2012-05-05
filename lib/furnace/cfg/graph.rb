@@ -5,10 +5,16 @@ module Furnace::CFG
 
     def initialize
       @nodes = Set.new
+
+      @source_map = nil
+      @label_map  = {}
     end
 
     def find_node(label)
-      if node = @nodes.find { |n| n.label == label }
+      if node = @label_map[label]
+        node
+      elsif node = @nodes.find { |n| n.label == label }
+        @label_map[label] = node
         node
       else
         raise "Cannot find CFG node #{label}"
@@ -16,19 +22,31 @@ module Furnace::CFG
     end
 
     def eliminate_unreachable!
-      worklist = @nodes.dup
-      while worklist.any?
-        node = worklist.first
-        worklist.delete node
+      queue     = [entry]
+      reachable = Set[]
 
-        next if node == @entry
+      while queue.any?
+        node = queue.shift
+        reachable.add node
 
-        if node.sources.count == 0 ||
-              node.sources == [node]
-          @nodes.delete node
-          flush
+        node.targets.each do |target|
+          unless reachable.include? target
+            queue.push target
+          end
+        end
+
+        if node.exception
+          unless reachable.include? node.exception
+            queue.push node.exception
+          end
         end
       end
+
+      @nodes.each do |node|
+        @nodes.remove node unless reachable.include? node
+      end
+
+      flush
     end
 
     def merge_redundant!
@@ -41,7 +59,9 @@ module Furnace::CFG
         next if target == @exit
 
         if node.targets.count == 1 &&
-            target.sources.count == 1
+            target.sources.count == 1 &&
+            node.exception == target.exception
+
           node.insns.delete node.cti
           @nodes.delete node
           @nodes.delete target
@@ -101,6 +121,9 @@ module Furnace::CFG
               dom[source]
             end.reduce(:&)
 
+            # An exception handler header node has no regular sources.
+            pred = [] if pred.nil?
+
             current = Set[node].merge(pred)
             if current != dom[node]
               dom[node] = current
@@ -153,7 +176,7 @@ module Furnace::CFG
       loops
     end
 
-    def source_map
+    def sources_for(node)
       unless @source_map
         @source_map = Hash.new { |h, k| h[k] = [] }
 
@@ -162,13 +185,18 @@ module Furnace::CFG
             @source_map[target] << node
           end
         end
+
+        @source_map.each do |node, sources|
+          sources.freeze
+        end
       end
 
-      @source_map
+      @source_map[node]
     end
 
     def flush
       @source_map = nil
+      @label_map.clear
     end
 
     def to_graphviz
@@ -191,6 +219,10 @@ module Furnace::CFG
 
           node.target_labels.each_with_index do |label, idx|
             graph.edge node.label, label, "#{idx}"
+          end
+
+          if node.exception_label
+            graph.edge node.label, node.exception_label, "Exc", color: 'orange'
           end
         end
       end
