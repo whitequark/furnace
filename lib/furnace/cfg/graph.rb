@@ -43,7 +43,7 @@ module Furnace::CFG
       end
 
       @nodes.each do |node|
-        @nodes.remove node unless reachable.include? node
+        @nodes.delete node unless reachable.include? node
       end
 
       flush
