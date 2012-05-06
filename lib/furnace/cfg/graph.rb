@@ -173,6 +173,7 @@ module Furnace::CFG
         nodes.replace all_nodes
       end
 
+      loops.default = nil
       loops
     end
 
