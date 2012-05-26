@@ -1,4 +1,4 @@
-require "furnace/base"
+require "furnace"
 
 require "furnace/ast/node"
 require "furnace/ast/symbolic_node"

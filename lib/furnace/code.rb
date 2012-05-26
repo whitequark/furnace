@@ -1,6 +1,6 @@
 require "set"
 
-require "furnace/base"
+require "furnace"
 
 require "furnace/code/token"
 require "furnace/code/terminal_token"

@@ -1,4 +1,4 @@
-require 'furnace/base'
+require 'furnace'
 
 class Furnace::Graphviz
   def initialize

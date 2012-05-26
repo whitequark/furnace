@@ -58,6 +58,11 @@ module Furnace::CFG
         target = node.targets[0]
         next if target == @exit
 
+        # Skip explicitly non-redundant nodes
+        if node.cti && node.cti.metadata[:keep]
+          next
+        end
+
         if node.targets.count == 1 &&
             target.sources.count == 1 &&
             node.exception == target.exception
