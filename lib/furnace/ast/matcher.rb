@@ -184,6 +184,8 @@ module Furnace::AST
 
       if pattern === astlet
         true
+      elsif pattern.is_a? MatcherSpecial
+        false
       elsif astlet.is_a? Node
         submatch([astlet.type].concat(astlet.children), pattern, captures)
       elsif astlet.is_a? Array
