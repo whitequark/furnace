@@ -102,45 +102,56 @@ module Furnace::CFG
 
     # Shamelessly stolen from
     # http://www.cs.colostate.edu/~mstrout/CS553/slides/lecture04.pdf
-    def dominators
-      unless @dominators
-        # values of β will give rise to dom!
-        dom = { @entry => Set[@entry] }
+    def compute_generic_domination(start, forward)
+      # values of β will give rise to dom!
+      dom = { start => Set[start] }
 
-        @nodes.each do |node|
-          next if node == @entry
-          dom[node] = @nodes.dup
-        end
-
-        change = true
-        while change
-          change = false
-          @nodes.each do |node|
-            next if node == @entry
-
-            #   Key Idea
-            # If a node dominates all
-            # predecessors of node n, then it
-            # also dominates node n.
-            pred = node.sources.map do |source|
-              dom[source]
-            end.reduce(:&)
-
-            # An exception handler header node has no regular sources.
-            pred = [] if pred.nil?
-
-            current = Set[node].merge(pred)
-            if current != dom[node]
-              dom[node] = current
-              change = true
-            end
-          end
-        end
-
-        @dominators = dom
+      @nodes.each do |node|
+        next if node == start
+        dom[node] = @nodes.dup
       end
 
-      @dominators
+      change = true
+      while change
+        change = false
+        @nodes.each do |node|
+          next if node == start
+
+          # Are we computing dominators or postdominators?
+          if forward
+            edges = node.sources
+          else
+            edges = node.targets
+          end
+
+          #   Key Idea [for dominators]
+          # If a node dominates all
+          # predecessors of node n, then it
+          # also dominates node n.
+          pred = edges.map do |source|
+            dom[source]
+          end.reduce(:&)
+
+          # An exception handler header node has no regular sources.
+          pred = [] if pred.nil?
+
+          current = Set[node].merge(pred)
+          if current != dom[node]
+            dom[node] = current
+            change = true
+          end
+        end
+      end
+
+      dom
+    end
+
+    def dominators
+      @dominators ||= compute_generic_domination(@entry, true)
+    end
+
+    def postdominators
+      @postdominators ||= compute_generic_domination(@exit, false)
     end
 
     # See also {#dominators} for references.
@@ -148,6 +159,7 @@ module Furnace::CFG
       loops = Hash.new { |h,k| h[k] = Set.new }
 
       dom = dominators
+
       @nodes.each do |node|
         node.targets.each do |target|
           #   Back edges
