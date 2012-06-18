@@ -43,6 +43,14 @@ module Furnace::CFG
       @cfg.find_node @exception_label if @exception_label
     end
 
+    def exception_source_labels
+      exception_sources.map &:label
+    end
+
+    def exception_sources
+      @cfg.sources_for(self, true)
+    end
+
     def exits?
       targets == [@cfg.exit]
     end

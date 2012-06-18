@@ -119,9 +119,9 @@ module Furnace::CFG
 
           # Are we computing dominators or postdominators?
           if forward
-            edges = node.sources
+            edges = node.sources + node.exception_sources
           else
-            edges = node.targets
+            edges = node.targets + [ node.exception ]
           end
 
           #   Key Idea [for dominators]
@@ -194,22 +194,33 @@ module Furnace::CFG
       loops
     end
 
-    def sources_for(node)
+    def sources_for(node, exceptions=false)
       unless @source_map
         @source_map = Hash.new { |h, k| h[k] = [] }
+        @exception_source_map = Hash.new { |h, k| h[k] = [] }
 
         @nodes.each do |node|
           node.targets.each do |target|
             @source_map[target] << node
           end
+
+          @exception_source_map[node.exception] << node
         end
 
         @source_map.each do |node, sources|
           sources.freeze
         end
+
+        @exception_source_map.each do |node, sources|
+          sources.freeze
+        end
       end
 
-      @source_map[node]
+      if exceptions
+        @exception_source_map[node]
+      else
+        @source_map[node]
+      end
     end
 
     def flush
