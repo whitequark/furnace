@@ -95,6 +95,10 @@ module Furnace::CFG
 
           @nodes.delete node
 
+          if @entry == node
+            @entry = target
+          end
+
           flush
         end
       end
