@@ -75,7 +75,8 @@ module Furnace::CFG
               node.label,
               node.insns + target.insns,
               target.cti,
-              target.target_labels)
+              target.target_labels,
+              target.exception_label)
           @nodes.add new_node
           worklist.add new_node
 
