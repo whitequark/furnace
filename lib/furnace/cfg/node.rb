@@ -5,14 +5,18 @@ module Furnace::CFG
     attr_accessor :target_labels, :exception_label
     attr_accessor :instructions, :control_transfer_instruction
 
+    attr_accessor :metadata
+
     alias :insns  :instructions
     alias :insns= :instructions=
     alias :cti    :control_transfer_instruction
     alias :cti=   :control_transfer_instruction=
 
     def initialize(cfg, label=nil, insns=[], cti=nil,
-            target_labels=[], exception_label=nil)
+            target_labels=[], exception_label=nil,
+            metadata={})
       @cfg, @label  = cfg, label
+      @metadata = metadata
 
       @instructions = insns
       @control_transfer_instruction = cti
@@ -64,10 +68,10 @@ module Furnace::CFG
         "<#{@label}:#{@instructions.join ", "}>"
       elsif @label
         "<#{@label}>"
-      elsif @insns
-        "<!unlabeled>"
+      elsif @instructions
+        "<!unlabeled:#{@instructions.join ", "}>"
       else
-        "<!exit>"
+        "<!exit#{metadata}>"
       end
     end
   end

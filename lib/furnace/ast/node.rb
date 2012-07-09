@@ -1,23 +1,9 @@
 module Furnace::AST
   class Node
-    attr_accessor :type, :parent, :children, :metadata
+    attr_accessor :type, :children, :metadata
 
     def initialize(type, children=[], metadata={})
       @type, @children, @metadata = type.to_sym, children, metadata
-    end
-
-    def normalize_hierarchy!
-      @children.each do |child|
-        if child.respond_to? :parent=
-          child.parent = self
-        end
-
-        if child.respond_to? :normalize_hierarchy!
-          child.normalize_hierarchy!
-        end
-      end
-
-      self
     end
 
     def update(type, children=nil, metadata={})
@@ -50,18 +36,6 @@ module Furnace::AST
       else
         false
       end
-    end
-
-    def index
-      parent.children.find_index(self)
-    end
-
-    def next
-      parent.children[index + 1]
-    end
-
-    def prev
-      parent.children[index - 1]
     end
 
     def to_s

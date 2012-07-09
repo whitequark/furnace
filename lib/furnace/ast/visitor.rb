@@ -29,8 +29,6 @@ module Furnace::AST
 
       node.children.delete_if do |child|
         if child.is_a? Node
-          child.parent = node
-
           child.type == :remove
         end
       end

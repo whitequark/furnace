@@ -63,7 +63,7 @@ module Furnace::CFG
         next if target == @exit
 
         # Skip explicitly non-redundant nodes
-        if node.cti && node.cti.metadata[:keep]
+        if node.metadata[:keep]
           next
         end
 
@@ -242,7 +242,15 @@ module Furnace::CFG
           if node.label == nil
             contents = "<exit>"
           else
-            contents = "<#{node.label.inspect}>\n#{node.insns.map(&:inspect).join("\n")}"
+            contents = "<#{node.label.inspect}>"
+          end
+
+          if node.metadata.any?
+            contents << "\n#{node.metadata.inspect}"
+          end
+
+          if node.insns.any?
+            contents << "\n#{node.insns.map(&:inspect).join("\n")}"
           end
 
           options = {}
