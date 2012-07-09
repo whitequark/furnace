@@ -22,28 +22,30 @@ module Furnace::CFG
     end
 
     def eliminate_unreachable!
-      queue     = [entry]
+      worklist  = Set[entry]
       reachable = Set[]
 
-      while queue.any?
-        node = queue.shift
+      while worklist.any?
+        node = worklist.first
+        worklist.delete node
         reachable.add node
 
         node.targets.each do |target|
           unless reachable.include? target
-            queue.push target
+            worklist.add target
           end
         end
 
         if node.exception
           unless reachable.include? node.exception
-            queue.push node.exception
+            worklist.add node.exception
           end
         end
       end
 
       @nodes.each do |node|
         @nodes.delete node unless reachable.include? node
+        yield node if block_given?
       end
 
       flush
@@ -67,27 +69,25 @@ module Furnace::CFG
             target.sources.count == 1 &&
             node.exception == target.exception
 
+          yield node, target if block_given?
+
           node.insns.delete node.cti
-          @nodes.delete node
           @nodes.delete target
+          worklist.delete target
 
-          new_node = Node.new(self,
-              node.label,
-              node.insns + target.insns,
-              target.cti,
-              target.target_labels,
-              target.exception_label)
-          @nodes.add new_node
-          worklist.add new_node
+          node.insns.concat target.insns
+          node.cti           = target.cti
+          node.target_labels = target.target_labels
 
-          if @entry == node
-            @entry = new_node
-          end
+          worklist.add node
 
           flush
         elsif node.targets.count == 1 &&
             node.insns.empty?
+
           target = node.targets.first
+
+          yield target, node if block_given?
 
           node.sources.each do |source|
             index = source.targets.index(node)
@@ -95,6 +95,7 @@ module Furnace::CFG
           end
 
           @nodes.delete node
+          worklist.delete node
 
           if @entry == node
             @entry = target
