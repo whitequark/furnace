@@ -44,8 +44,10 @@ module Furnace::CFG
       end
 
       @nodes.each do |node|
-        @nodes.delete node unless reachable.include? node
-        yield node if block_given?
+        unless reachable.include? node
+          @nodes.delete node
+          yield node if block_given?
+        end
       end
 
       flush
