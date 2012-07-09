@@ -96,10 +96,18 @@ module Furnace::AST
 
     def fancy_type
       dasherized = @type.to_s.gsub('_', '-')
+
+      if (@metadata.keys - [:label, :origin]).any?
+        metainfo = @metadata.dup
+        metainfo.delete :label
+        metainfo.delete :origin
+        metainfo = "#{metainfo.inspect}:"
+      end
+
       if @metadata[:label]
-        "#{@metadata[:label]}:#{dasherized}"
+        "#{@metadata[:label]}:#{metainfo}#{dasherized}"
       else
-        dasherized
+        "#{metainfo}#{dasherized}"
       end
     end
   end
