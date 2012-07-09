@@ -67,8 +67,8 @@ module Furnace::CFG
           next
         end
 
-        if node.targets.count == 1 &&
-            target.sources.count == 1 &&
+        if node.targets.uniq == [target] &&
+            target.sources.uniq == [node] &&
             node.exception == target.exception
 
           yield node, target if block_given?
