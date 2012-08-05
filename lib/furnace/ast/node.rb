@@ -45,6 +45,12 @@ module Furnace::AST
     def to_sexp(indent=0)
       str = "#{"  " * indent}(#{fancy_type}"
 
+      if @metadata[:ellipsis]
+        str << " <omitted>)"
+
+        return str
+      end
+
       children.each do |child|
         if (!children[0].is_a?(Node) && child.is_a?(Node)) ||
             (children[0].is_a?(Node) && child.is_a?(Node) &&
@@ -71,11 +77,17 @@ module Furnace::AST
     def fancy_type
       dasherized = @type.to_s.gsub('_', '-')
 
-      if (@metadata.keys - [:label, :origin]).any?
+      if @metadata.any?
         metainfo = @metadata.dup
         metainfo.delete :label
         metainfo.delete :origin
-        metainfo = "#{metainfo.inspect}:"
+        metainfo.delete :ellipsis
+
+        if metainfo.any?
+          metainfo = "#{metainfo.inspect}:"
+        else
+          metainfo = nil
+        end
       end
 
       if @metadata[:label]
