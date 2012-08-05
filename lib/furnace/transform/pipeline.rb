@@ -7,6 +7,8 @@ module Furnace
 
       def run(*sequence)
         @stages.each do |stage|
+          break if stage.nil?
+
           sequence = stage.transform *sequence
         end
 
