@@ -234,6 +234,9 @@ module Furnace::CFG
     def flush
       @source_map = nil
       @label_map.clear
+
+      @dominators = nil
+      @postdominators = nil
     end
 
     def to_graphviz
