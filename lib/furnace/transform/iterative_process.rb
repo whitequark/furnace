@@ -10,7 +10,7 @@ module Furnace
           changed = false
 
           @stages.each do |stage|
-            break if stage.nil?
+            return sequence if stage.nil?
 
             if new_sequence = stage.transform(*sequence)
               changed = true
