@@ -29,14 +29,14 @@ class Furnace::Graphviz
       label: label
     })
 
-    @code << %Q{#{name.inspect} #{graphviz_options(options)};\n}
+    @code << %Q{"#{name.inspect}" #{graphviz_options(options)};\n}
   end
 
   def edge(from, to, label="", options={})
     options = options.merge({
       label: label.inspect
     })
-    @code << %Q{#{from.inspect} -> #{to.inspect} #{graphviz_options(options)};\n}
+    @code << %Q{"#{from.inspect}" -> "#{to.inspect}" #{graphviz_options(options)};\n}
   end
 
   def to_s

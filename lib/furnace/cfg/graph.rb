@@ -270,7 +270,7 @@ module Furnace::CFG
           end
 
           if node.exception_label
-            graph.edge node.label, node.exception_label, "Exc", color: 'orange'
+            graph.edge node.label, node.exception_label, "", color: 'orange'
           end
         end
       end
