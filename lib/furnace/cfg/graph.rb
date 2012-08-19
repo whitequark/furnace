@@ -22,7 +22,7 @@ module Furnace::CFG
     end
 
     def eliminate_unreachable!
-      worklist  = Set[entry]
+      worklist  = Set[ entry, exit ]
       reachable = Set[]
 
       while worklist.any?
