@@ -1,36 +1,33 @@
 module Furnace::AST
   class Node
-    attr_accessor :type, :children, :metadata
+    attr_reader :type, :children
 
-    def initialize(type, children=[], metadata={})
-      @type, @children, @metadata = type.to_sym, children, metadata
-    end
-
-    def update(type, children=nil, metadata={})
-      @type     = type
-      @children = children || @children
-
-      # If something non-nil is passed, including default value, then merge.
-      # Else, clear metadata store.
-      if metadata
-        @metadata.merge!(metadata)
-      else
-        @metadata = {}
+    def initialize(type, children=[], properties={})
+      @type, @children = type.to_sym, children.to_a
+      properties.each do |name, value|
+        instance_variable_set :"@#{name}", value
       end
-
-      self
+      freeze
     end
 
-    def dup
-      node = super
-      node.children = @children.dup
-      node.metadata = @metadata.dup
-      node
+    def update(type=nil, children=nil, properties={})
+      new_type     = type     || @type
+      new_children = children || @children
+
+      if @type == new_type &&
+          @children == new_children &&
+          properties.empty?
+        self
+      else
+        dup.send :initialize, new_type, new_children, properties
+      end
     end
 
     def ==(other)
-      if other.respond_to? :to_astlet
-        other = other.to_astlet
+      if equal?(other)
+        true
+      elsif other.respond_to? :to_ast
+        other = other.to_ast
         other.type == self.type &&
           other.children == self.children
       else
@@ -45,17 +42,10 @@ module Furnace::AST
     def to_sexp(indent=0)
       str = "#{"  " * indent}(#{fancy_type}"
 
-      if @metadata[:ellipsis]
-        str << " <omitted>)"
-
-        return str
-      end
-
       children.each do |child|
         if (!children[0].is_a?(Node) && child.is_a?(Node)) ||
             (children[0].is_a?(Node) && child.is_a?(Node) &&
-              child.children.any? { |c| c.is_a?(Node) || c.is_a?(Array) }) ||
-            (child.is_a?(Node) && child.metadata[:label])
+              child.children.any? { |c| c.is_a?(Node) || c.is_a?(Array) })
           str << "\n#{child.to_sexp(indent + 1)}"
         else
           str << " #{child.inspect}"
@@ -68,33 +58,14 @@ module Furnace::AST
     end
     alias :inspect :to_sexp
 
-    def to_astlet
+    def to_ast
       self
     end
 
     protected
 
     def fancy_type
-      dasherized = @type.to_s.gsub('_', '-')
-
-      if @metadata.any?
-        metainfo = @metadata.dup
-        metainfo.delete :label
-        metainfo.delete :origin
-        metainfo.delete :ellipsis
-
-        if metainfo.any?
-          metainfo = "#{metainfo.inspect}:"
-        else
-          metainfo = nil
-        end
-      end
-
-      if @metadata[:label]
-        "#{@metadata[:label]}:#{metainfo}#{dasherized}"
-      else
-        "#{metainfo}#{dasherized}"
-      end
+      @type.to_s.gsub('_', '-')
     end
   end
 end
