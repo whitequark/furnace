@@ -128,6 +128,8 @@ module Furnace::CFG
           # Are we computing dominators or postdominators?
           if forward
             edges = node.sources + node.exception_sources
+          elsif node.exception.nil?
+            edges = node.targets
           else
             edges = node.targets + [ node.exception ]
           end
