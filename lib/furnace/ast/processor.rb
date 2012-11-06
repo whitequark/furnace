@@ -1,6 +1,6 @@
 module Furnace::AST
-  module StrictVisitor
-    def visit(node)
+  module Processor
+    def process(node)
       if node
         # Invoke a specific handler
         on_handler = :"on_#{node.type}"
@@ -16,7 +16,7 @@ module Furnace::AST
       node
     end
 
-    def visit_all(nodes)
+    def process_all(nodes)
       nodes.map do |node|
         visit node
       end

@@ -4,22 +4,27 @@ module Furnace::AST
 
     def initialize(type, children=[], properties={})
       @type, @children = type.to_sym, children.to_a
+
       properties.each do |name, value|
         instance_variable_set :"@#{name}", value
       end
+
       freeze
     end
 
-    def update(type=nil, children=nil, properties={})
-      new_type     = type     || @type
-      new_children = children || @children
+    protected :dup
+
+    def updated(type=nil, children=nil, properties=nil)
+      new_type       = type       || @type
+      new_children   = children   || @children
+      new_properties = properties || {}
 
       if @type == new_type &&
           @children == new_children &&
-          properties.empty?
+          properties.nil?
         self
       else
-        dup.send :initialize, new_type, new_children, properties
+        dup.send :initialize, new_type, new_children, new_properties
       end
     end
 
