@@ -3,7 +3,7 @@ module Furnace::AST
     attr_reader :type, :children
 
     def initialize(type, children=[], properties={})
-      @type, @children = type.to_sym, children.to_a
+      @type, @children = type.to_sym, children.to_a.freeze
 
       properties.each do |name, value|
         instance_variable_set :"@#{name}", value
@@ -45,21 +45,23 @@ module Furnace::AST
     end
 
     def to_sexp(indent=0)
-      str = "#{"  " * indent}(#{fancy_type}"
+      sexp = "#{"  " * indent}(#{fancy_type}"
 
-      children.each do |child|
-        if (!children[0].is_a?(Node) && child.is_a?(Node)) ||
-            (children[0].is_a?(Node) && child.is_a?(Node) &&
-              child.children.any? { |c| c.is_a?(Node) || c.is_a?(Array) })
-          str << "\n#{child.to_sexp(indent + 1)}"
+      first_node_child = children.index do |child|
+        child.is_a?(Node) || child.is_a?(Array)
+      end || children.count
+
+      children.each_with_index do |child, idx|
+        if child.is_a?(Node) && idx >= first_node_child
+          sexp << "\n#{child.to_sexp(indent + 1)}"
         else
-          str << " #{child.inspect}"
+          sexp << " #{child.inspect}"
         end
       end
 
-      str << ")"
+      sexp << ")"
 
-      str
+      sexp
     end
     alias :inspect :to_sexp
 

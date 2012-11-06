@@ -18,7 +18,7 @@ module Furnace::AST
 
     def process_all(nodes)
       nodes.map do |node|
-        visit node
+        process node
       end
     end
 

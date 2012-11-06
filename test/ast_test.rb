@@ -1,0 +1,166 @@
+require_relative 'test_helper'
+
+describe AST::Node do
+  class MetaNode < AST::Node
+    attr_reader :meta
+  end
+
+  before do
+    @node = AST::Node.new(:node, [ 0, 1 ])
+    @metanode = MetaNode.new(:node, [ 0, 1 ], meta: 'value')
+  end
+
+  it 'should have accessors for type and children' do
+    @node.type.should.equal :node
+    @node.children.should.equal [0, 1]
+  end
+
+  it 'should set metadata' do
+    @metanode.meta.should.equal 'value'
+  end
+
+  it 'should be frozen' do
+    @node.frozen?.should.be.true
+    @node.children.frozen?.should.be.true
+  end
+
+  it 'should not allow duping' do
+    -> { @node.dup }.should.raise NoMethodError
+  end
+
+  it 'should return an updated node, but only if needed' do
+    @node.updated().should.be.identical_to @node
+    @node.updated(:node).should.be.identical_to @node
+    @node.updated(nil, [0, 1]).should.be.identical_to @node
+
+    updated = @node.updated(:other_node)
+    updated.should.not.be.identical_to @node
+    updated.type.should.equal :other_node
+    updated.children.should.equal @node.children
+
+    updated.frozen?.should.be.true
+
+    updated = @node.updated(nil, [1, 1])
+    updated.should.not.be.identical_to @node
+    updated.type.should.equal @node.type
+    updated.children.should.equal [1, 1]
+
+    updated = @metanode.updated(nil, nil, meta: 'other_value')
+    updated.meta.should.equal 'other_value'
+  end
+
+  it 'should use fancy type in to_s' do
+    node = AST::Node.new(:ast_node)
+    node.to_s.should.equal '(ast-node ...)'
+  end
+
+  it 'should format to_sexp correctly' do
+    AST::Node.new(:a, [ :sym, [ 1, 2 ] ]).to_sexp.should.equal '(a :sym [1, 2])'
+    AST::Node.new(:a, [ :sym, @node ]).to_sexp.should.equal "(a :sym\n  (node 0 1))"
+    AST::Node.new(:a, [ :sym,
+      AST::Node.new(:b, [ @node, @node ])
+    ]).to_sexp.should.equal "(a :sym\n  (b\n    (node 0 1)\n    (node 0 1)))"
+  end
+
+  it 'should return self in to_ast' do
+    @node.to_ast.should.be.identical_to @node
+  end
+
+  it 'should only use type and children in comparisons' do
+    @node.should.equal @node
+    @node.should.equal @metanode
+    @node.should.not.equal :foo
+
+    mock_node = Object.new.tap do |obj|
+      def obj.to_ast
+        self
+      end
+
+      def obj.type
+        :node
+      end
+
+      def obj.children
+        [ 0, 1 ]
+      end
+    end
+    @node.should.equal mock_node
+  end
+end
+
+describe AST::Processor do
+  def have_sexp(text)
+    text = text.lines.map { |line| line.sub /^ +\|(.+)/, '\1' }.join.rstrip
+    lambda { |ast| ast.to_sexp == text }
+  end
+
+  class MockProcessor
+    include AST::Processor
+
+    attr_reader :counts
+
+    def initialize
+      @counts = Hash.new(0)
+    end
+
+    def on_root(node)
+      count_node(node)
+      node.updated(nil, process_all(node.children))
+    end
+    alias on_body on_root
+
+    def on_def(node)
+      count_node(node)
+      name, arglist, body = node.children
+      node.updated(:def, [ name, process(arglist), process(body) ])
+    end
+
+    def handler_missing(node)
+      count_node(node)
+    end
+
+    def count_node(node)
+      @counts[node.type] += 1; nil
+    end
+  end
+
+  before do
+    @ast = AST::Node.new(:root, [
+      AST::Node.new(:def, [ :func,
+        AST::Node.new(:arglist, [ :foo, :bar ]),
+        AST::Node.new(:body, [
+          AST::Node.new(:invoke, [ :puts, "Hello world" ])
+        ])
+      ]),
+      AST::Node.new(:invoke, [ :func ])
+    ])
+
+    @processor = MockProcessor.new
+  end
+
+  it 'should visit every node' do
+    @processor.process(@ast).should.equal @ast
+    @processor.counts.should.equal({
+      root:    1,
+      def:     1,
+      arglist: 1,
+      body:    1,
+      invoke:  2
+    })
+  end
+
+  it 'should be able to replace inner nodes' do
+    def @processor.on_arglist(node)
+      node.updated(:new_fancy_arglist)
+    end
+
+    @processor.process(@ast).should have_sexp(<<-SEXP)
+    |(root
+    |  (def :func
+    |    (new-fancy-arglist :foo :bar)
+    |    (body
+    |      (invoke :puts "Hello world")))
+    |  (invoke :func))
+    SEXP
+  end
+end
