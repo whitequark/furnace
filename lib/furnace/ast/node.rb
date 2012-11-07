@@ -67,7 +67,7 @@ module Furnace::AST
     # attribute readers for such variables. The values passed in the hash
     # are not frozen or whitelisted; such behavior can also be implemented\
     # by subclassing Node and overriding this method.
-    def assign_properties
+    def assign_properties(properties)
       properties.each do |name, value|
         instance_variable_set :"@#{name}", value
       end
