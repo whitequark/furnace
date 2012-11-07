@@ -3,7 +3,6 @@ module Furnace
 
   require "furnace/ast"
   require "furnace/cfg"
-  require "furnace/code"
 
   require "furnace/transform/pipeline"
   require "furnace/transform/iterative_process"
