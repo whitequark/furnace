@@ -1,19 +1,89 @@
 module Furnace::AST
+  # Node is an immutable class, instances of which represent abstract
+  # syntax tree nodes. It combines semantic information (i.e. anything
+  # that affects the algorithmic properties of a program) with
+  # meta-information (line numbers or compiler intermediates).
+  #
+  # Notes on inheritance
+  # ====================
+  #
+  # The distinction between semantics and metadata is important. Complete
+  # semantic information should be contained within just the {#type} and
+  # {#children} of a Node instance; in other words, if an AST was to be
+  # stripped of all meta-information, it should remain a valid AST which
+  # could be successfully processed to yield a result with the same
+  # algorithmic properties.
+  #
+  # Thus, Node should never be inherited in order to define methods which
+  # affect or return semantic information, such as getters for `class_name`,
+  # `superclass` and `body` in the case of a hypothetical `ClassNode`. The
+  # correct solution is to use a generic Node with a {#type} of `:class`
+  # and three children. See also {Processor} for tips on working with such
+  # ASTs.
+  #
+  # On the other hand, Node can and should be inherited to define
+  # application-specific metadata (see also {#initialize}) or customize the
+  # printing format. It is expected that an application would have one or two
+  # such classes and use them across the entire codebase.
+  #
+  # The rationale for this pattern is extensibility and maintainability.
+  # Unlike static ones, dynamic languages do not require the presence of a
+  # predefined, rigid structure, nor does it improve dispatch efficiency,
+  # and while such a structure can certainly be defined, it does not add
+  # any value but incurs a maintaining cost.
+  # For example, extending the AST even with a transformation-local
+  # temporary node type requires making globally visible changes to
+  # the codebase.
+  #
   class Node
-    attr_reader :type, :children
+    # Returns the type of this node.
+    # @return [Symbol]
+    attr_reader :type
 
+    # Returns the children of this node.
+    # The returned value is frozen.
+    # @return [Array]
+    attr_reader :children
+
+    # Constructs a new instance of Node.
+    #
+    # The arguments `type` and `children` are converted with `to_sym` and
+    # `to_a` respectively. Additionally, the result of converting `children`
+    # is frozen. While mutating the arguments is generally considered harmful,
+    # the most common case is to pass an array literal to the constructor. If
+    # your code does not expect the argument to be frozen, use `#dup`.
+    #
+    # The `properties` hash is passed to {#assign_properties}.
     def initialize(type, children=[], properties={})
       @type, @children = type.to_sym, children.to_a.freeze
 
-      properties.each do |name, value|
-        instance_variable_set :"@#{name}", value
-      end
+      assign_properties(properties)
 
       freeze
     end
 
+    # By default, each entry in the `properties` hash is assigned to
+    # a local variable in this instance of Node. A subclass should define
+    # attribute readers for such variables. The values passed in the hash
+    # are not frozen or whitelisted; such behavior can also be implemented\
+    # by subclassing Node and overriding this method.
+    def assign_properties
+      properties.each do |name, value|
+        instance_variable_set :"@#{name}", value
+      end
+    end
+    protected :assign_properties
+
     protected :dup
 
+    # Returns a new instance of Node where non-nil arguments replace the
+    # corresponding fields of `self`.
+    #
+    # For example, `Node.new(:foo, [ 1, 2 ]).updated(:bar)` would yield
+    # `(bar 1 2)`, and `Node.new(:foo, [ 1, 2 ]).updated(nil, [])` would
+    # yield `(foo)`.
+    #
+    # If the resulting node would be identical to `self`, does nothing.
     def updated(type=nil, children=nil, properties=nil)
       new_type       = type       || @type
       new_children   = children   || @children
@@ -28,6 +98,8 @@ module Furnace::AST
       end
     end
 
+    # Compares `self` to `other`, possibly converting with `to_ast`. Only
+    # `type` and `children` are compared; metadata is deliberately ignored.
     def ==(other)
       if equal?(other)
         true
@@ -40,10 +112,12 @@ module Furnace::AST
       end
     end
 
+    # Converts `self` to a concise s-expression, omitting any children.
     def to_s
       "(#{fancy_type} ...)"
     end
 
+    # Converts `self` to a pretty-printed s-expression.
     def to_sexp(indent=0)
       sexp = "#{"  " * indent}(#{fancy_type}"
 
@@ -65,12 +139,16 @@ module Furnace::AST
     end
     alias :inspect :to_sexp
 
+    # Returns `self`.
     def to_ast
       self
     end
 
     protected
 
+    # Returns `@type` with all underscores replaced by dashes. This allows
+    # to write symbol literals without quotes in Ruby sources and yet have
+    # nicely looking s-expressions.
     def fancy_type
       @type.to_s.gsub('_', '-')
     end
