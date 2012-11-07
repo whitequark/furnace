@@ -23,7 +23,7 @@ module Furnace::CFG
       end
     end
 
-    def sources_for(node, exceptions=false)
+    def sources_for(node, find_exceptions=false)
       unless @source_map
         @source_map = Hash.new { |h, k| h[k] = [] }
         @exception_source_map = Hash.new { |h, k| h[k] = [] }
@@ -45,7 +45,7 @@ module Furnace::CFG
         end
       end
 
-      if exceptions
+      if find_exceptions
         @exception_source_map[node]
       else
         @source_map[node]
@@ -56,8 +56,7 @@ module Furnace::CFG
       @source_map = nil
       @label_map.clear
 
-      @dominators = nil
-      @postdominators = nil
+      super if defined?(super)
     end
 
     def to_graphviz

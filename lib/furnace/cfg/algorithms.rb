@@ -182,5 +182,12 @@ module Furnace::CFG
       loops.default = nil
       loops
     end
+
+    def flush
+      @dominators = nil
+      @postdominators = nil
+
+      super if defined?(super)
+    end
   end
 end
