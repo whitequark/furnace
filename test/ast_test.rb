@@ -163,4 +163,20 @@ describe AST::Processor do
     |  (invoke :func))
     SEXP
   end
+
+  extend Furnace::AST::Sexp
+
+  it 'should build sexps' do
+    s(:add,
+      s(:integer, 1),
+      s(:multiply,
+        s(:integer, 2),
+        s(:integer, 3))).should have_sexp(<<-SEXP)
+    |(add
+    |  (integer 1)
+    |  (multiply
+    |    (integer 2)
+    |    (integer 3)))
+    SEXP
+  end
 end

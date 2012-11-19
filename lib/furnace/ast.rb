@@ -8,11 +8,12 @@ module Furnace
   # garbage collector, but completely eliminates all concurrency
   # and aliasing problems.
   #
-  # See also {Node} and {Processor} for additional
+  # See also {Node}, {Processor} and {Sexp} for additional
   # recommendations and design patterns.
   module AST
   end
 
   require_relative "ast/node"
   require_relative "ast/processor"
+  require_relative "ast/sexp"
 end
