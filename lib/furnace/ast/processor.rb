@@ -29,7 +29,10 @@ module Furnace::AST
   # Such subclass has a handler for each nonterminal node which recursively
   # processes children nodes:
   #
-  #     class ArithmeticsProcessor < Processor
+  #     require 'furnace'
+  #     include Furnace
+  #
+  #     class ArithmeticsProcessor < AST::Processor
   #       # This method traverses any binary operators such as (add) or (multiply).
   #       def process_binary_op(node)
   #         # Children aren't decomposed automatically; it is suggested to use Ruby
@@ -77,7 +80,7 @@ module Furnace::AST
   #
   # Let's test our ArithmeticsProcessor:
   #
-  #     include Furnace; include AST::Sexp
+  #     include AST::Sexp
   #     expr = s(:add, s(:integer, 2), s(:integer, 2))
   #
   #     p ArithmeticsProcessor.new.process(expr) == expr # => true
@@ -175,6 +178,8 @@ module Furnace::AST
   # run, that could save some debugging time.
   #
   #     class DivisionByZeroVerifier < ArithmeticsProcessor
+  #       class VerificationFailure < Exception; end
+  #
   #       def on_divide(node)
   #         # You need to process the children to handle nested divisions
   #         # such as:
@@ -185,8 +190,15 @@ module Furnace::AST
   #
   #         if right.type == :integer &&
   #            right.children.first == 0
-  #           raise RuntimeError, "Ouch! This code divides by zero."
+  #           raise VerificationFailure, "Ouch! This code divides by zero."
   #         end
+  #       end
+  #
+  #       def divides_by_zero?(ast)
+  #         process(ast)
+  #         false
+  #       rescue VerificationFailure
+  #         true
   #       end
   #     end
   #
@@ -195,13 +207,15 @@ module Furnace::AST
   #         s(:add, s(:integer, 10), s(:integer, 2)),
   #         s(:integer, 4))
   #
-  #     DivisionByZeroVerifier.new.process(nice_expr) # nothing!
+  #     p DivisionByZeroVerifier.new.divides_by_zero?(nice_expr)
+  #     # => false. Good.
   #
   #     bad_expr = \
   #       s(:add, s(:integer, 10),
   #         s(:divide, s(:integer, 1), s(:integer, 0)))
   #
-  #     DivisionByZeroVerifier.new.process(bad_expr) # WHOOPS. DO NOT RUN THIS.
+  #     p DivisionByZeroVerifier.new.divides_by_zero?(bad_expr)
+  #     # => true. WHOOPS. DO NOT RUN THIS.
   #
   # Of course, this won't detect more complex cases... unless you use some partial
   # evaluation before! The possibilites are endless. Have fun.
