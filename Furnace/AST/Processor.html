@@ -135,7 +135,10 @@ of Processor which knows how to traverse the entire tree should be defined.
 Such subclass has a handler for each nonterminal node which recursively
 processes children nodes:</p>
 
-<pre class="code ruby"><code><span class='kw'>class</span> <span class='const'>ArithmeticsProcessor</span> <span class='op'>&lt;</span> <span class='const'>Processor</span>
+<pre class="code ruby"><code><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>furnace</span><span class='tstring_end'>'</span></span>
+<span class='id identifier rubyid_include'>include</span> <span class='const'>Furnace</span>
+
+<span class='kw'>class</span> <span class='const'>ArithmeticsProcessor</span> <span class='op'>&lt;</span> <span class='const'>AST</span><span class='op'>::</span><span class='const'>Processor</span>
   <span class='comment'># This method traverses any binary operators such as (add) or (multiply).
 </span>  <span class='kw'>def</span> <span class='id identifier rubyid_process_binary_op'>process_binary_op</span><span class='lparen'>(</span><span class='id identifier rubyid_node'>node</span><span class='rparen'>)</span>
     <span class='comment'># Children aren't decomposed automatically; it is suggested to use Ruby
@@ -184,7 +187,7 @@ processes children nodes:</p>
 
 <p>Let&#39;s test our ArithmeticsProcessor:</p>
 
-<pre class="code ruby"><code><span class='id identifier rubyid_include'>include</span> <span class='const'>Furnace</span><span class='semicolon'>;</span> <span class='id identifier rubyid_include'>include</span> <span class='const'>AST</span><span class='op'>::</span><span class='const'>Sexp</span>
+<pre class="code ruby"><code><span class='id identifier rubyid_include'>include</span> <span class='const'>AST</span><span class='op'>::</span><span class='const'>Sexp</span>
 <span class='id identifier rubyid_expr'>expr</span> <span class='op'>=</span> <span class='id identifier rubyid_s'>s</span><span class='lparen'>(</span><span class='symbol'>:add</span><span class='comma'>,</span> <span class='id identifier rubyid_s'>s</span><span class='lparen'>(</span><span class='symbol'>:integer</span><span class='comma'>,</span> <span class='int'>2</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_s'>s</span><span class='lparen'>(</span><span class='symbol'>:integer</span><span class='comma'>,</span> <span class='int'>2</span><span class='rparen'>)</span><span class='rparen'>)</span>
 
 <span class='id identifier rubyid_p'>p</span> <span class='const'>ArithmeticsProcessor</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='period'>.</span><span class='id identifier rubyid_process'>process</span><span class='lparen'>(</span><span class='id identifier rubyid_expr'>expr</span><span class='rparen'>)</span> <span class='op'>==</span> <span class='id identifier rubyid_expr'>expr</span> <span class='comment'># =&gt; true
@@ -288,6 +291,8 @@ So if we could detect that someone has divided by zero before the program is eve
 run, that could save some debugging time.</p>
 
 <pre class="code ruby"><code><span class='kw'>class</span> <span class='const'>DivisionByZeroVerifier</span> <span class='op'>&lt;</span> <span class='const'>ArithmeticsProcessor</span>
+  <span class='kw'>class</span> <span class='const'>VerificationFailure</span> <span class='op'>&lt;</span> <span class='const'>Exception</span><span class='semicolon'>;</span> <span class='kw'>end</span>
+
   <span class='kw'>def</span> <span class='id identifier rubyid_on_divide'>on_divide</span><span class='lparen'>(</span><span class='id identifier rubyid_node'>node</span><span class='rparen'>)</span>
     <span class='comment'># You need to process the children to handle nested divisions
 </span>    <span class='comment'># such as:
@@ -298,8 +303,15 @@ run, that could save some debugging time.</p>
 
     <span class='kw'>if</span> <span class='id identifier rubyid_right'>right</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='symbol'>:integer</span> <span class='op'>&amp;&amp;</span>
        <span class='id identifier rubyid_right'>right</span><span class='period'>.</span><span class='id identifier rubyid_children'>children</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='op'>==</span> <span class='int'>0</span>
-      <span class='id identifier rubyid_raise'>raise</span> <span class='const'>RuntimeError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Ouch! This code divides by zero.</span><span class='tstring_end'>&quot;</span></span>
+      <span class='id identifier rubyid_raise'>raise</span> <span class='const'>VerificationFailure</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Ouch! This code divides by zero.</span><span class='tstring_end'>&quot;</span></span>
     <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>def</span> <span class='id identifier rubyid_divides_by_zero?'>divides_by_zero?</span><span class='lparen'>(</span><span class='id identifier rubyid_ast'>ast</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_process'>process</span><span class='lparen'>(</span><span class='id identifier rubyid_ast'>ast</span><span class='rparen'>)</span>
+    <span class='kw'>false</span>
+  <span class='kw'>rescue</span> <span class='const'>VerificationFailure</span>
+    <span class='kw'>true</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span>
 
@@ -308,13 +320,15 @@ run, that could save some debugging time.</p>
     <span class='id identifier rubyid_s'>s</span><span class='lparen'>(</span><span class='symbol'>:add</span><span class='comma'>,</span> <span class='id identifier rubyid_s'>s</span><span class='lparen'>(</span><span class='symbol'>:integer</span><span class='comma'>,</span> <span class='int'>10</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_s'>s</span><span class='lparen'>(</span><span class='symbol'>:integer</span><span class='comma'>,</span> <span class='int'>2</span><span class='rparen'>)</span><span class='rparen'>)</span><span class='comma'>,</span>
     <span class='id identifier rubyid_s'>s</span><span class='lparen'>(</span><span class='symbol'>:integer</span><span class='comma'>,</span> <span class='int'>4</span><span class='rparen'>)</span><span class='rparen'>)</span>
 
-<span class='const'>DivisionByZeroVerifier</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='period'>.</span><span class='id identifier rubyid_process'>process</span><span class='lparen'>(</span><span class='id identifier rubyid_nice_expr'>nice_expr</span><span class='rparen'>)</span> <span class='comment'># nothing!
+<span class='id identifier rubyid_p'>p</span> <span class='const'>DivisionByZeroVerifier</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='period'>.</span><span class='id identifier rubyid_divides_by_zero?'>divides_by_zero?</span><span class='lparen'>(</span><span class='id identifier rubyid_nice_expr'>nice_expr</span><span class='rparen'>)</span>
+<span class='comment'># =&gt; false. Good.
 </span>
 <span class='id identifier rubyid_bad_expr'>bad_expr</span> <span class='op'>=</span> \
   <span class='id identifier rubyid_s'>s</span><span class='lparen'>(</span><span class='symbol'>:add</span><span class='comma'>,</span> <span class='id identifier rubyid_s'>s</span><span class='lparen'>(</span><span class='symbol'>:integer</span><span class='comma'>,</span> <span class='int'>10</span><span class='rparen'>)</span><span class='comma'>,</span>
     <span class='id identifier rubyid_s'>s</span><span class='lparen'>(</span><span class='symbol'>:divide</span><span class='comma'>,</span> <span class='id identifier rubyid_s'>s</span><span class='lparen'>(</span><span class='symbol'>:integer</span><span class='comma'>,</span> <span class='int'>1</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_s'>s</span><span class='lparen'>(</span><span class='symbol'>:integer</span><span class='comma'>,</span> <span class='int'>0</span><span class='rparen'>)</span><span class='rparen'>)</span><span class='rparen'>)</span>
 
-<span class='const'>DivisionByZeroVerifier</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='period'>.</span><span class='id identifier rubyid_process'>process</span><span class='lparen'>(</span><span class='id identifier rubyid_bad_expr'>bad_expr</span><span class='rparen'>)</span> <span class='comment'># WHOOPS. DO NOT RUN THIS.
+<span class='id identifier rubyid_p'>p</span> <span class='const'>DivisionByZeroVerifier</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='period'>.</span><span class='id identifier rubyid_divides_by_zero?'>divides_by_zero?</span><span class='lparen'>(</span><span class='id identifier rubyid_bad_expr'>bad_expr</span><span class='rparen'>)</span>
+<span class='comment'># =&gt; true. WHOOPS. DO NOT RUN THIS.
 </span></code></pre>
 
 <p>Of course, this won&#39;t detect more complex cases... unless you use some partial
@@ -472,11 +486,11 @@ evaluation before! The possibilites are endless. Have fun.</p>
       <pre class="lines">
 
 
-248
-249</pre>
+262
+263</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/furnace/ast/processor.rb', line 248</span>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ast/processor.rb', line 262</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_handler_missing'>handler_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_node'>node</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
@@ -543,24 +557,24 @@ value of the handler is passed along.</p>
       <pre class="lines">
 
 
-218
-219
-220
-221
-222
-223
-224
-225
-226
-227
-228
-229
-230
-231
-232</pre>
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/furnace/ast/processor.rb', line 218</span>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ast/processor.rb', line 232</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_process'>process</span><span class='lparen'>(</span><span class='id identifier rubyid_node'>node</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_node'>node</span>
@@ -635,14 +649,14 @@ value of the handler is passed along.</p>
       <pre class="lines">
 
 
-238
-239
-240
-241
-242</pre>
+252
+253
+254
+255
+256</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/furnace/ast/processor.rb', line 238</span>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ast/processor.rb', line 252</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_process_all'>process_all</span><span class='lparen'>(</span><span class='id identifier rubyid_nodes'>nodes</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_nodes'>nodes</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_node'>node</span><span class='op'>|</span>
@@ -659,7 +673,7 @@ value of the handler is passed along.</p>
 </div>
 
     <div id="footer">
-  Generated on Mon Nov 19 16:34:32 2012 by
+  Generated on Mon Nov 19 16:40:41 2012 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.9.3).
 </div>
