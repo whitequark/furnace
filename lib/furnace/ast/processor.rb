@@ -1,5 +1,5 @@
 module Furnace::AST
-  module Processor
+  class Processor
     def process(node)
       if node
         # Invoke a specific handler

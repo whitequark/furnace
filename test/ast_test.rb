@@ -94,9 +94,7 @@ describe AST::Processor do
     lambda { |ast| ast.to_sexp == text }
   end
 
-  class MockProcessor
-    include AST::Processor
-
+  class MockProcessor < AST::Processor
     attr_reader :counts
 
     def initialize
