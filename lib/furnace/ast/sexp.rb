@@ -24,7 +24,7 @@ module Furnace::AST
     # This would not pose a problem with comparisons, as {Node#==}
     # ignores metadata.
     def s(type, *children)
-      AST::Node.new(type, children)
+      Node.new(type, children)
     end
   end
 end
