@@ -67,10 +67,14 @@ module Furnace::AST
     # attribute readers for such variables. The values passed in the hash
     # are not frozen or whitelisted; such behavior can also be implemented\
     # by subclassing Node and overriding this method.
+    #
+    # @return [nil]
     def assign_properties(properties)
       properties.each do |name, value|
         instance_variable_set :"@#{name}", value
       end
+
+      nil
     end
     protected :assign_properties
 
@@ -84,6 +88,11 @@ module Furnace::AST
     # yield `(foo)`.
     #
     # If the resulting node would be identical to `self`, does nothing.
+    #
+    # @param  [Symbol, nil] type
+    # @param  [Array, nil]  children
+    # @param  [Hash, nil]   properties
+    # @return [AST::Node]
     def updated(type=nil, children=nil, properties=nil)
       new_type       = type       || @type
       new_children   = children   || @children
@@ -100,6 +109,8 @@ module Furnace::AST
 
     # Compares `self` to `other`, possibly converting with `to_ast`. Only
     # `type` and `children` are compared; metadata is deliberately ignored.
+    #
+    # @return [Boolean]
     def ==(other)
       if equal?(other)
         true
@@ -113,11 +124,16 @@ module Furnace::AST
     end
 
     # Converts `self` to a concise s-expression, omitting any children.
+    #
+    # @return [String]
     def to_s
       "(#{fancy_type} ...)"
     end
 
     # Converts `self` to a pretty-printed s-expression.
+    #
+    # @param  [Integer] indent Base indentation level.
+    # @return [String]
     def to_sexp(indent=0)
       sexp = "#{"  " * indent}(#{fancy_type}"
 
@@ -139,7 +155,7 @@ module Furnace::AST
     end
     alias :inspect :to_sexp
 
-    # Returns `self`.
+    # @return [AST::Node] self
     def to_ast
       self
     end
@@ -149,6 +165,8 @@ module Furnace::AST
     # Returns `@type` with all underscores replaced by dashes. This allows
     # to write symbol literals without quotes in Ruby sources and yet have
     # nicely looking s-expressions.
+    #
+    # @return [String]
     def fancy_type
       @type.to_s.gsub('_', '-')
     end

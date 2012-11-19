@@ -1,1 +1,1 @@
--m markdown --protected
+-r {Furnace} -m markdown --protected
