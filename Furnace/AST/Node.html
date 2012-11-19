@@ -119,7 +119,7 @@ algorithmic properties.</p>
 affect or return semantic information, such as getters for <code>class_name</code>,
 <code>superclass</code> and <code>body</code> in the case of a hypothetical <code>ClassNode</code>. The
 correct solution is to use a generic Node with a <span class='object_link'><a href="#type-instance_method" title="Furnace::AST::Node#type (method)">#type</a></span> of <code>:class</code>
-and three children. See also <span class='object_link'><a href="Processor.html" title="Furnace::AST::Processor (module)">Processor</a></span> for tips on working with such
+and three children. See also <span class='object_link'><a href="Processor.html" title="Furnace::AST::Processor (class)">Processor</a></span> for tips on working with such
 ASTs.</p>
 
 <p>On the other hand, Node can and should be inherited to define
@@ -221,7 +221,7 @@ the codebase.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#%3D%3D-instance_method" title="#== (instance method)">- (Object) <strong>==</strong>(other) </a>
+      <a href="#%3D%3D-instance_method" title="#== (instance method)">- (Boolean) <strong>==</strong>(other) </a>
     
 
     
@@ -244,7 +244,7 @@ the codebase.</p>
         <li class="protected ">
   <span class="summary_signature">
     
-      <a href="#assign_properties-instance_method" title="#assign_properties (instance method)">- (Object) <strong>assign_properties</strong>(properties) </a>
+      <a href="#assign_properties-instance_method" title="#assign_properties (instance method)">- (nil) <strong>assign_properties</strong>(properties) </a>
     
 
     
@@ -290,7 +290,7 @@ a local variable in this instance of Node.</p>
         <li class="protected ">
   <span class="summary_signature">
     
-      <a href="#fancy_type-instance_method" title="#fancy_type (instance method)">- (Object) <strong>fancy_type</strong> </a>
+      <a href="#fancy_type-instance_method" title="#fancy_type (instance method)">- (String) <strong>fancy_type</strong> </a>
     
 
     
@@ -338,7 +338,7 @@ a local variable in this instance of Node.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#to_ast-instance_method" title="#to_ast (instance method)">- (Object) <strong>to_ast</strong> </a>
+      <a href="#to_ast-instance_method" title="#to_ast (instance method)">- (AST::Node) <strong>to_ast</strong> </a>
     
 
     
@@ -352,7 +352,7 @@ a local variable in this instance of Node.</p>
   
 
   
-    <span class="summary_desc"><div class='inline'><p>Returns <code>self</code>.</p>
+    <span class="summary_desc"><div class='inline'><p>Self.</p>
 </div></span>
   
 </li>
@@ -361,7 +361,7 @@ a local variable in this instance of Node.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#to_s-instance_method" title="#to_s (instance method)">- (Object) <strong>to_s</strong> </a>
+      <a href="#to_s-instance_method" title="#to_s (instance method)">- (String) <strong>to_s</strong> </a>
     
 
     
@@ -384,7 +384,7 @@ a local variable in this instance of Node.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#to_sexp-instance_method" title="#to_sexp (instance method)">- (Object) <strong>to_sexp</strong>(indent = 0) </a>
+      <a href="#to_sexp-instance_method" title="#to_sexp (instance method)">- (String) <strong>to_sexp</strong>(indent = 0) </a>
     
 
     
@@ -409,7 +409,7 @@ a local variable in this instance of Node.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#updated-instance_method" title="#updated (instance method)">- (Object) <strong>updated</strong>(type = nil, children = nil, properties = nil) </a>
+      <a href="#updated-instance_method" title="#updated (instance method)">- (AST::Node) <strong>updated</strong>(type = nil, children = nil, properties = nil) </a>
     
 
     
@@ -618,7 +618,7 @@ The returned value is frozen.</p>
       <div class="method_details first">
   <h3 class="signature first" id="==-instance_method">
   
-    - (<tt>Object</tt>) <strong>==</strong>(other) 
+    - (<tt>Boolean</tt>) <strong>==</strong>(other) 
   
 
   
@@ -634,6 +634,19 @@ The returned value is frozen.</p>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -641,20 +654,20 @@ The returned value is frozen.</p>
       <pre class="lines">
 
 
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113</pre>
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 103</span>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 114</span>
 
 <span class='kw'>def</span> <span class='op'>==</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_equal?'>equal?</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
@@ -675,7 +688,7 @@ The returned value is frozen.</p>
       <div class="method_details ">
   <h3 class="signature " id="assign_properties-instance_method">
   
-    - (<tt>Object</tt>) <strong>assign_properties</strong>(properties)  <span class="extras">(protected)</span>
+    - (<tt>nil</tt>) <strong>assign_properties</strong>(properties)  <span class="extras">(protected)</span>
   
 
   
@@ -694,6 +707,19 @@ by subclassing Node and overriding this method.</p>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>nil</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -701,19 +727,23 @@ by subclassing Node and overriding this method.</p>
       <pre class="lines">
 
 
-70
-71
 72
 73
-74</pre>
+74
+75
+76
+77
+78</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 70</span>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 72</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_assign_properties'>assign_properties</span><span class='lparen'>(</span><span class='id identifier rubyid_properties'>properties</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_properties'>properties</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span>
     <span class='id identifier rubyid_instance_variable_set'>instance_variable_set</span> <span class='symbol'>:@</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span>
   <span class='kw'>end</span>
+
+  <span class='kw'>nil</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -735,7 +765,7 @@ by subclassing Node and overriding this method.</p>
       <div class="method_details ">
   <h3 class="signature " id="fancy_type-instance_method">
   
-    - (<tt>Object</tt>) <strong>fancy_type</strong>  <span class="extras">(protected)</span>
+    - (<tt>String</tt>) <strong>fancy_type</strong>  <span class="extras">(protected)</span>
   
 
   
@@ -752,6 +782,19 @@ nicely looking s-expressions.</p>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -759,12 +802,12 @@ nicely looking s-expressions.</p>
       <pre class="lines">
 
 
-152
-153
-154</pre>
+170
+171
+172</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 152</span>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 170</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_fancy_type'>fancy_type</span>
   <span class='ivar'>@type</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>_</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>-</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
@@ -777,7 +820,7 @@ nicely looking s-expressions.</p>
       <div class="method_details ">
   <h3 class="signature " id="to_ast-instance_method">
   
-    - (<tt>Object</tt>) <strong>to_ast</strong> 
+    - (<tt><span class='object_link'><a href="" title="Furnace::AST::Node (class)">AST::Node</a></span></tt>) <strong>to_ast</strong> 
   
 
   
@@ -785,13 +828,30 @@ nicely looking s-expressions.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p>Returns <code>self</code>.</p>
+    <p>Self</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="" title="Furnace::AST::Node (class)">AST::Node</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>self</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -799,12 +859,12 @@ nicely looking s-expressions.</p>
       <pre class="lines">
 
 
-143
-144
-145</pre>
+159
+160
+161</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 143</span>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 159</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_ast'>to_ast</span>
   <span class='kw'>self</span>
@@ -817,7 +877,7 @@ nicely looking s-expressions.</p>
       <div class="method_details ">
   <h3 class="signature " id="to_s-instance_method">
   
-    - (<tt>Object</tt>) <strong>to_s</strong> 
+    - (<tt>String</tt>) <strong>to_s</strong> 
   
 
   
@@ -832,6 +892,19 @@ nicely looking s-expressions.</p>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -839,12 +912,12 @@ nicely looking s-expressions.</p>
       <pre class="lines">
 
 
-116
-117
-118</pre>
+129
+130
+131</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 116</span>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 129</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_s'>to_s</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_fancy_type'>fancy_type</span><span class='rbrace'>}</span><span class='tstring_content'> ...)</span><span class='tstring_end'>&quot;</span></span>
@@ -857,7 +930,7 @@ nicely looking s-expressions.</p>
       <div class="method_details ">
   <h3 class="signature " id="to_sexp-instance_method">
   
-    - (<tt>Object</tt>) <strong>to_sexp</strong>(indent = 0) 
+    - (<tt>String</tt>) <strong>to_sexp</strong>(indent = 0) 
   
 
   
@@ -875,7 +948,41 @@ nicely looking s-expressions.</p>
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>indent</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>0</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>Base indentation level.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -883,28 +990,28 @@ nicely looking s-expressions.</p>
       <pre class="lines">
 
 
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136
 137
 138
-139</pre>
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 121</span>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 137</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_sexp'>to_sexp</span><span class='lparen'>(</span><span class='id identifier rubyid_indent'>indent</span><span class='op'>=</span><span class='int'>0</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_sexp'>sexp</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  </span><span class='tstring_end'>&quot;</span></span> <span class='op'>*</span> <span class='id identifier rubyid_indent'>indent</span><span class='rbrace'>}</span><span class='tstring_content'>(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_fancy_type'>fancy_type</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
@@ -933,7 +1040,7 @@ nicely looking s-expressions.</p>
       <div class="method_details ">
   <h3 class="signature " id="updated-instance_method">
   
-    - (<tt>Object</tt>) <strong>updated</strong>(type = nil, children = nil, properties = nil) 
+    - (<tt><span class='object_link'><a href="" title="Furnace::AST::Node (class)">AST::Node</a></span></tt>) <strong>updated</strong>(type = nil, children = nil, properties = nil) 
   
 
   
@@ -954,7 +1061,63 @@ yield <code>(foo)</code>.</p>
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>type</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>, <tt>nil</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>children</span>
+      
+      
+        <span class='type'>(<tt>Array</tt>, <tt>nil</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>properties</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>, <tt>nil</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="" title="Furnace::AST::Node (class)">AST::Node</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -962,22 +1125,22 @@ yield <code>(foo)</code>.</p>
       <pre class="lines">
 
 
-87
-88
-89
-90
-91
-92
-93
-94
-95
 96
 97
 98
-99</pre>
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 87</span>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 96</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_updated'>updated</span><span class='lparen'>(</span><span class='id identifier rubyid_type'>type</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_children'>children</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_properties'>properties</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_new_type'>new_type</span>       <span class='op'>=</span> <span class='id identifier rubyid_type'>type</span>       <span class='op'>||</span> <span class='ivar'>@type</span>
@@ -1002,7 +1165,7 @@ yield <code>(foo)</code>.</p>
 </div>
 
     <div id="footer">
-  Generated on Mon Nov 19 14:28:18 2012 by
+  Generated on Mon Nov 19 16:34:32 2012 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.9.3).
 </div>
