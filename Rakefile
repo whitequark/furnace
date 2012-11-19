@@ -11,11 +11,11 @@ task :test do
   end
 end
 
-task :pages do
-  FileUtils.rm_rf 'gh-temp'
+PAGES_REPO = 'git@github.com:whitequark/furnace'
 
-  system "git clone . gh-temp/ -b gh-pages; rm gh-temp/* -rf" or abort
+task :pages do
+  system "git clone #{PAGES_REPO} gh-temp/ -b gh-pages; rm gh-temp/* -rf" or abort
   system "yardoc -o gh-temp/; cd gh-temp/; git add -A; git commit -m 'Updated pages.'" or abort
-  system "cd gh-temp/; git push -f git@github.com:whitequark/furnace gh-pages" or abort
+  system "cd gh-temp/; git push -f origin gh-pages" or abort
   FileUtils.rm_rf 'gh-temp'
 end
