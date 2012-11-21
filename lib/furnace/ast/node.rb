@@ -135,7 +135,8 @@ module Furnace::AST
     # @param  [Integer] indent Base indentation level.
     # @return [String]
     def to_sexp(indent=0)
-      sexp = "#{"  " * indent}(#{fancy_type}"
+      indented = "  " * indent
+      sexp = "#{indented}(#{fancy_type}"
 
       first_node_child = children.index do |child|
         child.is_a?(Node) || child.is_a?(Array)
@@ -144,6 +145,18 @@ module Furnace::AST
       children.each_with_index do |child, idx|
         if child.is_a?(Node) && idx >= first_node_child
           sexp << "\n#{child.to_sexp(indent + 1)}"
+        elsif child.is_a?(Hash)
+          sexp << " {\n"
+          child.each do |key, value|
+            if value.is_a?(Node)
+              pretty_value = value.to_sexp(indent + 2).lstrip
+            else
+              pretty_value = value.inspect
+            end
+
+            sexp << "#{indented}    #{key.inspect} => #{pretty_value}\n"
+          end
+          sexp << "#{indented}  }"
         else
           sexp << " #{child.inspect}"
         end
