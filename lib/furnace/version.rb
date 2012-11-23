@@ -1,3 +1,3 @@
 module Furnace
-  VERSION = "0.3.0.beta3"
+  VERSION = "0.3.0"
 end
