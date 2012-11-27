@@ -9,7 +9,7 @@
 <script type="text/javascript" charset="utf-8">
 window.onload = function() {
   var match = window.location.hash.match(/^#!(.+)/);
-  var name = 'index.html';
+  var name = '_index.html';
   if (match) {
     name = unescape(match[1]);
   }
@@ -22,7 +22,7 @@ window.onload = function() {
 <noscript>
   <frameset cols="20%,*">
     <frame name="list" src="class_list.html" />
-    <frame name="main" src="index.html" />
+    <frame name="main" src="_index.html" />
   </frameset>
 </noscript>
 </html>
