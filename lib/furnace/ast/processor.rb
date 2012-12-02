@@ -230,17 +230,17 @@ module Furnace::AST
     # @param  [AST::Node, nil] node
     # @return [AST::Node]
     def process(node)
-      if node
-        # Invoke a specific handler
-        on_handler = :"on_#{node.type}"
-        if respond_to? on_handler
-          new_node = send on_handler, node
-        else
-          new_node = handler_missing(node)
-        end
+      node = node.to_ast
 
-        node = new_node if new_node
+      # Invoke a specific handler
+      on_handler = :"on_#{node.type}"
+      if respond_to? on_handler
+        new_node = send on_handler, node
+      else
+        new_node = handler_missing(node)
       end
+
+      node = new_node if new_node
 
       node
     end

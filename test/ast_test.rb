@@ -177,4 +177,9 @@ describe AST::Processor do
     |    (integer 3)))
     SEXP
   end
+
+  it 'should refuse to process non-nodes' do
+    -> { @processor.process(nil) }.should.raise NoMethodError, %r|to_ast|
+    -> { @processor.process([]) }.should.raise NoMethodError, %r|to_ast|
+  end
 end
