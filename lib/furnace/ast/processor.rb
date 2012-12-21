@@ -37,7 +37,7 @@ module Furnace::AST
   #       def process_binary_op(node)
   #         # Children aren't decomposed automatically; it is suggested to use Ruby
   #         # multiple assignment expansion, as it is very convenient here.
-  #         left_expr, right_expr = node.children
+  #         left_expr, right_expr = *node
   #
   #         # AST::Node#updated won't change node type if nil is passed as a first
   #         # argument, which allows to reuse the same handler for multiple node types
@@ -54,11 +54,11 @@ module Furnace::AST
   #       def on_negate(node)
   #         # It is also possible to use #process_all for more compact code
   #         # if every child is a Node.
-  #         node.updated(nil, process_all(node.children))
+  #         node.updated(nil, process_all(node))
   #       end
   #
   #       def on_store(node)
-  #         expr, variable_name = node.children
+  #         expr, variable_name = *node
   #
   #         # Note that variable_name is not a Node and thus isn't passed to #process.
   #         node.updated(nil, [
@@ -74,7 +74,7 @@ module Furnace::AST
   #       end
   #
   #       def on_each(node)
-  #         node.updated(nil, process_all(node.children))
+  #         node.updated(nil, process_all(node))
   #       end
   #     end
   #
@@ -95,7 +95,7 @@ module Furnace::AST
   #       def compute_op(node)
   #         # First, node children are processed and then unpacked to local
   #         # variables.
-  #         nodes = process_all(node.children)
+  #         nodes = process_all(node)
   #
   #         if nodes.all? { |node| node.type == :integer }
   #           # If each of those nodes represents a literal, we can fold this
@@ -186,7 +186,7 @@ module Furnace::AST
   #         # (divide
   #         #   (integer 1)
   #         #   (divide (integer 1) (integer 0))
-  #         left, right = process_all(node.children)
+  #         left, right = process_all(node)
   #
   #         if right.type == :integer &&
   #            right.children.first == 0
@@ -250,7 +250,7 @@ module Furnace::AST
     # @param  [Array<AST::Node>] nodes
     # @return [Array<AST::Node>]
     def process_all(nodes)
-      nodes.map do |node|
+      nodes.to_a.map do |node|
         process node
       end
     end

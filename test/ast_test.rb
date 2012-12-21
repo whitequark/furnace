@@ -1,6 +1,8 @@
 require_relative 'test_helper'
 
 describe AST::Node do
+  extend Furnace::AST::Sexp
+
   class MetaNode < AST::Node
     attr_reader :meta
   end
@@ -86,9 +88,19 @@ describe AST::Node do
     end
     @node.should.equal mock_node
   end
+
+  it 'should allow to decompose nodes with a, b = *node' do
+    node = s(:gasgn, :$foo, s(:integer, 1))
+
+    var_name, value = *node
+    var_name.should.equal :$foo
+    value.should.equal s(:integer, 1)
+  end
 end
 
 describe AST::Processor do
+  extend Furnace::AST::Sexp
+
   def have_sexp(text)
     text = text.lines.map { |line| line.sub /^ +\|(.+)/, '\1' }.join.rstrip
     lambda { |ast| ast.to_sexp == text }
@@ -162,8 +174,6 @@ describe AST::Processor do
     SEXP
   end
 
-  extend Furnace::AST::Sexp
-
   it 'should build sexps' do
     s(:add,
       s(:integer, 1),
@@ -181,5 +191,13 @@ describe AST::Processor do
   it 'should refuse to process non-nodes' do
     -> { @processor.process(nil) }.should.raise NoMethodError, %r|to_ast|
     -> { @processor.process([]) }.should.raise NoMethodError, %r|to_ast|
+  end
+
+  it 'should allow to visit nodes with process_all(node)' do
+    @processor.process_all s(:foo, s(:bar), s(:integer, 1))
+    @processor.counts.should.equal({
+      bar:     1,
+      integer: 1,
+    })
   end
 end

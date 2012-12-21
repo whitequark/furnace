@@ -130,6 +130,20 @@ module Furnace::AST
       "(#{fancy_type} ...)"
     end
 
+    # Returns {#children}. This is very useful in order to decompose nodes
+    # concisely. For example:
+    #
+    #     node = s(:gasgn, :$foo, s(:integer, 1))
+    #     s
+    #     var_name, value = *node
+    #     p var_name # => :$foo
+    #     p value    # => (integer 1)
+    #
+    # @return [Array]
+    def to_a
+      children
+    end
+
     # Converts `self` to a pretty-printed s-expression.
     #
     # @param  [Integer] indent Base indentation level.
