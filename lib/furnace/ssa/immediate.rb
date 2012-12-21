@@ -3,7 +3,7 @@ module Furnace::SSA
     attr_reader :value
     attr_reader :type
 
-    def initialize(value, type)
+    def initialize(type, value)
       @value, @type = value, type
       freeze
     end

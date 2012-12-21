@@ -16,9 +16,12 @@ module Furnace::SSA
     end
 
     def successor_labels
-      control_transfer_instruction.uses.select do |value|
-        value.type == BasicBlock
-      end
+      control_transfer_instruction.uses.
+        select do |value|
+          value.type == BasicBlock
+        end.map do |value|
+          value.value
+        end
     end
 
     def successors
@@ -43,17 +46,16 @@ module Furnace::SSA
       Immediate.new(@label, BasicBlock)
     end
 
-    def inspect_type
+    def self.inspect_as_type
       'label'
     end
 
     def inspect
       string = "#{@label}:\n"
 
-      @instructions.each do |insn|
-        string << "    #{insn.inspect}\n"
-      end
-      string << "\n"
+      string << @instructions.map do |insn|
+                  "    #{insn.inspect}"
+                end.join("\n")
 
       string
     end

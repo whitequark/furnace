@@ -1,11 +1,15 @@
 module Furnace::SSA
   class Function
-    attr_reader   :arguments
+    attr_accessor :arguments
+    attr_accessor :return_type
 
     attr_reader   :basic_blocks
     attr_accessor :entry
 
-    def initialize
+    def initialize(arguments=[], return_type=nil)
+      @return_type   = return_type
+      self.arguments = arguments
+
       @basic_blocks = Set.new
 
       @last_label = 0
@@ -56,9 +60,15 @@ module Furnace::SSA
       predecessors
     end
 
+    def self.inspect_as_type
+      'function'
+    end
+
     def inspect(name=nil)
-      name_string = " #{name}" if name
-      string = "function#{name_string}(#{ @args.map(&:inspect).join(", ") }) {\n"
+      string =  "#{Furnace::SSA.inspect_type @return_type} "
+      string << "function"
+      string << " #{name}" if name
+      string << "(#{ @arguments.map(&:inspect).join(", ") }) {\n"
 
       each do |block|
         string << block.inspect + "\n"
@@ -71,17 +81,19 @@ module Furnace::SSA
 
     def to_graphviz
       Furnace::Graphviz.new do |graph|
-        @nodes.each do |node|
-          if @entry == node
-            options = { color: 'green' }
-          elsif node.returns?
-            options = { color: 'red'   }
+        @basic_blocks.each do |block|
+          options = {}
+
+          if @entry == block
+            options.merge!({ color: 'green' })
+          elsif block.returns?
+            options.merge!({ color: 'red'   })
           end
 
-          graph.node node.label, node.inspect, options
+          graph.node block.label, block.inspect, options
 
-          node.target_labels.each_with_index do |label, idx|
-            graph.edge node.label, label
+          block.successor_labels.each do |label|
+            graph.edge block.label, label
           end
         end
       end

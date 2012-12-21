@@ -3,7 +3,7 @@ module Furnace::SSA
     attr_reader :basic_block, :uses, :defs
 
     def self.instruction_name
-      name.gsub(/([a-z]|^)([A-Z])/) do
+      name.split('::').last.gsub(/([a-z]|^)([A-Z])/) do
         if $1.empty?
           $2.downcase
         else
@@ -44,16 +44,22 @@ module Furnace::SSA
     def uses=(new_uses)
       @uses = sanitize_values(new_uses, use_count)
       update_defs!
+
+      @uses
     end
 
     def update_defs!
+      @defs = []
+
       def_count.times.zip(def_types) do |index, type|
         if @defs[index].nil?
-          Value.new(@function.make_name, type)
+          @defs[index] = Value.new(function.make_name, type)
         else
           @defs[index].type = type
         end
       end
+
+      @defs.freeze
     end
 
     def has_side_effects?
@@ -65,9 +71,19 @@ module Furnace::SSA
     end
 
     def inspect
-      defs = "{ #{@defs.map(&:inspect).join(", ")} }"
-      uses = "#{@uses.map(&:inspect).join(", ")}"
-      "#{defs.ljust(20)} = #{name} #{uses}"
+      if @defs.count > 1
+        defs = "{ #{@defs.map(&:inspect).join(", ")} }"
+      elsif @defs.count == 1
+        defs = @defs.first.inspect
+      end
+
+      if @defs.count > 0
+        defs = "#{defs} = "
+      end
+
+      uses = " #{@uses.map(&:inspect).join(", ")}"
+
+      "#{defs}#{name}#{uses}"
     end
 
     protected
@@ -90,14 +106,14 @@ module Furnace::SSA
       end
 
       unless size.nil?
-        if values <= size
-          values.resize size
+        if values.size <= size
+          values += [nil] * (size - values.size)
         else
           raise "#{name}: too much values provided: #{values.size} for #{size}"
         end
       end
 
-      values
+      values.freeze
     end
   end
 end
