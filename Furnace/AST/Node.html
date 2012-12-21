@@ -338,6 +338,29 @@ a local variable in this instance of Node.</p>
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#to_a-instance_method" title="#to_a (instance method)">- (Array) <strong>to_a</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Returns <span class='object_link'><a href="#children-instance_method" title="Furnace::AST::Node#children (method)">#children</a></span>.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#to_ast-instance_method" title="#to_ast (instance method)">- (AST::Node) <strong>to_ast</strong> </a>
     
 
@@ -802,15 +825,76 @@ nicely looking s-expressions.</p>
       <pre class="lines">
 
 
-183
-184
-185</pre>
+197
+198
+199</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 183</span>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 197</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_fancy_type'>fancy_type</span>
   <span class='ivar'>@type</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>_</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>-</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="to_a-instance_method">
+  
+    - (<tt>Array</tt>) <strong>to_a</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Returns <span class='object_link'><a href="#children-instance_method" title="Furnace::AST::Node#children (method)">#children</a></span>. This is very useful in order to decompose nodes
+concisely. For example:</p>
+
+<pre class="code ruby"><code><span class='id identifier rubyid_node'>node</span> <span class='op'>=</span> <span class='id identifier rubyid_s'>s</span><span class='lparen'>(</span><span class='symbol'>:gasgn</span><span class='comma'>,</span> <span class='symbol'>:$foo</span><span class='comma'>,</span> <span class='id identifier rubyid_s'>s</span><span class='lparen'>(</span><span class='symbol'>:integer</span><span class='comma'>,</span> <span class='int'>1</span><span class='rparen'>)</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_s'>s</span>
+<span class='id identifier rubyid_var_name'>var_name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='op'>*</span><span class='id identifier rubyid_node'>node</span>
+<span class='id identifier rubyid_p'>p</span> <span class='id identifier rubyid_var_name'>var_name</span> <span class='comment'># =&gt; :$foo
+</span><span class='id identifier rubyid_p'>p</span> <span class='id identifier rubyid_value'>value</span>    <span class='comment'># =&gt; (integer 1)
+</span></code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+143
+144
+145</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 143</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_to_a'>to_a</span>
+  <span class='id identifier rubyid_children'>children</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -859,12 +943,12 @@ nicely looking s-expressions.</p>
       <pre class="lines">
 
 
-172
-173
-174</pre>
+186
+187
+188</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 172</span>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 186</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_ast'>to_ast</span>
   <span class='kw'>self</span>
@@ -990,20 +1074,6 @@ nicely looking s-expressions.</p>
       <pre class="lines">
 
 
-137
-138
-139
-140
-141
-142
-143
-144
-145
-146
-147
-148
-149
-150
 151
 152
 153
@@ -1021,10 +1091,24 @@ nicely looking s-expressions.</p>
 165
 166
 167
-168</pre>
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 137</span>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 151</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_sexp'>to_sexp</span><span class='lparen'>(</span><span class='id identifier rubyid_indent'>indent</span><span class='op'>=</span><span class='int'>0</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_indented'>indented</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  </span><span class='tstring_end'>&quot;</span></span> <span class='op'>*</span> <span class='id identifier rubyid_indent'>indent</span>
@@ -1191,7 +1275,7 @@ yield <code>(foo)</code>.</p>
 </div>
 
     <div id="footer">
-  Generated on Tue Nov 27 23:08:27 2012 by
+  Generated on Fri Dec 21 17:57:26 2012 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.9.3).
 </div>
