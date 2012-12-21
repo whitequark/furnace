@@ -5,14 +5,14 @@ module Furnace
         @stages = stages
       end
 
-      def run(*sequence)
+      def run(target)
         @stages.each do |stage|
           break if stage.nil?
 
-          sequence = stage.transform *sequence
+          target = stage.transform target
         end
 
-        sequence
+        target
       end
     end
   end
