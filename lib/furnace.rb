@@ -14,7 +14,7 @@ module Furnace
   require "furnace/version"
 
   require "furnace/ast"
-  require "furnace/cfg"
+  require "furnace/ssa"
 
   require "furnace/transform/pipeline"
   require "furnace/transform/iterative_process"

@@ -5,11 +5,7 @@ task :default => :test
 
 desc "Run test suite"
 task :test do
-  require 'bacon'
-  Bacon.summary_at_exit
-  Dir["test/**/*_test.rb"].each do |file|
-    load file
-  end
+  sh "bacon test/*_test.rb"
 end
 
 PAGES_REPO = 'git@github.com:whitequark/furnace'
