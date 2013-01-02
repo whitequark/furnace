@@ -84,7 +84,7 @@ module Furnace
       p.keyword 'function'
       p.type    @return_type
       p.text    @name, '('
-      p.values  @arguments
+      p.objects @arguments
       p.text    ') {'
       p.newline
 

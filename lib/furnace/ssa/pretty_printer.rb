@@ -59,6 +59,15 @@ module Furnace
       text with_ansi(:bright, :white) { what.to_s }
     end
 
+    def objects(objects, separator=", ")
+      objects.each_with_index do |object, index|
+        object.pretty_print(self)
+        self << separator if index < objects.count - 1
+      end
+
+      self
+    end
+
     def values(values)
       values.each_with_index do |value, index|
         value.inspect_as_value(self)

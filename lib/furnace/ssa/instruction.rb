@@ -22,14 +22,24 @@ module Furnace
       self.class.opcode
     end
 
+    def pretty_parameters(p)
+    end
+
+    def pretty_operands(p)
+      p.values @operands
+    end
+
     def pretty_print(p=SSA::PrettyPrinter.new)
       if SSA::Void != type
+        p.type  type
         p.name  name
         p.text  '='
       end
 
       p.keyword opcode
-      p.values  @operands
+
+      pretty_parameters(p)
+      pretty_operands(p)
     end
   end
 end

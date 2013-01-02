@@ -6,5 +6,10 @@ module Furnace
       super(function, name)
       @type = type
     end
+
+    def pretty_print(p=SSA::PrettyPrinter.new)
+      p.type type
+      p.name name
+    end
   end
 end

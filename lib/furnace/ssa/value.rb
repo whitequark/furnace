@@ -22,7 +22,7 @@ module Furnace
     end
 
     def inspect_as_value(p=SSA::PrettyPrinter.new)
-      p.type type
+      p.text inspect
     end
   end
 end

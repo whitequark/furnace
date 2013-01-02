@@ -28,42 +28,33 @@ module Furnace
       @block    = old_block
     end
 
-    def insn(instruction, *uses)
-      insn = instruction.new(@block, uses)
-      @block.append insn
-
-      insn
-    end
-
-    def typed_insn(instruction, type, *uses)
-      insn = instruction.new(@block, type, uses)
+    def append(instruction, *args)
+      insn = instruction.new(@block, *args)
       @block.append insn
 
       insn
     end
 
     def branch(block)
-      insn(SSA::Branch, block.to_value)
+      append(SSA::Branch, [ block.to_value ])
     end
 
-    def phi(type, *uses)
-      typed_insn(SSA::Phi, type, *uses)
+    def phi(type, mapping)
+      append(SSA::Phi, type, mapping)
     end
 
     def return(value)
-      insn(SSA::Return, value)
-
-      nil
+      append(SSA::Return, [ value ])
     end
 
-    def cond(instruction, *uses)
-      switch(instruction, *uses, 2)
+    def condition(instruction, *uses)
+      switch(instruction, uses, 2)
     end
 
-    def switch(instruction, *uses, successor_count)
+    def switch(instruction, uses, successor_count)
       successors = successor_count.times.map { add_block }
 
-      insn(instruction, *uses, *successors.map(&:to_value))
+      append(instruction, [ *uses, *successors.map(&:to_value) ])
 
       @block = add_block
 

@@ -9,9 +9,7 @@ module Furnace
     end
 
     def inspect_as_value(p=SSA::PrettyPrinter.new)
-      p.type type
-      p.name name unless SSA::Void == type
-      p
+      p.name name
     end
   end
 end
