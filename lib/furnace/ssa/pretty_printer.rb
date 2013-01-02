@@ -59,22 +59,18 @@ module Furnace
       text with_ansi(:bright, :white) { what.to_s }
     end
 
-    def objects(objects, separator=", ")
+    def objects(objects, separator=",", printer=:pretty_print)
       objects.each_with_index do |object, index|
-        object.pretty_print(self)
+        object.send(printer, self)
+
         self << separator if index < objects.count - 1
       end
 
       self
     end
 
-    def values(values)
-      values.each_with_index do |value, index|
-        value.inspect_as_value(self)
-        self << ',' if index < values.count - 1
-      end
-
-      self
+    def values(values, separator=",")
+      objects(values, separator, :inspect_as_value)
     end
 
     protected

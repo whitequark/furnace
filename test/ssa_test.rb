@@ -49,7 +49,7 @@ describe SSA do
   end
 
   def insn_binary(basic_block, left, right)
-    TupleConcatInsn.new(basic_block, left, right)
+    TupleConcatInsn.new(basic_block, [left, right])
   end
 
   describe SSA::PrettyPrinter do
@@ -335,6 +335,31 @@ describe SSA do
       @function.name = 'foo'
       @function.to_value.inspect_as_value.should ==
           'function "foo"'
+    end
+
+    it 'pretty prints' do
+      @function.name = 'foo'
+      @function.arguments = [
+          SSA::Argument.new(@function, Integer, 'count'),
+          SSA::Argument.new(@function, Binding, 'outer')
+      ]
+
+      @basic_block.append insn_binary(@basic_block, *@function.arguments)
+
+      bb2 = SSA::BasicBlock.new(@function, 'foo')
+      @function.add bb2
+      bb2.append insn_unary(@basic_block, SSA::Constant.new(Integer, 1))
+
+      @function.pretty_print.should == <<-END
+function void foo( ^Integer %count, ^Binding %outer ) {
+1:
+   ^Array %2 = tuple_concat %count, %outer
+
+foo:
+   ^Integer %3 = dup ^Integer 1
+
+}
+      END
     end
   end
 
