@@ -41,5 +41,13 @@ module Furnace
       pretty_parameters(p)
       pretty_operands(p)
     end
+
+    def inspect_as_value(p=SSA::PrettyPrinter.new)
+      if SSA::Void != type
+        super
+      else
+        p.type  type
+      end
+    end
   end
 end

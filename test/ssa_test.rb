@@ -127,7 +127,7 @@ describe SSA do
     end
 
     it 'pretty prints' do
-      @val.pretty_print.should == 'void'
+      @val.pretty_print.to_s.should =~ %r{#<Furnace::SSA::Value}
     end
   end
 
@@ -199,17 +199,17 @@ describe SSA do
 
     it 'pretty prints' do
       dup = DupInsn.new(@basic_block, [SSA::Constant.new(Integer, 1)])
-      dup.pretty_print.should == '%2 = dup ^Integer 1'
-      dup.inspect_as_value.should == '^Integer %2'
+      dup.pretty_print.should == '^Integer %2 = dup ^Integer 1'
+      dup.inspect_as_value.should == '%2'
 
       concat = TupleConcatInsn.new(@basic_block,
           [SSA::Constant.new(Array, [1]), SSA::Constant.new(Array, [2,3])])
-      concat.pretty_print.should == '%3 = tuple_concat ^Array [1], ^Array [2, 3]'
-      concat.inspect_as_value.should == '^Array %3'
+      concat.pretty_print.should == '^Array %3 = tuple_concat ^Array [1], ^Array [2, 3]'
+      concat.inspect_as_value.should == '%3'
 
       zero_arity = BindingInsn.new(@basic_block)
-      zero_arity.pretty_print.should == '%4 = binding'
-      zero_arity.inspect_as_value.should == '^Binding %4'
+      zero_arity.pretty_print.should == '^Binding %4 = binding'
+      zero_arity.inspect_as_value.should == '%4'
 
       zero_all = A::NestedInsn.new(@basic_block)
       zero_all.pretty_print.should == 'nested'
@@ -220,9 +220,9 @@ describe SSA do
   describe SSA::GenericInstruction do
     it 'has settable type' do
       i = GenericInsn.new(@basic_block, Integer, [])
-      i.inspect_as_value.should == '^Integer %2'
+      i.pretty_print.should == '^Integer %2 = generic'
       i.type = Binding
-      i.inspect_as_value.should == '^Binding %2'
+      i.pretty_print.should == '^Binding %2 = generic'
     end
   end
 
@@ -240,7 +240,7 @@ describe SSA do
       @basic_block.append insn_noary(@basic_block)
       @basic_block.append insn_noary(@basic_block)
       @basic_block.pretty_print.should ==
-          "1:\n   %2 = binding\n   %3 = binding\n"
+          "1:\n   ^Binding %2 = binding\n   ^Binding %3 = binding\n"
     end
 
     it 'inspects as value' do
