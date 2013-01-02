@@ -1,7 +1,4 @@
-module Furnace::SSA
-  class Return < Instruction
-    def use_count
-      1
-    end
+module Furnace
+  class SSA::Return < SSA::Instruction
   end
 end

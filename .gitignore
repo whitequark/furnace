@@ -5,3 +5,4 @@ pkg/*
 *.sublime-*
 doc/
 .yardoc/
+coverage/

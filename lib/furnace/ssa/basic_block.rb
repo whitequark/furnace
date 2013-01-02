@@ -1,26 +1,56 @@
-module Furnace::SSA
-  class BasicBlock
-    attr_reader   :function, :label
+module Furnace
+  class SSA::BasicBlock < SSA::NamedValue
+    def initialize(function, name=nil, insns=[])
+      super(function, name)
+      @instructions = insns
+    end
 
-    attr_accessor :instructions
+    def to_a
+      @instructions.dup
+    end
 
-    alias :insns  :instructions
-    alias :insns= :instructions=
+    def include?(instruction)
+      @instructions.include? instruction
+    end
 
-    def initialize(function, insns=[], label=function.make_label)
-      @function, @label, @instructions = function, label, insns
+    def each(&proc)
+      @instructions.each(&proc)
+    end
+
+    def append(instruction)
+      @instructions.push instruction
+    end
+
+    alias << append
+
+    def insert(before, instruction)
+      unless index = @instructions.index(before)
+        raise ArgumentError, "Instruction #{before} is not found"
+      end
+
+      @instructions.insert index, instruction
+    end
+
+    def replace(instruction, replace_with)
+      insert instruction, replace_with
+      remove instruction
+    end
+
+    def remove(instruction)
+      @instructions.delete instruction
     end
 
     def control_transfer_instruction
       @instructions.last
     end
+    alias control_transfer_insn control_transfer_instruction
 
-    def successor_labels
+    def successor_names
       control_transfer_instruction.uses.
         select do |value|
-          value.type == BasicBlock
+          value.type == SSA::BasicBlock
         end.map do |value|
-          value.value
+          value.name
         end
     end
 
@@ -30,34 +60,38 @@ module Furnace::SSA
       end
     end
 
-    def predecessor_labels
-      predecessors.map(&:label)
+    def predecessor_names
+      predecessors.map(&:name)
     end
 
     def predecessors
-      @function.predecessors_for(self)
+      @function.predecessors_for(@label)
     end
 
     def returns?
       successor_labels.empty?
     end
 
-    def to_value
-      Immediate.new(@label, BasicBlock)
+    def constant?
+      true
     end
 
-    def self.inspect_as_type
-      'label'
+    def pretty_print(p=SSA::PrettyPrinter.new)
+      p.text    @name, ":"
+      p.newline
+
+      each do |insn|
+        p << '   '
+        insn.pretty_print(p)
+        p.newline
+      end
+
+      p
     end
 
-    def inspect
-      string = "#{@label}:\n"
-
-      string << @instructions.map do |insn|
-                  "    #{insn.inspect}"
-                end.join("\n")
-
-      string
+    def inspect_as_value(p=SSA::PrettyPrinter.new)
+      p.keyword 'label'
+      p.name    name
     end
   end
 end

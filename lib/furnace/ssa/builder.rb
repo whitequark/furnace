@@ -1,51 +1,57 @@
-module Furnace::SSA
-  class Builder
+module Furnace
+  class SSA::Builder
     attr_reader   :function
-    attr_accessor :current_block
+    attr_accessor :block
 
-    def initialize(arguments=[], return_type=nil)
-      @function = Function.new(arguments, return_type)
+    def initialize(name, arguments=[], return_type=nil)
+      @function = SSA::Function.new(name, [], return_type)
+      @function.arguments = arguments.map do |(type, name)|
+        SSA::Argument.new(@function, type, name)
+      end
 
-      entry = block
-      @function.entry = entry
-
-      @current_block = entry
+      @block = @function.entry = add_block
     end
 
-    def block
-      block = BasicBlock.new(@function)
+    def add_block
+      block = SSA::BasicBlock.new(@function)
       @function.add block
 
       block
     end
 
-    def goto(block)
-      @current_block = block
+    def with(block)
+      old_block = @block
+      @block    = block
+
+      yield old_block
+    ensure
+      @block    = old_block
     end
 
     def insn(instruction, *uses)
-      insn = instruction.new(@current_block, uses)
-      @current_block.instructions << insn
+      insn = instruction.new(@block, uses)
+      @block.append insn
 
-      insn.defs
+      insn
     end
 
-    def assign(value)
-      result, = insn(Assign, value)
-      result
+    def typed_insn(instruction, type, *uses)
+      insn = instruction.new(@block, type, uses)
+      @block.append insn
+
+      insn
     end
 
-    def jump(block)
-      insn(Jump, Immediate.new(BasicBlock, block.label))
+    def branch(block)
+      insn(SSA::Branch, block.to_value)
     end
 
-    def phi(*uses)
-      result, = insn(Phi, *uses)
-      result
+    def phi(type, *uses)
+      typed_insn(SSA::Phi, type, *uses)
     end
 
     def return(value)
-      insn(Return, value)
+      insn(SSA::Return, value)
 
       nil
     end
@@ -55,13 +61,11 @@ module Furnace::SSA
     end
 
     def switch(instruction, *uses, successor_count)
-      successors = successor_count.times.map { block }
+      successors = successor_count.times.map { add_block }
 
-      labels = successors.map do |succ|
-        Immediate.new(BasicBlock, succ.label)
-      end
+      insn(instruction, *uses, *successors.map(&:to_value))
 
-      insn(instruction, *uses, *labels)
+      @block = add_block
 
       successors
     end

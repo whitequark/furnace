@@ -1,23 +1,28 @@
-module Furnace::SSA
-  class Value
-    attr_reader   :name
-    attr_accessor :type
-
-    def initialize(name, type=nil)
-      @name = name.freeze
-      @type = type
+module Furnace
+  class SSA::Value
+    def type
+      SSA::Void
     end
 
     def constant?
       false
     end
 
-    def evaluate(context)
-      context.use @name
+    def to_value
+      self
     end
 
-    def inspect
-      "#{Furnace::SSA.inspect_type type} %#{name}"
+    def ==(other)
+      other.respond_to?(:to_value) &&
+          equal?(other.to_value)
+    end
+
+    def pretty_print(p=SSA::PrettyPrinter.new)
+      inspect_as_value(p)
+    end
+
+    def inspect_as_value(p=SSA::PrettyPrinter.new)
+      p.type type
     end
   end
 end
