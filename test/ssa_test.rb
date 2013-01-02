@@ -127,7 +127,7 @@ describe SSA do
     end
 
     it 'pretty prints' do
-      @val.pretty_print.to_s.should =~ %r{#<Furnace::SSA::Value}
+      @val.pretty_print.should =~ %r{#<Furnace::SSA::Value}
     end
   end
 
@@ -157,14 +157,30 @@ describe SSA do
     end
   end
 
+  describe SSA::NamedValue do
+    it 'receives unique names' do
+      values = 5.times.map { SSA::NamedValue.new(@function, nil) }
+      values.map(&:name).uniq.count.should == values.size
+    end
+
+    it 'receives unique names even if explicitly specified name conflicts' do
+      i1 = SSA::NamedValue.new(@function, "foo")
+      i2 = SSA::NamedValue.new(@function, "foo")
+      i2.name.should.not == i1.name
+
+      i2.name = 'foo'
+      i2.name.should.not == i1.name
+    end
+  end
+
   describe SSA::Argument do
     before do
       @val = SSA::Argument.new(@function, nil, 'foo')
     end
 
     it 'pretty prints' do
-      SSA::Argument.new(@function, nil, 'foo').pretty_print.
-          should == '<?> %foo'
+      SSA::Argument.new(@function, nil, 'baz').pretty_print.
+          should == '<?> %baz'
 
       SSA::Argument.new(@function, Integer, 'bar').pretty_print.
           should == '^Integer %bar'
@@ -189,7 +205,7 @@ describe SSA do
   end
 
   describe SSA::Instruction do
-    it 'underscores the name' do
+    it 'underscores the opcode name' do
       DupInsn.opcode.should == 'dup'
       TupleConcatInsn.opcode.should == 'tuple_concat'
       A::NestedInsn.opcode.should == 'nested'
@@ -220,18 +236,13 @@ describe SSA do
   describe SSA::GenericInstruction do
     it 'has settable type' do
       i = GenericInsn.new(@basic_block, Integer, [])
-      i.pretty_print.should == '^Integer %2 = generic'
+      i.pretty_print.should =~ /\^Integer %\d+ = generic/
       i.type = Binding
-      i.pretty_print.should == '^Binding %2 = generic'
+      i.pretty_print.should =~ /\^Binding %\d+ = generic/
     end
   end
 
   describe SSA::BasicBlock do
-    it 'receives distinct names' do
-      5.times.map { SSA::BasicBlock.new(@function).name }.
-          uniq.count.should == 5
-    end
-
     it 'converts to value' do
       @basic_block.to_value.should == @basic_block
     end
@@ -321,13 +332,6 @@ describe SSA do
   end
 
   describe SSA::Function do
-    it 'does not allow to add two basic blocks with same name' do
-      bb1 = SSA::BasicBlock.new(@function, 'a')
-      bb2 = SSA::BasicBlock.new(@function, 'a')
-      @function.add bb1
-      -> { @function.add bb2 }.should.raise ArgumentError, %r|already exists|
-    end
-
     it 'converts to value' do
       @function.to_value.should ==
           SSA::Constant.new(SSA::Function, @function.name)
@@ -335,6 +339,16 @@ describe SSA do
       @function.name = 'foo'
       @function.to_value.inspect_as_value.should ==
           'function "foo"'
+    end
+
+    it 'generates numeric names in #make_name(nil)' do
+      @function.make_name.should =~ /^\d+$/
+    end
+
+    it 'appends numeric suffixes in #make_name(String) if needed' do
+      @function.make_name("foobar.i").should =~ /^foobar\.i$/
+      @function.make_name("foobar.i").should =~ /^foobar\.i\d+$/
+      @function.make_name("foobar.i").should =~ /^foobar\.i\d+$/
     end
 
     it 'pretty prints' do

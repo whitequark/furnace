@@ -26,6 +26,10 @@ module Furnace
       to_s == other
     end
 
+    def =~(other)
+      to_s =~ other
+    end
+
     def <<(what)
       @buffer << what
 

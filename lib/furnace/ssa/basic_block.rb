@@ -2,7 +2,7 @@ module Furnace
   class SSA::BasicBlock < SSA::NamedValue
     def initialize(function, name=nil, insns=[])
       super(function, name)
-      @instructions = insns
+      @instructions = insns.to_a
     end
 
     def to_a

@@ -13,6 +13,7 @@ module Furnace
 
       @basic_blocks  = Set.new
 
+      @name_prefixes = [nil].to_set
       @next_name     = 0
     end
 
@@ -20,8 +21,13 @@ module Furnace
       @arguments = sanitize_arguments(arguments)
     end
 
-    def make_name
-      @next_name += 1
+    def make_name(prefix=nil)
+      if @name_prefixes.include? prefix
+        "#{prefix}#{@next_name += 1}"
+      else
+        @name_prefixes.add prefix
+        prefix.to_s
+      end
     end
 
     def each(&proc)
