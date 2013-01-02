@@ -4,6 +4,8 @@ module Furnace
       super(basic_block, type, operands, name)
     end
 
+    attr_writer :operands
+
     def pretty_operands(p)
       @operands.each_with_index do |(basic_block, value), index|
         p.name basic_block.name

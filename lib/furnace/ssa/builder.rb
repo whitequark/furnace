@@ -19,15 +19,6 @@ module Furnace
       block
     end
 
-    def with(block)
-      old_block = @block
-      @block    = block
-
-      yield old_block
-    ensure
-      @block    = old_block
-    end
-
     def append(instruction, *args)
       insn = instruction.new(@block, *args)
       @block.append insn
@@ -35,30 +26,44 @@ module Furnace
       insn
     end
 
-    def branch(block)
-      append(SSA::Branch, [ block.to_value ])
+    def phi(type, mapping)
+      append(SSA::Phi, type, Hash[mapping])
     end
 
-    def phi(type, mapping)
-      append(SSA::Phi, type, mapping)
+    def branch(post_block)
+      old_block = @block
+      @block    = add_block
+
+      value     = yield old_block
+
+      append(SSA::Branch, [ post_block ])
+
+      [ @block, value ]
+    ensure
+      @block    = old_block
+    end
+
+    def control_flow_op(instruction, type=nil, uses)
+      cond_block = @block
+      post_block = add_block
+
+      mapping = yield post_block
+
+      targets = mapping.map { |(target, _)| target }
+      append(instruction, uses + targets)
+
+      @block = post_block
+      phi(type, mapping.map do |(target, value)|
+                  if target == post_block
+                    [cond_block, value]
+                  else
+                    [target, value]
+                  end
+                end)
     end
 
     def return(value)
       append(SSA::Return, [ value ])
-    end
-
-    def condition(instruction, *uses)
-      switch(instruction, uses, 2)
-    end
-
-    def switch(instruction, uses, successor_count)
-      successors = successor_count.times.map { add_block }
-
-      append(instruction, [ *uses, *successors.map(&:to_value) ])
-
-      @block = add_block
-
-      successors
     end
   end
 end
