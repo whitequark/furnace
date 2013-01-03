@@ -1,5 +1,5 @@
 module Furnace
-  class SSA::Phi < SSA::GenericInstruction
+  class SSA::PhiInsn < SSA::GenericInstruction
     def initialize(basic_block, type, operands={}, name=nil)
       super(basic_block, type, operands, name)
     end

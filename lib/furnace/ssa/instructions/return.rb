@@ -1,4 +1,4 @@
 module Furnace
-  class SSA::Return < SSA::Instruction
+  class SSA::ReturnInsn < SSA::Instruction
   end
 end

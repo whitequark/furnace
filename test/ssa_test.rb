@@ -242,6 +242,22 @@ describe SSA do
     end
   end
 
+  describe SSA::PhiInsn do
+    it 'accepts operand hash' do
+      -> {
+        phi = SSA::PhiInsn.new(@basic_block, nil,
+          { @basic_block => SSA::Constant.new(Integer, 1) })
+      }.should.not.raise
+    end
+
+    it 'pretty prints' do
+      phi = SSA::PhiInsn.new(@basic_block, nil,
+        { @basic_block => SSA::Constant.new(Integer, 1) })
+      phi.pretty_print.should =~
+        /<?> %\d = phi %\d => \^Integer 1/
+    end
+  end
+
   describe SSA::BasicBlock do
     it 'converts to value' do
       @basic_block.to_value.should == @basic_block

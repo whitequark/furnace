@@ -1,4 +1,4 @@
 module Furnace
-  class SSA::Branch < SSA::Instruction
+  class SSA::BranchInsn < SSA::Instruction
   end
 end

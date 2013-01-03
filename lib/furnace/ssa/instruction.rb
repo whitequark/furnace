@@ -40,6 +40,8 @@ module Furnace
 
       pretty_parameters(p)
       pretty_operands(p)
+
+      p
     end
 
     def inspect_as_value(p=SSA::PrettyPrinter.new)
