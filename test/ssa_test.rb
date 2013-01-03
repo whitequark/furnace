@@ -426,6 +426,34 @@ describe SSA do
       @function.make_name("foobar.i").should =~ /^foobar\.i\d+$/
     end
 
+    it 'finds blocks or raises an exception' do
+      @function.find('1').should == @basic_block
+      -> { @function.find('foobar') }.should.raise ArgumentError, %r|Cannot find|
+    end
+
+    it 'checks blocks for presence' do
+      @function.should.include '1'
+      @function.should.not.include 'foobar'
+    end
+
+    it 'removes blocks' do
+      @function.remove @basic_block
+      @function.should.not.include '1'
+    end
+
+    it 'iterates each instruction in each block' do
+      bb2 = SSA::BasicBlock.new(@function)
+      @function.add bb2
+
+      i1 = insn_noary(@basic_block)
+      @basic_block.append i1
+
+      i2 = insn_unary(@basic_block, i1)
+      bb2.append i2
+
+      (@function.each_instruction.to_a - [i1,i2]).should.be.empty
+    end
+
     it 'pretty prints' do
       @function.name = 'foo'
       @function.arguments = [

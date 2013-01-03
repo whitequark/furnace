@@ -47,10 +47,6 @@ module Furnace
     end
 
     def add(block)
-      if include?(block.name)
-        raise ArgumentError, "function #{name}: block #{block.name} already exists"
-      end
-
       @basic_blocks.add block
     end
 
@@ -61,6 +57,8 @@ module Furnace
     end
 
     def each_instruction(&proc)
+      return to_enum(:each_instruction) if proc.nil?
+
       each do |block|
         block.each(&proc)
       end
