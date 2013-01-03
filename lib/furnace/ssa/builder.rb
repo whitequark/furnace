@@ -35,7 +35,7 @@ module Furnace
     end
 
     def phi(type, mapping)
-      append(lookup_insn(:phi), type, Hash[mapping])
+      append(:phi, type, Hash[mapping])
     end
 
     def branch(post_block)
@@ -44,7 +44,7 @@ module Furnace
 
       value     = yield old_block
 
-      append(lookup_insn(:branch), [ post_block ])
+      append(:branch, [ post_block ])
 
       [ @block, value ]
     ensure
@@ -71,7 +71,7 @@ module Furnace
     end
 
     def return(value)
-      append(lookup_insn(:return), [ value ])
+      append(:return, [ value ])
     end
 
     def method_missing(opcode, *args)

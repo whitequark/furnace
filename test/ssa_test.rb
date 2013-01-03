@@ -515,6 +515,13 @@ foo:
 
       -> { @b.nonexistent }.should.raise NoMethodError
     end
+
+    it 'builds ReturnInsn' do
+      @b.return SSA::Void.value
+      i, = @b.block.to_a
+      i.should.be.instance_of SSA::ReturnInsn
+      i.operands.should == [SSA::Void.value]
+    end
   end
 
   describe SSA::InstructionSyntax do
