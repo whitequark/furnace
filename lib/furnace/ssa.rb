@@ -1,5 +1,25 @@
 module Furnace
   module SSA
+    def self.class_name_to_opcode(klass)
+      klass.to_s.split('::').last.gsub(/([a-z]|^)([A-Z])/) do
+        if $1.empty?
+          $2.downcase
+        else
+          "#{$1}_#{$2.downcase}"
+        end
+      end.gsub(/_insn$/, '')
+    end
+
+    def self.opcode_to_class_name(opcode)
+      opcode.gsub(/(?:([a-z])_|^)([a-z])/) do
+        if $1.nil?
+          $2.upcase
+        else
+          "#{$1}#{$2.upcase}"
+        end
+      end + 'Insn'
+    end
+
     def self.inspect_type(type)
       if type
         type.inspect_as_type

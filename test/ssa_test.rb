@@ -52,6 +52,17 @@ describe SSA do
     TupleConcatInsn.new(basic_block, [left, right])
   end
 
+  it 'converts class names to opcodes' do
+    SSA.class_name_to_opcode(DupInsn).should == 'dup'
+    SSA.class_name_to_opcode(TupleConcatInsn).should == 'tuple_concat'
+    SSA.class_name_to_opcode(A::NestedInsn).should == 'nested'
+  end
+
+  it 'converts opcodes to class names' do
+    SSA.opcode_to_class_name('foo').should == 'FooInsn'
+    SSA.opcode_to_class_name('foo_bar').should == 'FooBarInsn'
+  end
+
   describe SSA::PrettyPrinter do
     it 'outputs chunks' do
       SSA::PrettyPrinter.new do |p|
@@ -205,14 +216,6 @@ describe SSA do
   end
 
   describe SSA::Instruction do
-    it 'underscores the opcode name' do
-      DupInsn.opcode.should == 'dup'
-      TupleConcatInsn.opcode.should == 'tuple_concat'
-      A::NestedInsn.opcode.should == 'nested'
-
-      A::NestedInsn.new(@basic_block).opcode.should == 'nested'
-    end
-
     it 'pretty prints' do
       dup = DupInsn.new(@basic_block, [SSA::Constant.new(Integer, 1)])
       dup.pretty_print.should == '^Integer %2 = dup ^Integer 1'

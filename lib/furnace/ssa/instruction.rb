@@ -1,14 +1,7 @@
 module Furnace
   class SSA::Instruction < SSA::User
     def self.opcode
-      @opcode ||=
-        name.split('::').last.gsub(/([a-z]|^)([A-Z])/) do
-          if $1.empty?
-            $2.downcase
-          else
-            "#{$1}_#{$2.downcase}"
-          end
-        end.gsub(/_insn$/, '')
+      @opcode ||= SSA.class_name_to_opcode(self)
     end
 
     attr_accessor :basic_block

@@ -12,6 +12,10 @@ module Furnace
       @block = @function.entry = add_block
     end
 
+    def lookup_insn(opcode, scope=SSA)
+      scope.const_get(SSA.opcode_to_class_name(opcode))
+    end
+
     def add_block
       block = SSA::BasicBlock.new(@function)
       @function.add block
@@ -20,14 +24,14 @@ module Furnace
     end
 
     def append(instruction, *args)
-      insn = instruction.new(@block, *args)
+      insn = lookup_insn(instruction).new(@block, *args)
       @block.append insn
 
       insn
     end
 
     def phi(type, mapping)
-      append(SSA::Phi, type, Hash[mapping])
+      append(:phi, type, Hash[mapping])
     end
 
     def branch(post_block)
@@ -36,7 +40,7 @@ module Furnace
 
       value     = yield old_block
 
-      append(SSA::Branch, [ post_block ])
+      append(:branch, [ post_block ])
 
       [ @block, value ]
     ensure
@@ -63,7 +67,7 @@ module Furnace
     end
 
     def return(value)
-      append(SSA::Return, [ value ])
+      append(:return, [ value ])
     end
   end
 end
