@@ -616,6 +616,20 @@ foo:
       i.foo = @fconst
       i.should.not.be.valid
     end
+
+    it 'allows to treat nil type as error' do
+      phi = SSA::PhiInsn.new(@basic_block, nil)
+
+      i   = SyntaxTypedInsn.new(@basic_block, [ @iconst ])
+      i.should.be.valid(true)
+      i.should.be.valid(false)
+      -> { i.verify!(false) }.should.not.raise
+
+      i.foo = phi
+      i.should.be.valid(true)
+      i.should.not.be.valid(false)
+      -> { i.verify!(false) }.should.raise TypeError, %r|<?>|
+    end
   end
 
   describe SSA::Module do

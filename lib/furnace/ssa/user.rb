@@ -11,8 +11,8 @@ module Furnace
       @operands = operands.map(&:to_value)
     end
 
-    def valid?
-      verify!
+    def valid?(*args)
+      verify!(*args)
       true
     rescue TypeError
       false
