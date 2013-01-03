@@ -40,10 +40,9 @@ module Furnace
       @instructions.delete instruction
     end
 
-    def control_transfer_instruction
+    def terminator
       @instructions.last
     end
-    alias control_transfer_insn control_transfer_instruction
 
     def successor_names
       control_transfer_instruction.uses.
@@ -68,8 +67,12 @@ module Furnace
       @function.predecessors_for(@label)
     end
 
-    def returns?
-      successor_labels.empty?
+    def exits?
+      terminator.exits?
+    end
+
+    def type
+      SSA::BasicBlock
     end
 
     def constant?

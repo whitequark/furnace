@@ -4,6 +4,10 @@ module Furnace
       @opcode ||= SSA.class_name_to_opcode(self)
     end
 
+    def self.syntax(&block)
+      SSA::InstructionSyntax.new(self).evaluate(&block)
+    end
+
     attr_accessor :basic_block
 
     def initialize(basic_block, operands=[], name=nil)
@@ -13,6 +17,10 @@ module Furnace
 
     def opcode
       self.class.opcode
+    end
+
+    def terminator?
+      false
     end
 
     def pretty_parameters(p)

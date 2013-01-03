@@ -10,5 +10,16 @@ module Furnace
     def operands=(operands)
       @operands = operands.map(&:to_value)
     end
+
+    def valid?
+      verify!
+      true
+    rescue TypeError
+      false
+    end
+
+    def verify!
+      # do nothing
+    end
   end
 end

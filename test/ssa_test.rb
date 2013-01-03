@@ -30,8 +30,20 @@ describe SSA do
   class GenericInsn < SSA::GenericInstruction
   end
 
-  module A
+  module TestScope
+    include SSA
+
+    BindingInsn = ::BindingInsn
+    DupInsn = ::DupInsn
+    TupleConcatInsn = ::TupleConcatInsn
+
     class NestedInsn < SSA::Instruction; end
+  end
+
+  class TestBuilder < SSA::Builder
+    def lookup_insn(opcode)
+      super(opcode, TestScope)
+    end
   end
 
   before do
@@ -55,12 +67,13 @@ describe SSA do
   it 'converts class names to opcodes' do
     SSA.class_name_to_opcode(DupInsn).should == 'dup'
     SSA.class_name_to_opcode(TupleConcatInsn).should == 'tuple_concat'
-    SSA.class_name_to_opcode(A::NestedInsn).should == 'nested'
+    SSA.class_name_to_opcode(TestScope::NestedInsn).should == 'nested'
   end
 
   it 'converts opcodes to class names' do
     SSA.opcode_to_class_name('foo').should == 'FooInsn'
     SSA.opcode_to_class_name('foo_bar').should == 'FooBarInsn'
+    SSA.opcode_to_class_name(:foo_bar).should == 'FooBarInsn'
   end
 
   describe SSA::PrettyPrinter do
@@ -168,6 +181,14 @@ describe SSA do
     end
   end
 
+  describe SSA::Void do
+    it 'allows to retrieve a constant' do
+      const = SSA::Void.value
+      const.should.be.constant
+      const.type.should == SSA::Void
+    end
+  end
+
   describe SSA::NamedValue do
     it 'receives unique names' do
       values = 5.times.map { SSA::NamedValue.new(@function, nil) }
@@ -216,6 +237,11 @@ describe SSA do
   end
 
   describe SSA::Instruction do
+    it 'is not terminator' do
+      i = insn_noary(@basic_block)
+      i.should.not.be.terminator
+    end
+
     it 'pretty prints' do
       dup = DupInsn.new(@basic_block, [SSA::Constant.new(Integer, 1)])
       dup.pretty_print.should == '^Integer %2 = dup ^Integer 1'
@@ -230,40 +256,70 @@ describe SSA do
       zero_arity.pretty_print.should == '^Binding %4 = binding'
       zero_arity.inspect_as_value.should == '%4'
 
-      zero_all = A::NestedInsn.new(@basic_block)
+      zero_all = TestScope::NestedInsn.new(@basic_block)
       zero_all.pretty_print.should == 'nested'
       zero_all.inspect_as_value.should == 'void'
     end
-  end
 
-  describe SSA::GenericInstruction do
-    it 'has settable type' do
-      i = GenericInsn.new(@basic_block, Integer, [])
-      i.pretty_print.should =~ /\^Integer %\d+ = generic/
-      i.type = Binding
-      i.pretty_print.should =~ /\^Binding %\d+ = generic/
+    describe SSA::GenericInstruction do
+      it 'has settable type' do
+        i = GenericInsn.new(@basic_block, Integer, [])
+        i.pretty_print.should =~ /\^Integer %\d+ = generic/
+        i.type = Binding
+        i.pretty_print.should =~ /\^Binding %\d+ = generic/
+      end
+
+      describe SSA::PhiInsn do
+        it 'accepts operand hash' do
+          -> {
+            phi = SSA::PhiInsn.new(@basic_block, nil,
+              { @basic_block => SSA::Constant.new(Integer, 1) })
+          }.should.not.raise
+        end
+
+        it 'pretty prints' do
+          phi = SSA::PhiInsn.new(@basic_block, nil,
+            { @basic_block => SSA::Constant.new(Integer, 1) })
+          phi.pretty_print.should =~
+            /<?> %\d = phi %\d => \^Integer 1/
+        end
+      end
     end
-  end
 
-  describe SSA::PhiInsn do
-    it 'accepts operand hash' do
-      -> {
-        phi = SSA::PhiInsn.new(@basic_block, nil,
-          { @basic_block => SSA::Constant.new(Integer, 1) })
-      }.should.not.raise
-    end
+    describe SSA::TerminatorInstruction do
+      it 'is a terminator' do
+        i = SSA::TerminatorInstruction.new(@basic_block, [])
+        i.should.be.terminator
+      end
 
-    it 'pretty prints' do
-      phi = SSA::PhiInsn.new(@basic_block, nil,
-        { @basic_block => SSA::Constant.new(Integer, 1) })
-      phi.pretty_print.should =~
-        /<?> %\d = phi %\d => \^Integer 1/
+      it 'requires to implement #exits?' do
+        i = SSA::TerminatorInstruction.new(@basic_block, [])
+        -> { i.exits? }.should.raise NotImplementedError
+      end
+
+      describe SSA::BranchInsn do
+        it 'does not exit the method' do
+          i = SSA::BranchInsn.new(@basic_block, [@basic_block])
+          i.exits?.should == false
+        end
+      end
+
+      describe SSA::ReturnInsn do
+        it 'exits the method' do
+          i = SSA::ReturnInsn.new(@basic_block, [SSA::Void.value])
+          i.exits?.should == true
+        end
+      end
     end
   end
 
   describe SSA::BasicBlock do
     it 'converts to value' do
       @basic_block.to_value.should == @basic_block
+    end
+
+    it 'has the type of BasicBlock' do
+      @basic_block.type.should == SSA::BasicBlock
     end
 
     it 'pretty prints' do
@@ -393,6 +449,130 @@ foo:
 
 }
       END
+    end
+  end
+
+  describe SSA::Builder do
+    before do
+      @b = TestBuilder.new('foo',
+          [ [Integer, 'bar'], [Binding, 'baz'] ],
+          Float)
+      @f = @b.function
+    end
+
+    it 'correctly sets function attributes' do
+      @f.name.should == 'foo'
+      @f.arguments.each do |arg|
+        arg.function.should == @f
+      end
+      bar, = @f.arguments
+      bar.type.should == Integer
+      bar.name.should == 'bar'
+      @f.return_type.should == Float
+
+      bb = @f.find('1')
+      @f.entry.should == bb
+    end
+
+    it 'appends instructions' do
+      i1 = @b.append :binding
+      i2 = @b.append :nested
+      i1.should.be.instance_of BindingInsn
+      i2.should.be.instance_of TestScope::NestedInsn
+    end
+  end
+
+  describe SSA::InstructionSyntax do
+    class SyntaxUntypedInsn < SSA::Instruction
+      syntax do |s|
+        s.operand :foo
+        s.operand :bar
+      end
+    end
+
+    class SyntaxTypedInsn < SSA::Instruction
+      syntax do |s|
+        s.operand :foo, Integer
+      end
+    end
+
+    class SyntaxSplatInsn < SSA::Instruction
+      syntax do |s|
+        s.operand :foo
+        s.splat   :bars
+      end
+    end
+
+    before do
+      @iconst = SSA::Constant.new(Integer, 1)
+      @fconst = SSA::Constant.new(Float, 1.0)
+      @iinsn  = DupInsn.new(@basic_block, [ @iconst ])
+    end
+
+    it 'accepts operands and decomposes them' do
+      i = SyntaxUntypedInsn.new(@basic_block, [ @iconst, @fconst ])
+      i.foo.should == @iconst
+      i.bar.should == @fconst
+    end
+
+    it 'allows to change operands through accessors' do
+      i = SyntaxUntypedInsn.new(@basic_block, [ @iconst, @fconst ])
+      i.foo = @iinsn
+      i.operands.should == [@iinsn, @fconst]
+    end
+
+    it 'does not accept wrong amount of operands' do
+      -> { SyntaxUntypedInsn.new(@basic_block, [ @iconst ]) }.
+        should.raise ArgumentError
+      -> { SyntaxUntypedInsn.new(@basic_block, [ @iconst, @iconst, @iconst ]) }.
+        should.raise ArgumentError
+    end
+
+    it 'accepts only correct typed operands' do
+      -> { SyntaxTypedInsn.new(@basic_block, [ @fconst ]) }.
+        should.raise TypeError
+      -> { SyntaxTypedInsn.new(@basic_block, [ @iconst ]) }.
+        should.not.raise
+      -> { SyntaxTypedInsn.new(@basic_block, [ @iinsn ]) }.
+        should.not.raise
+    end
+
+    it 'accepts splat' do
+      i = SyntaxSplatInsn.new(@basic_block, [ @iconst, @fconst, @iinsn ])
+      i.foo.should == @iconst
+      i.bars.should == [@fconst, @iinsn]
+    end
+
+    it 'does not accept wrong amount of operands with splat' do
+      -> { SyntaxSplatInsn.new(@basic_block, []) }.
+          should.raise ArgumentError
+    end
+
+    it 'only permits one last splat' do
+      -> {
+        Class.new(SSA::Instruction) {
+          syntax do |s|
+            s.splat   :bars
+            s.operand :foo
+          end
+        }
+      }.should.raise ArgumentError
+
+      -> {
+        Class.new(SSA::Instruction) {
+          syntax do |s|
+            s.splat :bars
+            s.splat :foos
+          end
+        }
+      }.should.raise ArgumentError
+    end
+
+    it 'allows to inquire status' do
+      i = SyntaxTypedInsn.new(@basic_block, [ @iconst ])
+      i.should.be.valid
+      i.foo = @fconst
+      i.should.not.be.valid
     end
   end
 
