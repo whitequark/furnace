@@ -41,8 +41,8 @@ describe SSA do
   end
 
   class TestBuilder < SSA::Builder
-    def lookup_insn(opcode)
-      super(opcode, TestScope)
+    def self.scope
+      TestScope
     end
   end
 
@@ -507,6 +507,13 @@ foo:
       i2 = @b.append :nested
       i1.should.be.instance_of BindingInsn
       i2.should.be.instance_of TestScope::NestedInsn
+    end
+
+    it 'dispatches through method_missing' do
+      i1 = @b.binding
+      i1.should.be.instance_of BindingInsn
+
+      -> { @b.nonexistent }.should.raise NoMethodError
     end
   end
 

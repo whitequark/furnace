@@ -3,6 +3,10 @@ module Furnace
     attr_reader   :function
     attr_accessor :block
 
+    def self.scope
+      SSA
+    end
+
     def initialize(name, arguments=[], return_type=nil)
       @function = SSA::Function.new(name, [], return_type)
       @function.arguments = arguments.map do |(type, name)|
@@ -12,8 +16,8 @@ module Furnace
       @block = @function.entry = add_block
     end
 
-    def lookup_insn(opcode, scope=SSA)
-      scope.const_get(SSA.opcode_to_class_name(opcode))
+    def lookup_insn(opcode)
+      self.class.scope.const_get SSA.opcode_to_class_name(opcode)
     end
 
     def add_block
@@ -31,7 +35,7 @@ module Furnace
     end
 
     def phi(type, mapping)
-      append(:phi, type, Hash[mapping])
+      append(lookup_insn(:phi), type, Hash[mapping])
     end
 
     def branch(post_block)
@@ -40,7 +44,7 @@ module Furnace
 
       value     = yield old_block
 
-      append(:branch, [ post_block ])
+      append(lookup_insn(:branch), [ post_block ])
 
       [ @block, value ]
     ensure
@@ -67,7 +71,17 @@ module Furnace
     end
 
     def return(value)
-      append(:return, [ value ])
+      append(lookup_insn(:return), [ value ])
+    end
+
+    def method_missing(opcode, *args)
+      class_name = SSA.opcode_to_class_name(opcode)
+
+      if self.class.scope.const_defined? class_name
+        append opcode, *args
+      else
+        super
+      end
     end
   end
 end
