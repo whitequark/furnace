@@ -187,6 +187,10 @@ describe SSA do
       const.should.be.constant
       const.type.should == SSA::Void
     end
+
+    it 'inspects as void in constants' do
+      SSA::Void.value.inspect_as_value.should == 'void'
+    end
   end
 
   describe SSA::NamedValue do
