@@ -25,7 +25,7 @@ module Furnace
 
     def inspect_as_value(p=SSA::PrettyPrinter.new)
       p.type type
-      p.text @value.inspect
+      p.text @value.inspect if @value
     end
   end
 end
