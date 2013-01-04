@@ -10,7 +10,7 @@ module Furnace
     end
 
     def each(&block)
-      @functions.each(&block)
+      @functions.values.each(&block)
     end
 
     def include?(name)

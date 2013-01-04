@@ -677,7 +677,7 @@ foo:
       @module.add f1
       f2 = SSA::Function.new('bar')
       @module.add f2
-      @module.each.to_a.sort_by { |a| a[0] }.should == [['bar', f2], ['foo', f1]]
+      (@module.each.to_a - [f1, f2]).should.be.empty
     end
 
     it 'removes functions' do
