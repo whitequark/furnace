@@ -15,6 +15,12 @@ module Furnace
       @basic_block = basic_block
     end
 
+    def initialize_copy(original)
+      super
+
+      @operands = nil
+    end
+
     def opcode
       self.class.opcode
     end

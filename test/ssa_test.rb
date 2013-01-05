@@ -62,6 +62,7 @@ describe SSA do
     @function    = SSA::Function.new('foo')
     @basic_block = SSA::BasicBlock.new(@function)
     @function.add @basic_block
+    @function.entry = @basic_block
   end
 
   def insn_noary(basic_block)
@@ -703,6 +704,56 @@ foo:
 
 }
       END
+    end
+
+    it 'duplicates all its content' do
+      @function.name = 'foo'
+      @function.arguments = [
+          SSA::Argument.new(@function, Integer, 'count'),
+      ]
+
+      f1a1 = @function.arguments.first
+
+      f1bb1 = @function.entry
+      f1bb1.name = 'bb1'
+
+      f1bb2 = SSA::BasicBlock.new(@function, 'bb2')
+      @function.add f1bb2
+
+      f1i1 = insn_unary(@basic_block, f1a1)
+      @basic_block.append f1i1
+
+      f1i2 = insn_unary(@basic_block, f1i1)
+      f1bb2.append f1i2
+
+      f1 = @function
+      f2 = @function.dup
+
+      (f1.arguments & f2.arguments).should.be.empty
+      (f1.each.to_a & f2.each.to_a).should.be.empty
+      (f1.each_instruction.to_a & f2.each_instruction.to_a).should.be.empty
+      f2.name.should == nil
+
+      f1.entry.should.not == f2.entry
+
+      f2a1  = f2.arguments.first
+
+      f2bb1 = f2.find 'bb1'
+      f2i1  = f2bb1.to_a.first
+      f2bb2 = f2.find 'bb2'
+      f2i2  = f2bb2.to_a.first
+
+      f2.entry.should == f2bb1
+      f2i1.operands.should == [f2a1]
+      f2a1.should.enumerate :each_use, [f2i1]
+      f2i2.operands.should == [f2i1]
+      f2i1.should.enumerate :each_use, [f2i2]
+
+      f1a1.should.enumerate :each_use, [f1i1]
+      f1i1.should.enumerate :each_use, [f1i2]
+
+      f2.name = f1.name
+      f2.pretty_print.to_s.should == f1.pretty_print.to_s
     end
   end
 

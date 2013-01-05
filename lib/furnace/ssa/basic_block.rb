@@ -5,6 +5,10 @@ module Furnace
       @instructions = insns.to_a
     end
 
+    def initialize_copy(original)
+      @instructions = []
+    end
+
     def to_a
       @instructions.dup
     end

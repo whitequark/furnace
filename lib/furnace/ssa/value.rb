@@ -4,6 +4,10 @@ module Furnace
       @uses = Set.new
     end
 
+    def initialize_copy(original)
+      @uses = Set.new
+    end
+
     def type
       SSA::Void
     end

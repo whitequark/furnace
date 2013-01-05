@@ -17,6 +17,45 @@ module Furnace
       @next_name     = 0
     end
 
+    def initialize_copy(original)
+      @name = nil
+
+      value_map = Hash.new do |value_map, value|
+        new_value = value.dup
+        new_value.function = self
+        value_map[value] = new_value
+
+        unless new_value.constant?
+          # This is an instruction.
+          # Arguments are processed explicitly.
+          new_value.operands = value.operands.
+              map { |op| value_map[op] }
+        end
+
+        new_value
+      end
+
+      @arguments = @arguments.map do |arg|
+        new_arg = arg.dup
+        new_arg.function = self
+        value_map[arg] = new_arg
+
+        new_arg
+      end
+
+      @basic_blocks = @basic_blocks.map do |bb|
+        new_bb = bb.dup
+        new_bb.function = self
+        @entry = new_bb if @entry == bb
+
+        bb.each do |insn|
+          new_bb.append value_map[insn]
+        end
+
+        new_bb
+      end
+    end
+
     def arguments=(arguments)
       @arguments = sanitize_arguments(arguments)
     end

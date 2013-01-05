@@ -1,7 +1,7 @@
 module Furnace
   class SSA::NamedValue < SSA::Value
-    attr_reader :function
-    attr_reader :name
+    attr_accessor :function
+    attr_reader   :name
 
     def initialize(function, name)
       super()
