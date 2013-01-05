@@ -18,8 +18,6 @@ module Furnace
     end
 
     def initialize_copy(original)
-      @name = nil
-
       value_map = Hash.new do |value_map, value|
         new_value = value.dup
         new_value.function = self

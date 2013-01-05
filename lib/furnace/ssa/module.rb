@@ -30,7 +30,10 @@ module Furnace
           function.name.nil? ||
           @functions.include?(function.name)
 
-        function.name = "#{name_prefix || function.name || 'function'}$#{make_id}"
+        basename = name_prefix || function.name || 'function'
+        basename = basename.gsub /;\d+$/, ''
+
+        function.name = "#{basename};#{make_id}"
       end
 
       @functions[function.name] = function

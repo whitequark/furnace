@@ -732,7 +732,7 @@ foo:
       (f1.arguments & f2.arguments).should.be.empty
       (f1.each.to_a & f2.each.to_a).should.be.empty
       (f1.each_instruction.to_a & f2.each_instruction.to_a).should.be.empty
-      f2.name.should == nil
+      f2.name.should == f1.name
 
       f1.entry.should.not == f2.entry
 
@@ -943,7 +943,7 @@ foo:
     it 'adds named functions with explicit prefix' do
       f = SSA::Function.new('foo')
       @module.add f, 'bar'
-      f.name.should == 'bar$1'
+      f.name.should == 'bar;1'
     end
 
     it 'automatically renames functions with duplicate names' do
@@ -952,7 +952,11 @@ foo:
 
       f2 = SSA::Function.new('foo')
       @module.add f2
-      f2.name.should == 'foo$1'
+      f2.name.should == 'foo;1'
+
+      f3 = SSA::Function.new('foo;1')
+      @module.add f3
+      f3.name.should == 'foo;2'
     end
 
     it 'retrieves functions' do
