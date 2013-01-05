@@ -24,7 +24,14 @@ module Furnace
       block = SSA::BasicBlock.new(@function)
       @function.add block
 
-      block
+      if block_given?
+        branch block
+        @block = block
+
+        yield
+      else
+        block
+      end
     end
 
     def append(instruction, *args)
@@ -34,17 +41,21 @@ module Furnace
       insn
     end
 
+    def branch(target)
+      append(:branch, [ target ])
+    end
+
     def phi(type, mapping)
       append(:phi, type, Hash[mapping])
     end
 
-    def branch(post_block)
+    def fork(post_block)
       old_block = @block
       @block    = add_block
 
       value     = yield old_block
 
-      append(:branch, [ post_block ])
+      branch post_block
 
       [ @block, value ]
     ensure
@@ -55,7 +66,7 @@ module Furnace
       cond_block = @block
       post_block = add_block
 
-      mapping = yield post_block
+      mapping = yield cond_block, post_block
 
       targets = mapping.map { |(target, _)| target }
       append(instruction, uses + targets)
