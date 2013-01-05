@@ -1,0 +1,320 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: Furnace::SSA
+  
+    &mdash; Documentation by YARD 0.8.3
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '../';
+  framesUrl = "../frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../_index.html">Index (S)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../Furnace.html" title="Furnace (module)">Furnace</a></span></span>
+     &raquo; 
+    <span class="title">SSA</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="../method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="../file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Module: Furnace::SSA
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">lib/furnace/ssa.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+  
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="SSA/Argument.html" title="Furnace::SSA::Argument (class)">Argument</a></span>, <span class='object_link'><a href="SSA/BasicBlock.html" title="Furnace::SSA::BasicBlock (class)">BasicBlock</a></span>, <span class='object_link'><a href="SSA/BranchInsn.html" title="Furnace::SSA::BranchInsn (class)">BranchInsn</a></span>, <span class='object_link'><a href="SSA/Builder.html" title="Furnace::SSA::Builder (class)">Builder</a></span>, <span class='object_link'><a href="SSA/Constant.html" title="Furnace::SSA::Constant (class)">Constant</a></span>, <span class='object_link'><a href="SSA/Function.html" title="Furnace::SSA::Function (class)">Function</a></span>, <span class='object_link'><a href="SSA/GenericInstruction.html" title="Furnace::SSA::GenericInstruction (class)">GenericInstruction</a></span>, <span class='object_link'><a href="SSA/Instruction.html" title="Furnace::SSA::Instruction (class)">Instruction</a></span>, <span class='object_link'><a href="SSA/InstructionSyntax.html" title="Furnace::SSA::InstructionSyntax (class)">InstructionSyntax</a></span>, <span class='object_link'><a href="SSA/Module.html" title="Furnace::SSA::Module (class)">Module</a></span>, <span class='object_link'><a href="SSA/NamedValue.html" title="Furnace::SSA::NamedValue (class)">NamedValue</a></span>, <span class='object_link'><a href="SSA/PhiInsn.html" title="Furnace::SSA::PhiInsn (class)">PhiInsn</a></span>, <span class='object_link'><a href="SSA/PrettyPrinter.html" title="Furnace::SSA::PrettyPrinter (class)">PrettyPrinter</a></span>, <span class='object_link'><a href="SSA/ReturnInsn.html" title="Furnace::SSA::ReturnInsn (class)">ReturnInsn</a></span>, <span class='object_link'><a href="SSA/TerminatorInstruction.html" title="Furnace::SSA::TerminatorInstruction (class)">TerminatorInstruction</a></span>, <span class='object_link'><a href="SSA/User.html" title="Furnace::SSA::User (class)">User</a></span>, <span class='object_link'><a href="SSA/Value.html" title="Furnace::SSA::Value (class)">Value</a></span>, <span class='object_link'><a href="SSA/Void.html" title="Furnace::SSA::Void (class)">Void</a></span>
+    
+  
+</p>
+
+
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#class_name_to_opcode-class_method" title="class_name_to_opcode (class method)">+ (Object) <strong>class_name_to_opcode</strong>(klass) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#inspect_type-class_method" title="inspect_type (class method)">+ (Object) <strong>inspect_type</strong>(type) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#opcode_to_class_name-class_method" title="opcode_to_class_name (class method)">+ (Object) <strong>opcode_to_class_name</strong>(opcode) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="class_name_to_opcode-class_method">
+  
+    + (<tt>Object</tt>) <strong>class_name_to_opcode</strong>(klass) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+3
+4
+5
+6
+7
+8
+9
+10
+11</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ssa.rb', line 3</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class_name_to_opcode'>class_name_to_opcode</span><span class='lparen'>(</span><span class='id identifier rubyid_klass'>klass</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>::</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_last'>last</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>([a-z]|^)([A-Z])</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='kw'>if</span> <span class='backref'>$1</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+      <span class='backref'>$2</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span>
+    <span class='kw'>else</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='backref'>$1</span><span class='rbrace'>}</span><span class='tstring_content'>_</span><span class='embexpr_beg'>#{</span><span class='backref'>$2</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>_insn$</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="inspect_type-class_method">
+  
+    + (<tt>Object</tt>) <strong>inspect_type</strong>(type) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25
+26
+27
+28
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ssa.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_inspect_type'>inspect_type</span><span class='lparen'>(</span><span class='id identifier rubyid_type'>type</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_type'>type</span>
+    <span class='id identifier rubyid_type'>type</span><span class='period'>.</span><span class='id identifier rubyid_inspect_as_type'>inspect_as_type</span>
+  <span class='kw'>else</span>
+    <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>&lt;?&gt;</span><span class='tstring_end'>'</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="opcode_to_class_name-class_method">
+  
+    + (<tt>Object</tt>) <strong>opcode_to_class_name</strong>(opcode) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+13
+14
+15
+16
+17
+18
+19
+20
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ssa.rb', line 13</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_opcode_to_class_name'>opcode_to_class_name</span><span class='lparen'>(</span><span class='id identifier rubyid_opcode'>opcode</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_opcode'>opcode</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>(?:([a-z])_|^)([a-z])</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='kw'>if</span> <span class='backref'>$1</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+      <span class='backref'>$2</span><span class='period'>.</span><span class='id identifier rubyid_upcase'>upcase</span>
+    <span class='kw'>else</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='backref'>$1</span><span class='rbrace'>}</span><span class='embexpr_beg'>#{</span><span class='backref'>$2</span><span class='period'>.</span><span class='id identifier rubyid_upcase'>upcase</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>Insn</span><span class='tstring_end'>'</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+    <div id="footer">
+  Generated on Sat Jan  5 13:24:56 2013 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.3 (ruby-1.9.3).
+</div>
+
+  </body>
+</html>
