@@ -483,6 +483,16 @@ describe SSA do
       @basic_block.should.enumerate :each, [i1]
     end
 
+    it 'enumerates instructions by type' do
+      i1 = BindingInsn.new(@basic_block)
+      @basic_block.append i1
+
+      i2 = GenericInsn.new(@basic_block)
+      @basic_block.append i2
+
+      @basic_block.each(BindingInsn).should.enumerate :each, [i1]
+    end
+
     it 'can check for presence of instructions' do
       i1, i2 = 2.times.map { insn_noary(@basic_block) }
       @basic_block.append i1

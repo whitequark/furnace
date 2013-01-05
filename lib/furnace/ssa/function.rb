@@ -56,11 +56,11 @@ module Furnace
       @basic_blocks.delete block
     end
 
-    def each_instruction(&proc)
-      return to_enum(:each_instruction) if proc.nil?
+    def each_instruction(type=nil, &proc)
+      return to_enum(:each_instruction, type) if proc.nil?
 
       each do |block|
-        block.each(&proc)
+        block.each(type, &proc)
       end
     end
 
