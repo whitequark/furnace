@@ -26,7 +26,13 @@ module Furnace
 
     def replace_with(insn)
       replace_all_uses_with(insn)
-      @basic_block.replace self, insn
+
+      if insn.constant?
+        @basic_block.remove self
+      else
+        @basic_block.replace self, insn
+      end
+
       detach
     end
 

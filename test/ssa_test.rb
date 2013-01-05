@@ -349,7 +349,7 @@ describe SSA do
       @basic_block.to_a.should.be.empty
     end
 
-    it 'replaces uses of itself' do
+    it 'replaces uses of itself with instructions' do
       i1 = insn_noary(@basic_block)
       @basic_block.append i1
 
@@ -361,6 +361,20 @@ describe SSA do
 
       @basic_block.to_a.should == [i1a, i2]
       i2.operands.should == [i1a]
+    end
+
+    it 'replaces uses of itself with constants' do
+      i1 = insn_noary(@basic_block)
+      @basic_block.append i1
+
+      i2 = insn_unary(@basic_block, i1)
+      @basic_block.append i2
+
+      c1 = SSA::Constant.new(Integer, 1)
+      i1.replace_with c1
+
+      @basic_block.to_a.should == [i2]
+      i2.operands.should == [c1]
     end
 
     it 'pretty prints' do
