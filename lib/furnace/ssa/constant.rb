@@ -1,7 +1,7 @@
 module Furnace
   class SSA::Constant < SSA::Value
-    attr_reader :type
-    attr_reader :value
+    attr_accessor :type
+    attr_accessor :value
 
     def initialize(type, value)
       super()
