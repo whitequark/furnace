@@ -14,6 +14,12 @@ module Furnace
       end
     end
 
+    def translate_operands(map)
+      Hash[@operands.map do |basic_block, value|
+        [ map[basic_block], map[value] ]
+      end]
+    end
+
     def replace_uses_of(value, new_value)
       found = false
 

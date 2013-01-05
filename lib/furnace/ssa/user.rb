@@ -18,6 +18,12 @@ module Furnace
       end
     end
 
+    def translate_operands(map)
+      @operands.map do |operand|
+        map[operand]
+      end
+    end
+
     def detach
       update_use_lists do
         @operands = nil
@@ -58,14 +64,14 @@ module Furnace
     protected
 
     def update_use_lists
-      each_operand do |op|
-        op.remove_use(self)
+      each_operand do |operand|
+        operand.remove_use(self)
       end
 
       value = yield
 
-      each_operand do |op|
-        op.add_use(self)
+      each_operand do |operand|
+        operand.add_use(self)
       end
 
       value

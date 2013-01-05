@@ -26,8 +26,7 @@ module Furnace
           # This is an instruction.
           # Arguments are processed explicitly.
           new_value.function = self
-          new_value.operands = value.operands.
-              map { |op| value_map[op] }
+          new_value.operands = value.translate_operands(value_map)
         end
 
         new_value
@@ -44,13 +43,19 @@ module Furnace
       @basic_blocks = @basic_blocks.map do |bb|
         new_bb = bb.dup
         new_bb.function = self
-        @entry = new_bb if @entry == bb
 
+        value_map[bb] = new_bb
+
+        new_bb
+      end
+
+      @entry = value_map[@entry]
+
+      original.each do |bb|
+        new_bb = value_map[bb]
         bb.each do |insn|
           new_bb.append value_map[insn]
         end
-
-        new_bb
       end
     end
 

@@ -727,6 +727,13 @@ foo:
       f1i2 = insn_binary(@basic_block, f1i1, f1c1)
       f1bb2.append f1i2
 
+      f1bb3 = SSA::BasicBlock.new(@function, 'bb3')
+      @function.add f1bb3
+
+      f1phi = SSA::PhiInsn.new(f1bb3, nil,
+          { f1bb1 => f1i1, f1bb2 => f1i2 })
+      f1bb3.append f1phi
+
       f1 = @function
       f2 = @function.dup
 
@@ -743,15 +750,17 @@ foo:
       f2i1  = f2bb1.to_a.first
       f2bb2 = f2.find 'bb2'
       f2i2  = f2bb2.to_a.first
+      f2bb3 = f2.find 'bb3'
+      f2phi = f2bb3.to_a.first
 
       f2.entry.should == f2bb1
       f2i1.operands.should == [f2a1]
       f2a1.should.enumerate :each_use, [f2i1]
       f2i2.operands.should == [f2i1, f1c1]
-      f2i1.should.enumerate :each_use, [f2i2]
+      f2i1.should.enumerate :each_use, [f2i2, f2phi]
 
       f1a1.should.enumerate :each_use, [f1i1]
-      f1i1.should.enumerate :each_use, [f1i2]
+      f1i1.should.enumerate :each_use, [f1i2, f1phi]
 
       f2.name = f1.name
       f2.pretty_print.to_s.should == f1.pretty_print.to_s
