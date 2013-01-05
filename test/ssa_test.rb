@@ -316,6 +316,14 @@ describe SSA do
       val1.should.enumerate :each_use, []
       val2.should.enumerate :each_use, [user]
     end
+
+    it 'barfs on #replace_uses_of if the value is not used' do
+      val1, val2 = 2.times.map { SSA::Value.new }
+
+      user = SSA::User.new(@function, [val1])
+
+      -> { user.replace_uses_of(val2, val1) }.should.raise ArgumentError
+    end
   end
 
   describe SSA::Instruction do
@@ -382,6 +390,15 @@ describe SSA do
 
           val1.should.enumerate :each_use, []
           val2.should.enumerate :each_use, [phi]
+        end
+
+        it 'barfs on #replace_uses_of if the value is not used' do
+          val1, val2 = 2.times.map { SSA::Value.new }
+
+          phi = SSA::PhiInsn.new(@basic_block, nil,
+              { @basic_block => val1 })
+
+          -> { phi.replace_uses_of(val2, val1) }.should.raise ArgumentError
         end
       end
     end
@@ -630,6 +647,10 @@ foo:
           [ [Integer, 'bar'], [Binding, 'baz'] ],
           Float)
       @f = @b.function
+    end
+
+    it 'has SSA as default scope' do
+      SSA::Builder.scope.should == ::Furnace::SSA
     end
 
     it 'correctly sets function attributes' do
