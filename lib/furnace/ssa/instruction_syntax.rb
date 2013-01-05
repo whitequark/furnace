@@ -37,12 +37,12 @@ module Furnace
 
       @klass.class_eval do
         operands.each_with_index do |(operand, type), index|
-          attr_reader operand
+          define_method(operand) do
+            @operands[index]
+          end
 
           define_method(:"#{operand}=") do |value|
             value = value.to_value
-
-            instance_variable_set :"@#{operand}", value
 
             @operands[index].remove_use self if @operands[index]
             @operands[index] = value
@@ -53,16 +53,16 @@ module Furnace
         end
 
         if splat
-          attr_reader splat
+          define_method splat do
+            @operands[operands.size..-1]
+          end
 
-          define_method(:"#{splat}=") do |value|
-            value = value.to_a
-
-            instance_variable_set :"@#{splat}", value
+          define_method(:"#{splat}=") do |values|
+            values = values.map(&:to_value)
 
             update_use_lists do
               @operands.slice! operands.size, -1
-              @operands.insert operands.size, *value
+              @operands.insert operands.size, *values
             end
 
             value
@@ -76,14 +76,10 @@ module Furnace
             raise ArgumentError, "Incorrect number of operands provided: #{values.size} for #{operands.size}"
           end
 
-          @operands = []
+          values = values.map(&:to_value)
 
-          operands.keys.each_with_index do |operand, index|
-            send :"#{operand}=", values[index]
-          end
-
-          if splat
-            send :"#{splat}=", values[operands.size..-1]
+          update_use_lists do
+            @operands = values
           end
 
           verify!

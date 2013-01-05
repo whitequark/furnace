@@ -54,7 +54,11 @@ module Furnace
     end
 
     def pretty_operands(p)
-      p.values @operands
+      if @operands
+        p.values @operands
+      else
+        p.text '<DETACHED>'
+      end
     end
 
     def pretty_print(p=SSA::PrettyPrinter.new)

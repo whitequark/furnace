@@ -920,6 +920,12 @@ foo:
       @fconst.should.enumerate :each_use, []
       @iinsn.should.enumerate :each_use, [ i ]
     end
+
+    it 'does not break on replace_uses_of' do
+      i = SyntaxUntypedInsn.new(@basic_block, [ @iconst, @fconst ])
+      i.replace_uses_of @iconst, @fconst
+      i.foo.should == @fconst
+    end
   end
 
   describe SSA::Module do
