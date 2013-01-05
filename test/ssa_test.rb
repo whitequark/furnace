@@ -341,6 +341,11 @@ describe SSA do
       i.should.not.be.terminator
     end
 
+    it 'does not have side effects' do
+      i = insn_noary(@basic_block)
+      i.has_side_effects?.should == false
+    end
+
     it 'removes itself from basic block' do
       i = insn_noary(@basic_block)
       @basic_block.append i
@@ -452,6 +457,11 @@ describe SSA do
       it 'is a terminator' do
         i = SSA::TerminatorInstruction.new(@basic_block, [])
         i.should.be.terminator
+      end
+
+      it 'has side effects' do
+        i = SSA::TerminatorInstruction.new(@basic_block, [])
+        i.has_side_effects?.should == true
       end
 
       it 'requires to implement #exits?' do

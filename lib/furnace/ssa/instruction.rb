@@ -36,6 +36,10 @@ module Furnace
       detach
     end
 
+    def has_side_effects?
+      false
+    end
+
     def terminator?
       false
     end
