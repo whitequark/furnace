@@ -3,12 +3,15 @@ require 'bacon/colored_output'
 
 class Should
   def enumerate(iterator, array)
-    satisfy("##{iterator} should return an Enumerator") do
-      @object.send(iterator).instance_of? Enumerator
+    enum = @object.send(iterator)
+
+    satisfy("##{iterator} should return an Enumerator, returns #{enum.class}") do
+      enum.instance_of? Enumerator
     end
 
-    satisfy("##{iterator} should yield #{array.inspect}") do
-      (@object.send(iterator).to_a - array).empty?
+    values = enum.to_a
+    satisfy("##{iterator} should yield #{array.inspect}, yields #{values.inspect}") do
+      (values - array).empty?
     end
   end
 end

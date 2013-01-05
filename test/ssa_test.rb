@@ -850,6 +850,15 @@ foo:
       i.should.not.be.valid(false)
       -> { i.verify!(false) }.should.raise TypeError, %r|<?>|
     end
+
+    it 'does not interfere with def-use tracking' do
+      i = SyntaxUntypedInsn.new(@basic_block, [ @iconst, @fconst ])
+      @fconst.should.enumerate :each_use, [ i ]
+
+      i.bar = @iinsn
+      @fconst.should.enumerate :each_use, []
+      @iinsn.should.enumerate :each_use, [ i ]
+    end
   end
 
   describe SSA::Module do

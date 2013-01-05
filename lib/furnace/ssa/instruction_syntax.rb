@@ -43,7 +43,10 @@ module Furnace
             value = value.to_value
 
             instance_variable_set :"@#{operand}", value
+
+            @operands[index].remove_use self if @operands[index]
             @operands[index] = value
+            value.add_use self if value
 
             value
           end
@@ -56,7 +59,11 @@ module Furnace
             value = value.to_a
 
             instance_variable_set :"@#{splat}", value
-            @operands[operands.size] = value
+
+            update_use_lists do
+              @operands.slice! operands.size, -1
+              @operands.insert operands.size, *value
+            end
 
             value
           end
