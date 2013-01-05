@@ -157,12 +157,29 @@ describe SSA do
     it 'has an use list' do
       other = SSA::Value.new
       @val.should.enumerate :each_use, []
+      @val.should.not.be.used
+      @val.use_count.should == 0
 
       @val.add_use(other)
       @val.should.enumerate :each_use, [other]
+      @val.should.be.used
+      @val.use_count.should == 1
 
       @val.remove_use(other)
       @val.should.enumerate :each_use, []
+      @val.should.not.be.used
+      @val.use_count.should == 0
+    end
+
+    it 'can have all of its uses replaced' do
+      val1, val2 = 2.times.map { SSA::Value.new }
+
+      user = SSA::User.new(@function, [val1])
+
+      val1.replace_all_uses_with(val2)
+
+      val1.should.enumerate :each_use, []
+      val2.should.enumerate :each_use, [user]
     end
   end
 
@@ -277,6 +294,16 @@ describe SSA do
       val1.should.enumerate :each_use, []
       val2.should.enumerate :each_use, [user]
     end
+
+    it 'can replace uses of values' do
+      val1, val2 = 2.times.map { SSA::Value.new }
+
+      user = SSA::User.new(@function, [val1])
+      user.replace_uses_of(val1, val2)
+
+      val1.should.enumerate :each_use, []
+      val2.should.enumerate :each_use, [user]
+    end
   end
 
   describe SSA::Instruction do
@@ -332,6 +359,17 @@ describe SSA do
           phi = SSA::PhiInsn.new(@basic_block, nil,
               { @basic_block => val })
           val.should.enumerate :each_use, [phi]
+        end
+
+        it 'can replace uses of values' do
+          val1, val2 = 2.times.map { SSA::Value.new }
+
+          phi = SSA::PhiInsn.new(@basic_block, nil,
+              { @basic_block => val1 })
+          phi.replace_uses_of(val1, val2)
+
+          val1.should.enumerate :each_use, []
+          val2.should.enumerate :each_use, [phi]
         end
       end
     end

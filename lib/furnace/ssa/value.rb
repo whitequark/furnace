@@ -1,7 +1,7 @@
 module Furnace
   class SSA::Value
     def initialize
-      @uses = []
+      @uses = Set.new
     end
 
     def type
@@ -12,12 +12,8 @@ module Furnace
       false
     end
 
-    def to_value
-      self
-    end
-
     def add_use(use)
-      @uses.push use
+      @uses.add use
     end
 
     def remove_use(use)
@@ -26,6 +22,24 @@ module Furnace
 
     def each_use(&block)
       @uses.each(&block)
+    end
+
+    def use_count
+      @uses.count
+    end
+
+    def used?
+      @uses.any?
+    end
+
+    def replace_all_uses_with(value)
+      each_use do |user|
+        user.replace_uses_of self, value
+      end
+    end
+
+    def to_value
+      self
     end
 
     def ==(other)

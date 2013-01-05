@@ -14,6 +14,26 @@ module Furnace
       end
     end
 
+    def replace_uses_of(value, new_value)
+      found = false
+
+      @operands.each do |basic_block, operand|
+        if operand == value
+          found = true
+          @operands[basic_block] = new_value
+        end
+      end
+
+      if found
+        value.remove_use(self)
+        new_value.add_use(self)
+      else
+        raise ArgumentError, "#{value.inspect} is not used in #{self.inspect}"
+      end
+
+      self
+    end
+
     def pretty_operands(p)
       @operands.each_with_index do |(basic_block, value), index|
         p.name basic_block.name

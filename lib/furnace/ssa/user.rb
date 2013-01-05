@@ -18,6 +18,26 @@ module Furnace
       end
     end
 
+    def replace_uses_of(value, new_value)
+      found = false
+
+      @operands.each_with_index do |operand, index|
+        if operand == value
+          found = true
+          @operands[index] = new_value
+        end
+      end
+
+      if found
+        value.remove_use(self)
+        new_value.add_use(self)
+      else
+        raise ArgumentError, "#{value.inspect} is not used in #{self.inspect}"
+      end
+
+      self
+    end
+
     def valid?(*args)
       verify!(*args)
       true
