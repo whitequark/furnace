@@ -4,6 +4,8 @@ module Furnace
     attr_reader :name
 
     def initialize(function, name)
+      super()
+
       @function = function
       self.name = name
     end

@@ -4,7 +4,15 @@ module Furnace
       super(basic_block, type, operands, name)
     end
 
-    attr_writer :operands
+    def each_operand(&block)
+      @operands.values.each &block if @operands
+    end
+
+    def operands=(operands)
+      update_use_lists do
+        @operands = operands
+      end
+    end
 
     def pretty_operands(p)
       @operands.each_with_index do |(basic_block, value), index|

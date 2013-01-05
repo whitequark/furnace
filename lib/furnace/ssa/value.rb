@@ -1,5 +1,9 @@
 module Furnace
   class SSA::Value
+    def initialize
+      @uses = []
+    end
+
     def type
       SSA::Void
     end
@@ -10,6 +14,18 @@ module Furnace
 
     def to_value
       self
+    end
+
+    def add_use(use)
+      @uses.push use
+    end
+
+    def remove_use(use)
+      @uses.delete use
+    end
+
+    def each_use(&block)
+      @uses.each(&block)
     end
 
     def ==(other)

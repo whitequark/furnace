@@ -4,6 +4,8 @@ module Furnace
     attr_reader :value
 
     def initialize(type, value)
+      super()
+
       @value, @type = value, type
     end
 

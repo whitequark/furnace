@@ -153,6 +153,17 @@ describe SSA do
     it 'pretty prints' do
       @val.pretty_print.should =~ %r{#<Furnace::SSA::Value}
     end
+
+    it 'has an use list' do
+      other = SSA::Value.new
+      @val.should.enumerate :each_use, []
+
+      @val.add_use(other)
+      @val.should.enumerate :each_use, [other]
+
+      @val.remove_use(other)
+      @val.should.enumerate :each_use, []
+    end
   end
 
   describe SSA::Constant do
@@ -240,6 +251,34 @@ describe SSA do
     end
   end
 
+  describe SSA::User do
+    it 'populates use lists' do
+      val  = SSA::Value.new
+
+      user = SSA::User.new(@function)
+      val.should.enumerate :each_use, []
+
+      user.operands = [val]
+      val.should.enumerate :each_use, [user]
+    end
+
+    it 'updates use lists' do
+      val1, val2 = 2.times.map { SSA::Value.new }
+
+      user = SSA::User.new(@function)
+      val1.should.enumerate :each_use, []
+      val2.should.enumerate :each_use, []
+
+      user.operands = [val1]
+      val1.should.enumerate :each_use, [user]
+      val2.should.enumerate :each_use, []
+
+      user.operands = [val2]
+      val1.should.enumerate :each_use, []
+      val2.should.enumerate :each_use, [user]
+    end
+  end
+
   describe SSA::Instruction do
     it 'is not terminator' do
       i = insn_noary(@basic_block)
@@ -277,15 +316,22 @@ describe SSA do
         it 'accepts operand hash' do
           -> {
             phi = SSA::PhiInsn.new(@basic_block, nil,
-              { @basic_block => SSA::Constant.new(Integer, 1) })
+                { @basic_block => SSA::Constant.new(Integer, 1) })
           }.should.not.raise
         end
 
         it 'pretty prints' do
           phi = SSA::PhiInsn.new(@basic_block, nil,
-            { @basic_block => SSA::Constant.new(Integer, 1) })
+              { @basic_block => SSA::Constant.new(Integer, 1) })
           phi.pretty_print.should =~
             /<?> %\d = phi %\d => \^Integer 1/
+        end
+
+        it 'maintains use chains' do
+          val = SSA::Value.new
+          phi = SSA::PhiInsn.new(@basic_block, nil,
+              { @basic_block => val })
+          val.should.enumerate :each_use, [phi]
         end
       end
     end
@@ -367,8 +413,7 @@ describe SSA do
     it 'enumerates instructions' do
       i1 = insn_noary(@basic_block)
       @basic_block.append i1
-      @basic_block.each.should.be.instance_of Enumerator
-      @basic_block.each.to_a.should == [i1]
+      @basic_block.should.enumerate :each, [i1]
     end
 
     it 'can check for presence of instructions' do
@@ -455,7 +500,7 @@ describe SSA do
       i2 = insn_unary(@basic_block, i1)
       bb2.append i2
 
-      (@function.each_instruction.to_a - [i1,i2]).should.be.empty
+      @function.should.enumerate :each_instruction, [i1, i2]
     end
 
     it 'pretty prints' do
@@ -681,7 +726,8 @@ foo:
       @module.add f1
       f2 = SSA::Function.new('bar')
       @module.add f2
-      (@module.each.to_a - [f1, f2]).should.be.empty
+
+      @module.should.enumerate :each, [f1, f2]
     end
 
     it 'removes functions' do
