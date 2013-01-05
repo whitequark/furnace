@@ -45,16 +45,11 @@ module Furnace
     end
 
     def successor_names
-      control_transfer_instruction.uses.
-        select do |value|
-          value.type == SSA::BasicBlock
-        end.map do |value|
-          value.name
-        end
+      terminator.successors
     end
 
     def successors
-      successor_labels.map do |label|
+      successor_names.map do |label|
         @function.find(label)
       end
     end
@@ -64,7 +59,7 @@ module Furnace
     end
 
     def predecessors
-      @function.predecessors_for(@label)
+      @function.predecessors_for(@name)
     end
 
     def exits?

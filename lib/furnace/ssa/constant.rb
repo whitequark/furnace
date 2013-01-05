@@ -30,5 +30,9 @@ module Furnace
       p.text @value.inspect unless type == SSA::Void
       p
     end
+
+    def inspect
+      pretty_print
+    end
   end
 end

@@ -17,5 +17,9 @@ module Furnace
     def inspect_as_value(p=SSA::PrettyPrinter.new)
       p.name name
     end
+
+    def inspect
+      pretty_print
+    end
   end
 end

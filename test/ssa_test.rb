@@ -30,6 +30,18 @@ describe SSA do
   class GenericInsn < SSA::GenericInstruction
   end
 
+  class CondBranchInsn < SSA::TerminatorInstruction
+    syntax do |s|
+      s.operand :condition
+      s.operand :if_true,  SSA::BasicBlock
+      s.operand :if_false, SSA::BasicBlock
+    end
+
+    def exits?
+      false
+    end
+  end
+
   module TestScope
     include SSA
 
@@ -478,19 +490,64 @@ describe SSA do
       @basic_block.to_a.should == [i1, i4, i3]
     end
 
-=begin
-    it 'can determine control transfer instruction' do
-    end
+    describe 'with other blocks' do
+      before do
+        @branch_bb = @basic_block
+        @branch_bb.name = 'branch'
 
-    it 'can determine successors' do
-    end
+        @body_bb = SSA::BasicBlock.new(@function, 'body')
+        @function.add @body_bb
 
-    it 'can determine predecessors' do
-    end
+        @ret_bb  = SSA::BasicBlock.new(@function, 'ret')
+        @function.add @ret_bb
 
-    it 'can determine if it is an exit node' do
+        @cond = DupInsn.new(@branch_bb,
+              [ SSA::Constant.new(TrueClass, true) ])
+        @branch_bb.append @cond
+
+        @cond_br = CondBranchInsn.new(@branch_bb,
+              [ @cond,
+                @body_bb,
+                @ret_bb ])
+        @branch_bb.append @cond_br
+
+        @uncond_br = SSA::BranchInsn.new(@body_bb,
+              [ @ret_bb ])
+        @body_bb.append @uncond_br
+
+        @ret = SSA::ReturnInsn.new(@ret_bb,
+              [ SSA::Void.value ])
+        @ret_bb.append @ret
+      end
+
+      it 'can determine terminator' do
+        @branch_bb.terminator.should == @cond_br
+        @body_bb.terminator.should == @uncond_br
+        @ret_bb.terminator.should == @ret
+      end
+
+      it 'can determine successors' do
+        @branch_bb.successors.should.enumerate :each, [@body_bb, @ret_bb]
+        @body_bb.successors.should.enumerate :each, [@ret_bb]
+        @ret_bb.successors.should.enumerate :each, []
+      end
+
+      it 'can determine predecessors' do
+        @branch_bb.predecessors.should.enumerate :each, []
+        @body_bb.predecessors.should.enumerate :each, [@branch_bb]
+        @ret_bb.predecessors.should.enumerate :each, [@branch_bb, @body_bb]
+      end
+
+      it 'can determine predecessor names' do
+        @ret_bb.predecessor_names.should.enumerate :each, %w(branch body)
+      end
+
+      it 'can determine if it is an exit block' do
+        @branch_bb.exits?.should == false
+        @body_bb.exits?.should == false
+        @ret_bb.exits?.should == true
+      end
     end
-=end
   end
 
   describe SSA::Function do
