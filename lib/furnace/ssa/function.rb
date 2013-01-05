@@ -20,12 +20,12 @@ module Furnace
     def initialize_copy(original)
       value_map = Hash.new do |value_map, value|
         new_value = value.dup
-        new_value.function = self
         value_map[value] = new_value
 
         unless new_value.constant?
           # This is an instruction.
           # Arguments are processed explicitly.
+          new_value.function = self
           new_value.operands = value.operands.
               map { |op| value_map[op] }
         end

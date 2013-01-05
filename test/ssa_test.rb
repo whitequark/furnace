@@ -723,7 +723,8 @@ foo:
       f1i1 = insn_unary(@basic_block, f1a1)
       @basic_block.append f1i1
 
-      f1i2 = insn_unary(@basic_block, f1i1)
+      f1c1 = SSA::Constant.new(Array, [1])
+      f1i2 = insn_binary(@basic_block, f1i1, f1c1)
       f1bb2.append f1i2
 
       f1 = @function
@@ -746,7 +747,7 @@ foo:
       f2.entry.should == f2bb1
       f2i1.operands.should == [f2a1]
       f2a1.should.enumerate :each_use, [f2i1]
-      f2i2.operands.should == [f2i1]
+      f2i2.operands.should == [f2i1, f1c1]
       f2i1.should.enumerate :each_use, [f2i2]
 
       f1a1.should.enumerate :each_use, [f1i1]
