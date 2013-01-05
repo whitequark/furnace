@@ -53,8 +53,11 @@ module Furnace
 
       original.each do |bb|
         new_bb = value_map[bb]
+
         bb.each do |insn|
-          new_bb.append value_map[insn]
+          new_insn = value_map[insn]
+          new_insn.basic_block = new_bb
+          new_bb.append new_insn
         end
       end
     end

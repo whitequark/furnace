@@ -762,6 +762,15 @@ foo:
       f1a1.should.enumerate :each_use, [f1i1]
       f1i1.should.enumerate :each_use, [f1i2, f1phi]
 
+      f2.arguments.each do |arg|
+        arg.function.should == f2
+      end
+
+      f2.each_instruction do |insn|
+        insn.function.should == f2
+        f2.each.to_a.should.include insn.basic_block
+      end
+
       f2.name = f1.name
       f2.pretty_print.to_s.should == f1.pretty_print.to_s
     end
