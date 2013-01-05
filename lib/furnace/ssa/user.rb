@@ -18,6 +18,12 @@ module Furnace
       end
     end
 
+    def detach
+      update_use_lists do
+        @operands = nil
+      end
+    end
+
     def replace_uses_of(value, new_value)
       found = false
 

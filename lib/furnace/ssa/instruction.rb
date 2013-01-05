@@ -19,6 +19,17 @@ module Furnace
       self.class.opcode
     end
 
+    def remove
+      @basic_block.remove self
+      detach
+    end
+
+    def replace_with(insn)
+      replace_all_uses_with(insn)
+      @basic_block.replace self, insn
+      detach
+    end
+
     def terminator?
       false
     end

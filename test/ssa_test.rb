@@ -307,6 +307,15 @@ describe SSA do
       val2.should.enumerate :each_use, [user]
     end
 
+    it 'detaches from values' do
+      val  = SSA::Value.new
+      user = SSA::User.new(@function, [val])
+
+      val.should.enumerate :each_use, [user]
+      user.detach
+      val.should.enumerate :each_use, []
+    end
+
     it 'can replace uses of values' do
       val1, val2 = 2.times.map { SSA::Value.new }
 
@@ -330,6 +339,28 @@ describe SSA do
     it 'is not terminator' do
       i = insn_noary(@basic_block)
       i.should.not.be.terminator
+    end
+
+    it 'removes itself from basic block' do
+      i = insn_noary(@basic_block)
+      @basic_block.append i
+
+      i.remove
+      @basic_block.to_a.should.be.empty
+    end
+
+    it 'replaces uses of itself' do
+      i1 = insn_noary(@basic_block)
+      @basic_block.append i1
+
+      i2 = insn_unary(@basic_block, i1)
+      @basic_block.append i2
+
+      i1a = insn_noary(@basic_block)
+      i1.replace_with i1a
+
+      @basic_block.to_a.should == [i1a, i2]
+      i2.operands.should == [i1a]
     end
 
     it 'pretty prints' do
