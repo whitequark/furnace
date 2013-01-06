@@ -921,6 +921,12 @@ foo:
       i.should.not.be.valid
     end
 
+    it 'highlights invalid insns when pretty printing' do
+      i = SyntaxTypedInsn.new(@basic_block, [ @iconst ])
+      i.foo = @fconst
+      i.pretty_print.should =~ /!syntax_typed/
+    end
+
     it 'allows to treat nil type as error' do
       phi = SSA::PhiInsn.new(@basic_block, nil)
 

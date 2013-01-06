@@ -63,6 +63,14 @@ module Furnace
       text with_ansi(:bright, :white) { what.to_s }
     end
 
+    def keyword_invalid(what)
+      if @coloruze
+        text with_ansi(:bright, :red) { what.to_s }
+      else
+        text "!#{what}".to_s
+      end
+    end
+
     def objects(objects, separator=",", printer=:pretty_print)
       objects.each_with_index do |object, index|
         object.send(printer, self)

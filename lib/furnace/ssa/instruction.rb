@@ -68,7 +68,11 @@ module Furnace
         p.text  '='
       end
 
-      p.keyword opcode
+      if valid?
+        p.keyword opcode
+      else
+        p.keyword_invalid opcode
+      end
 
       pretty_parameters(p)
       pretty_operands(p)
