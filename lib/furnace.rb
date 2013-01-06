@@ -17,7 +17,7 @@ module Furnace
   require "furnace/ssa"
 
   require "furnace/transform/pipeline"
-  require "furnace/transform/iterative_process"
+  require "furnace/transform/iterative"
 
   require "furnace/graphviz"
 end

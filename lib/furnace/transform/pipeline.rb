@@ -5,14 +5,14 @@ module Furnace
         @stages = stages
       end
 
-      def run(target)
+      def run(context)
         @stages.each do |stage|
           break if stage.nil?
 
-          target = stage.transform target
+          stage.run context
         end
 
-        target
+        true
       end
     end
   end
