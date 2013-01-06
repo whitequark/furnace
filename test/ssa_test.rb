@@ -711,7 +711,7 @@ foo:
     end
 
     it 'duplicates all its content' do
-      @function.name = 'foo'
+      @function.name = 'foo;1'
       @function.arguments = [
           SSA::Argument.new(@function, Integer, 'count'),
       ]
@@ -744,7 +744,8 @@ foo:
       (f1.arguments & f2.arguments).should.be.empty
       (f1.each.to_a & f2.each.to_a).should.be.empty
       (f1.each_instruction.to_a & f2.each_instruction.to_a).should.be.empty
-      f2.name.should == f1.name
+      f2.original_name.should == f1.original_name
+      f2.name.should == f1.original_name
 
       f1.entry.should.not == f2.entry
 
@@ -979,19 +980,24 @@ foo:
       f = SSA::Function.new('foo')
       @module.add f, 'bar'
       f.name.should == 'bar;1'
+      f.original_name.should == 'foo'
     end
 
     it 'automatically renames functions with duplicate names' do
       f1 = SSA::Function.new('foo')
       @module.add f1
+      f1.name.should == 'foo'
+      f1.original_name.should == 'foo'
 
       f2 = SSA::Function.new('foo')
       @module.add f2
       f2.name.should == 'foo;1'
+      f2.original_name.should == 'foo'
 
       f3 = SSA::Function.new('foo;1')
       @module.add f3
       f3.name.should == 'foo;2'
+      f3.original_name.should == 'foo;1'
     end
 
     it 'retrieves functions' do

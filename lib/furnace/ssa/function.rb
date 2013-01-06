@@ -1,5 +1,6 @@
 module Furnace
   class SSA::Function
+    attr_reader   :original_name
     attr_accessor :name
     attr_reader   :arguments
     attr_accessor :return_type
@@ -7,6 +8,7 @@ module Furnace
     attr_accessor :entry
 
     def initialize(name=nil, arguments=[], return_type=SSA::Void)
+      @original_name = name
       @name          = name
       self.arguments = arguments
       @return_type   = return_type
@@ -18,6 +20,8 @@ module Furnace
     end
 
     def initialize_copy(original)
+      @name = @original_name
+
       value_map = Hash.new do |value_map, value|
         new_value = value.dup
         value_map[value] = new_value
