@@ -64,7 +64,7 @@ module Furnace
     end
 
     def keyword_invalid(what)
-      if @coloruze
+      if @colorize
         text with_ansi(:bright, :red) { what.to_s }
       else
         text "!#{what}".to_s
