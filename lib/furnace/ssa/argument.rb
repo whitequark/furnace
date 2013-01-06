@@ -7,6 +7,10 @@ module Furnace
       @type = type
     end
 
+    def has_side_effects?
+      true
+    end
+
     def pretty_print(p=SSA::PrettyPrinter.new)
       p.type type
       p.name name

@@ -279,6 +279,10 @@ describe SSA do
     it 'is not constant' do
       @val.should.not.be.constant
     end
+
+    it 'has side effects' do
+      @val.has_side_effects?.should == true
+    end
   end
 
   describe SSA::User do
