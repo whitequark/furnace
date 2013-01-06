@@ -50,17 +50,6 @@ module Furnace
       false
     end
 
-    def pretty_parameters(p)
-    end
-
-    def pretty_operands(p)
-      if @operands
-        p.values @operands
-      else
-        p.text '<DETACHED>'
-      end
-    end
-
     def pretty_print(p=SSA::PrettyPrinter.new)
       if SSA::Void != type
         p.type  type
@@ -85,6 +74,19 @@ module Furnace
         super
       else
         p.type  type
+      end
+    end
+
+    protected
+
+    def pretty_parameters(p)
+    end
+
+    def pretty_operands(p)
+      if @operands
+        p.values @operands
+      else
+        p.text '<DETACHED>'
       end
     end
   end

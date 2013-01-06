@@ -31,16 +31,7 @@ module Furnace
     end
 
     def replace_uses_of(value, new_value)
-      found = false
-
-      @operands.each_with_index do |operand, index|
-        if operand == value
-          found = true
-          @operands[index] = new_value
-        end
-      end
-
-      if found
+      if replace_uses_of_operands(value, new_value)
         value.remove_use(self)
         new_value.add_use(self)
       else
@@ -75,6 +66,19 @@ module Furnace
       end
 
       value
+    end
+
+    def replace_uses_of_operands(value, new_value)
+      found = false
+
+      @operands.each_with_index do |operand, index|
+        if operand == value
+          found = true
+          @operands[index] = new_value
+        end
+      end
+
+      found
     end
   end
 end
