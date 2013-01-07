@@ -4,6 +4,10 @@ module Furnace
       self
     end
 
+    def monotype?
+      true
+    end
+
     def ==(other)
       other.instance_of?(self.class)
     end

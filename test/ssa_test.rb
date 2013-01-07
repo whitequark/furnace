@@ -165,6 +165,10 @@ describe SSA do
       @type.to_type.should.be.equal @type
     end
 
+    it 'is a monotype' do
+      @type.should.be.monotype
+    end
+
     it 'should be ==, eql?, subtype_of? and have the same hash as another instance' do
       other = SSA::Type.new
       @type.should == other
