@@ -94,7 +94,7 @@ module Furnace
             value = send operand
             next if ignore_nil_types && value.type.nil?
 
-            unless value.type.subtype_of? type
+            if value.type.nil? || !value.type.subtype_of?(type)
               raise TypeError, "Wrong type for operand ##{index + 1} `#{operand}': #{SSA.inspect_type type} is expected, #{SSA.inspect_type value.type} is present"
             end
           end
