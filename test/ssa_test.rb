@@ -697,11 +697,15 @@ describe SSA do
   describe SSA::Function do
     it 'converts to value' do
       @function.to_value.should ==
-          SSA::Constant.new(SSA::FunctionType.instance, @function.name)
+          SSA::Constant.new(SSA::Function, @function.name)
 
       @function.name = 'foo'
       @function.to_value.inspect_as_value.should ==
           'function "foo"'
+    end
+
+    it 'converts to type' do
+      SSA::Function.to_type.should == SSA::FunctionType.instance
     end
 
     it 'generates numeric names in #make_name(nil)' do

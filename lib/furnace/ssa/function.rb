@@ -125,8 +125,12 @@ module Furnace
       predecessors
     end
 
+    def self.to_type
+      SSA::FunctionType.instance
+    end
+
     def to_value
-      SSA::Constant.new(SSA::FunctionType.instance, @name)
+      SSA::Constant.new(self.class.to_type, @name)
     end
 
     def pretty_print(p=SSA::PrettyPrinter.new)
