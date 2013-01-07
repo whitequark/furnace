@@ -43,7 +43,7 @@ module Furnace
           end
 
           define_method(:"#{operand}=") do |value|
-            value = value.to_value
+            value = value.to_value if value
 
             @operands[index].remove_use self if @operands[index]
             @operands[index] = value

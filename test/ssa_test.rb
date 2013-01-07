@@ -994,6 +994,11 @@ foo:
       i.should.not.be.valid
     end
 
+    it 'allows to set an operand to nil' do
+      i = SyntaxTypedInsn.new(@basic_block, [ @iconst ])
+      -> { i.foo = nil }.should.not.raise
+    end
+
     it 'highlights invalid insns when pretty printing' do
       i = SyntaxTypedInsn.new(@basic_block, [ @iconst ])
       i.foo = @fconst
