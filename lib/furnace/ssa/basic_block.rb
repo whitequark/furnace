@@ -80,8 +80,12 @@ module Furnace
       terminator.exits?
     end
 
+    def self.to_type
+      SSA::BasicBlockType.instance
+    end
+
     def type
-      SSA::BasicBlock
+      self.class.to_type
     end
 
     def constant?

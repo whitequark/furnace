@@ -15,7 +15,7 @@ module Furnace
     def successors
       operands.
         select do |value|
-          value.type == SSA::BasicBlock
+          value.type == SSA::BasicBlockType.instance
         end.map do |value|
           value.name
         end

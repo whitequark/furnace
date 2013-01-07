@@ -1,10 +1,14 @@
 module Furnace
   class SSA::Argument < SSA::NamedValue
-    attr_accessor :type
+    attr_reader :type
 
     def initialize(function, type, name)
       super(function, name)
-      @type = type
+      self.type = type
+    end
+
+    def type=(type)
+      @type = type.to_type if type
     end
 
     def has_side_effects?

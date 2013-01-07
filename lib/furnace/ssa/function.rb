@@ -7,7 +7,7 @@ module Furnace
 
     attr_accessor :entry
 
-    def initialize(name=nil, arguments=[], return_type=SSA::Void)
+    def initialize(name=nil, arguments=[], return_type=SSA.void)
       @original_name = name
       @name          = name
       self.arguments = arguments
@@ -126,11 +126,7 @@ module Furnace
     end
 
     def to_value
-      SSA::Constant.new(SSA::Function, @name)
-    end
-
-    def self.inspect_as_type
-      'function'
+      SSA::Constant.new(SSA::FunctionType.instance, @name)
     end
 
     def pretty_print(p=SSA::PrettyPrinter.new)

@@ -1,5 +1,13 @@
 module Furnace
   module SSA
+    def self.void
+      SSA::VoidType.instance
+    end
+
+    def self.void_value
+      SSA::VoidType.value
+    end
+
     def self.class_name_to_opcode(klass)
       klass.to_s.split('::').last.gsub(/([a-z]|^)([A-Z])/) do
         if $1.empty?
@@ -21,17 +29,18 @@ module Furnace
     end
 
     def self.inspect_type(type)
-      if type
-        type.inspect_as_type
-      else
-        '<?>'
-      end
+      type ?  type.inspect : '<?>'
     end
   end
 
   require_relative 'ssa/pretty_printer'
 
-  require_relative 'ssa/void'
+  require_relative 'ssa/type'
+  require_relative 'ssa/generic_type'
+
+  require_relative 'ssa/types/void'
+  require_relative 'ssa/types/basic_block'
+  require_relative 'ssa/types/function'
 
   require_relative 'ssa/value'
   require_relative 'ssa/constant'

@@ -9,7 +9,7 @@ module Furnace
     end
 
     def type
-      SSA::Void
+      SSA.void
     end
 
     def constant?

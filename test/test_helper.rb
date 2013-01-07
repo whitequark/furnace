@@ -11,7 +11,7 @@ class Should
 
     values = enum.to_a
     satisfy("##{iterator} should yield #{array.inspect}, yields #{values.inspect}") do
-      (values - array).empty?
+      (values - array).empty? && (array - values).empty?
     end
   end
 end

@@ -15,6 +15,7 @@ module Furnace
     def operand(name, type=nil)
       check_for_splat
 
+      type = type.to_type unless type.nil?
       @operands[name.to_sym] = type
     end
 
@@ -61,11 +62,10 @@ module Furnace
             values = values.map(&:to_value)
 
             update_use_lists do
-              @operands.slice! operands.size, -1
-              @operands.insert operands.size, *values
+              @operands[operands.size, @operands.size - operands.size] = values
             end
 
-            value
+            values
           end
         end
 

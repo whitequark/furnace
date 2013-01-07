@@ -1,12 +1,17 @@
 module Furnace
   class SSA::Constant < SSA::Value
-    attr_accessor :type
+    attr_reader   :type
     attr_accessor :value
 
     def initialize(type, value)
       super()
 
-      @value, @type = value, type
+      self.type = type
+      @value    = value
+    end
+
+    def type=(type)
+      @type     = type.to_type
     end
 
     def constant?
@@ -27,7 +32,7 @@ module Furnace
 
     def inspect_as_value(p=SSA::PrettyPrinter.new)
       p.type type
-      p.text @value.inspect unless type == SSA::Void
+      p.text @value.inspect unless type == SSA.void
       p
     end
 

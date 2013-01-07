@@ -3,15 +3,29 @@ require_relative 'test_helper'
 describe SSA do
   SSA::PrettyPrinter.colorize = false
 
+  class SSARubyType < SSA::GenericType
+    def initialize(ruby_type)
+      @ruby_type = ruby_type
+    end
+
+    def parameters
+      [@ruby_type]
+    end
+
+    def inspect
+      "^#{@ruby_type}"
+    end
+  end
+
   class Class
-    def inspect_as_type
-      "^#{name}"
+    def to_type
+      SSARubyType.new(self)
     end
   end
 
   class BindingInsn < SSA::Instruction
     def type
-      Binding
+      Binding.to_type
     end
   end
 
@@ -23,7 +37,7 @@ describe SSA do
 
   class TupleConcatInsn < SSA::Instruction
     def type
-      Array
+      Array.to_type
     end
   end
 
@@ -96,7 +110,7 @@ describe SSA do
       end.to_s.should == 'foo'
 
       SSA::PrettyPrinter.new do |p|
-        p.type Integer
+        p.type Integer.to_type
       end.to_s.should == '^Integer'
 
       SSA::PrettyPrinter.new do |p|
@@ -142,13 +156,52 @@ describe SSA do
     end
   end
 
+  describe SSA::Type do
+    before do
+      @type = SSA::Type.new
+    end
+
+    it 'converts to type' do
+      @type.to_type.should.be.equal @type
+    end
+
+    it 'should be ==, eql?, subtype_of? and have the same hash as another instance' do
+      other = SSA::Type.new
+      @type.should == other
+      @type.should.be.eql other
+      @type.should.be.subtype_of other
+      @type.hash.should == other.hash
+    end
+
+    describe SSA::GenericType do
+      before do
+        @type = Integer.to_type
+      end
+
+      it 'should compare its parameters' do
+        otheri = Integer.to_type
+        otherf = Float.to_type
+
+        @type.should == otheri
+        @type.should.be.eql otheri
+        @type.should.be.subtype_of otheri
+        @type.hash.should == otheri.hash
+
+        @type.should.not == otherf
+        @type.should.not.be.eql otherf
+        @type.should.not.be.subtype_of otherf
+        @type.hash.should.not == otherf.hash
+      end
+    end
+  end
+
   describe SSA::Value do
     before do
       @val = SSA::Value.new
     end
 
     it 'has void type' do
-      @val.type.should == SSA::Void
+      @val.type.should == SSA.void
     end
 
     it 'is not constant' do
@@ -222,15 +275,19 @@ describe SSA do
     end
   end
 
-  describe SSA::Void do
+  describe SSA::VoidType do
     it 'allows to retrieve a constant' do
-      const = SSA::Void.value
+      const = SSA.void_value
       const.should.be.constant
-      const.type.should == SSA::Void
+      const.type.should.be.instance_of SSA::VoidType
+    end
+
+    it 'inspects as void' do
+      SSA.void.inspect.should == 'void'
     end
 
     it 'inspects as void in constants' do
-      SSA::Void.value.inspect_as_value.should == 'void'
+      SSA.void_value.inspect.should == 'void'
     end
   end
 
@@ -483,7 +540,7 @@ describe SSA do
 
       describe SSA::ReturnInsn do
         it 'exits the method' do
-          i = SSA::ReturnInsn.new(@basic_block, [SSA::Void.value])
+          i = SSA::ReturnInsn.new(@basic_block, [SSA.void_value])
           i.exits?.should == true
         end
       end
@@ -496,7 +553,7 @@ describe SSA do
     end
 
     it 'has the type of BasicBlock' do
-      @basic_block.type.should == SSA::BasicBlock
+      @basic_block.type.should == SSA::BasicBlock.to_type
     end
 
     it 'pretty prints' do
@@ -603,7 +660,7 @@ describe SSA do
         @body_bb.append @uncond_br
 
         @ret = SSA::ReturnInsn.new(@ret_bb,
-              [ SSA::Void.value ])
+              [ SSA.void_value ])
         @ret_bb.append @ret
       end
 
@@ -640,7 +697,7 @@ describe SSA do
   describe SSA::Function do
     it 'converts to value' do
       @function.to_value.should ==
-          SSA::Constant.new(SSA::Function, @function.name)
+          SSA::Constant.new(SSA::FunctionType.instance, @function.name)
 
       @function.name = 'foo'
       @function.to_value.inspect_as_value.should ==
@@ -799,7 +856,7 @@ foo:
         arg.function.should == @f
       end
       bar, = @f.arguments
-      bar.type.should == Integer
+      bar.type.should == Integer.to_type
       bar.name.should == 'bar'
       @f.return_type.should == Float
 
@@ -822,10 +879,10 @@ foo:
     end
 
     it 'builds ReturnInsn' do
-      @b.return SSA::Void.value
+      @b.return SSA.void_value
       i, = @b.block.to_a
       i.should.be.instance_of SSA::ReturnInsn
-      i.operands.should == [SSA::Void.value]
+      i.operands.should == [SSA.void_value]
     end
   end
 
@@ -913,6 +970,13 @@ foo:
           end
         }
       }.should.raise ArgumentError
+    end
+
+    it 'allows to update splat' do
+      i = SyntaxSplatInsn.new(@basic_block, [ @iconst, @fconst, @iinsn ])
+      i.bars = [@iinsn, @fconst]
+      i.bars.should == [@iinsn, @fconst]
+      i.operands.should == [@iconst, @iinsn, @fconst]
     end
 
     it 'allows to inquire status' do
