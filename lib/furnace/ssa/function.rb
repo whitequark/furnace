@@ -26,9 +26,7 @@ module Furnace
         new_value = value.dup
         value_map[value] = new_value
 
-        unless new_value.constant?
-          # This is an instruction.
-          # Arguments are processed explicitly.
+        if new_value.is_a? SSA::User
           new_value.function = self
           new_value.operands = value.translate_operands(value_map)
         end
