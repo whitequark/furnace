@@ -150,6 +150,8 @@ module Furnace
       p.newline
     end
 
+    alias inspect pretty_print
+
     def to_graphviz
       Graphviz.new do |graph|
         @basic_blocks.each do |block|
