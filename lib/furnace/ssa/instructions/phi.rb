@@ -4,10 +4,6 @@ module Furnace
       super(basic_block, type, operands, name)
     end
 
-    def each_operand(&block)
-      @operands.values.each &block if @operands
-    end
-
     def operands=(operands)
       update_use_lists do
         @operands = operands
@@ -32,17 +28,34 @@ module Furnace
       end
     end
 
-    def replace_uses_of_operands(value, new_value)
-      found = false
-
-      @operands.each do |basic_block, operand|
-        if operand == value
-          found = true
-          @operands[basic_block] = new_value
+    def each_used_value(&block)
+      if @operands
+        @operands.each do |basic_block, value|
+          yield basic_block
+          yield value
         end
       end
+    end
 
-      found
+    def replace_uses_of_operands(use, new_use)
+      if @operands.include? use
+        value = @operands[use]
+        @operands.delete use
+        @operands[new_use] = value
+
+        true
+      else
+        found = false
+
+        @operands.each do |basic_block, operand|
+          if operand == use
+            found = true
+            @operands[basic_block] = new_use
+          end
+        end
+
+        found
+      end
     end
   end
 end

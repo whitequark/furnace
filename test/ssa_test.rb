@@ -495,6 +495,7 @@ describe SSA do
           phi = SSA::PhiInsn.new(@basic_block, nil,
               { @basic_block => val })
           val.should.enumerate :each_use, [phi]
+          @basic_block.should.enumerate :each_use, [phi]
         end
 
         it 'can replace uses of values' do
@@ -506,6 +507,19 @@ describe SSA do
 
           val1.should.enumerate :each_use, []
           val2.should.enumerate :each_use, [phi]
+        end
+
+        it 'can replace uses of basic blocks' do
+          val = SSA::Value.new
+          bb2 = SSA::BasicBlock.new(@function)
+
+          phi = SSA::PhiInsn.new(@basic_block, nil,
+              { @basic_block => val })
+          phi.replace_uses_of(@basic_block, bb2)
+
+          phi.operands.should == { bb2 => val }
+          @basic_block.should.enumerate :each_use, []
+          bb2.should.enumerate :each_use, [phi]
         end
 
         it 'barfs on #replace_uses_of if the value is not used' do

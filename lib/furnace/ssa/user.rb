@@ -8,25 +8,21 @@ module Furnace
       self.operands = operands
     end
 
-    def each_operand(&block)
-      @operands.each &block if @operands
-    end
-
     def operands=(operands)
       update_use_lists do
         @operands = operands.map(&:to_value)
       end
     end
 
-    def translate_operands(map)
-      @operands.map do |operand|
-        map[operand]
-      end
-    end
-
     def detach
       update_use_lists do
         @operands = nil
+      end
+    end
+
+    def translate_operands(map)
+      @operands.map do |operand|
+        map[operand]
       end
     end
 
@@ -54,14 +50,18 @@ module Furnace
 
     protected
 
+    def each_used_value(&block)
+      @operands.each &block if @operands
+    end
+
     def update_use_lists
-      each_operand do |operand|
+      each_used_value do |operand|
         operand.remove_use(self)
       end
 
       value = yield
 
-      each_operand do |operand|
+      each_used_value do |operand|
         operand.add_use(self)
       end
 
