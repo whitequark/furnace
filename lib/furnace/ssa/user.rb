@@ -8,6 +8,10 @@ module Furnace
       self.operands = operands
     end
 
+    def each_operand(&block)
+      @operands.each &block if @operands
+    end
+
     def operands=(operands)
       update_use_lists do
         @operands = operands.map(&:to_value)
@@ -50,18 +54,14 @@ module Furnace
 
     protected
 
-    def each_used_value(&block)
-      @operands.each &block if @operands
-    end
-
     def update_use_lists
-      each_used_value do |operand|
+      each_operand do |operand|
         operand.remove_use(self)
       end
 
       value = yield
 
-      each_used_value do |operand|
+      each_operand do |operand|
         operand.add_use(self)
       end
 

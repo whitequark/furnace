@@ -4,6 +4,17 @@ module Furnace
       super(basic_block, type, operands, name)
     end
 
+    def each_operand(&block)
+      return to_enum(:each_operand) if block.nil?
+
+      if @operands
+        @operands.each do |basic_block, value|
+          yield basic_block
+          yield value
+        end
+      end
+    end
+
     def operands=(operands)
       update_use_lists do
         @operands = operands
@@ -25,15 +36,6 @@ module Furnace
         value.inspect_as_value p
 
         p << ',' if index < @operands.count - 1
-      end
-    end
-
-    def each_used_value(&block)
-      if @operands
-        @operands.each do |basic_block, value|
-          yield basic_block
-          yield value
-        end
       end
     end
 

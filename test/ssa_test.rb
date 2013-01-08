@@ -347,6 +347,13 @@ describe SSA do
   end
 
   describe SSA::User do
+    it 'enumerates operands' do
+      val1, val2 = 2.times.map { SSA::Value.new }
+
+      user = SSA::User.new(@function, [val1, val2])
+      user.should.enumerate :each_operand, [val1, val2]
+    end
+
     it 'populates use lists' do
       val  = SSA::Value.new
 
@@ -481,6 +488,15 @@ describe SSA do
             phi = SSA::PhiInsn.new(@basic_block, nil,
                 { @basic_block => SSA::Constant.new(Integer, 1) })
           }.should.not.raise
+        end
+
+        it 'enumerates operands' do
+          val1, val2 = 2.times.map { SSA::Value.new }
+          bb1,  bb2  = 2.times.map { SSA::BasicBlock.new(@function) }
+
+          phi = SSA::PhiInsn.new(@basic_block, nil,
+              { bb1 => val1, bb2 => val2 })
+          phi.should.enumerate :each_operand, [val1, val2, bb1, bb2]
         end
 
         it 'pretty prints' do
