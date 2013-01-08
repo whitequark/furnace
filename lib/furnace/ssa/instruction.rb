@@ -30,16 +30,15 @@ module Furnace
       detach
     end
 
-    def replace_with(insn)
-      replace_all_uses_with(insn)
+    def replace_with(value)
+      replace_all_uses_with value
 
-      if insn.constant?
-        @basic_block.remove self
+      if value.is_a? SSA::Instruction
+        @basic_block.replace self, value
+        detach
       else
-        @basic_block.replace self, insn
+        remove
       end
-
-      detach
     end
 
     def has_side_effects?
