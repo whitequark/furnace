@@ -88,6 +88,8 @@ module Furnace
         end
 
         define_method(:verify!) do |ignore_nil_types=true|
+          return if @operands.nil?
+
           operands.each_with_index do |(operand, type), index|
             next if type.nil?
 
