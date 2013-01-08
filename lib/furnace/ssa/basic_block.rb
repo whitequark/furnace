@@ -6,6 +6,8 @@ module Furnace
     end
 
     def initialize_copy(original)
+      super
+
       @instructions = []
     end
 
