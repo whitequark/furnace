@@ -81,6 +81,8 @@ module Furnace
       @basic_blocks.each(&proc)
     end
 
+    alias each_basic_block each
+
     def include?(name)
       @basic_blocks.any? { |n| n.name == name }
     end
