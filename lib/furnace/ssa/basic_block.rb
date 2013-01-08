@@ -31,6 +31,8 @@ module Furnace
       end
     end
 
+    alias each_instruction each
+
     def append(instruction)
       @instructions.push instruction
     end
