@@ -748,8 +748,8 @@ describe SSA do
 
     it 'appends numeric suffixes in #make_name(String) if needed' do
       @function.make_name("foobar.i").should =~ /^foobar\.i$/
-      @function.make_name("foobar.i").should =~ /^foobar\.i\d+$/
-      @function.make_name("foobar.i").should =~ /^foobar\.i\d+$/
+      @function.make_name("foobar.i").should =~ /^foobar\.i\.\d+$/
+      @function.make_name("foobar.i").should =~ /^foobar\.i\.\d+$/
     end
 
     it 'finds blocks or raises an exception' do

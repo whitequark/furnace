@@ -15,7 +15,7 @@ module Furnace
 
       @basic_blocks  = Set.new
 
-      @name_prefixes = [nil].to_set
+      @name_prefixes = [""].to_set
       @next_name     = 0
     end
 
@@ -69,11 +69,17 @@ module Furnace
     end
 
     def make_name(prefix=nil)
-      if @name_prefixes.include? prefix
-        "#{prefix}#{@next_name += 1}"
+      if prefix.nil?
+        (@next_name += 1).to_s
       else
-        @name_prefixes.add prefix
-        prefix.to_s
+        prefix = prefix.to_s
+
+        if @name_prefixes.include? prefix
+          "#{prefix}.#{@next_name += 1}"
+        else
+          @name_prefixes.add prefix
+          prefix
+        end
       end
     end
 
