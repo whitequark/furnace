@@ -131,7 +131,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+</div></span>
   
 </li>
 
@@ -153,7 +154,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+</div></span>
   
 </li>
 
@@ -200,7 +202,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+</div></span>
   
 </li>
 
@@ -222,7 +225,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+</div></span>
   
 </li>
 
@@ -303,15 +307,16 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/graphviz.rb', line 4</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span>
-  <span class='ivar'>@code</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>digraph {\n</span><span class='tstring_end'>&quot;</span></span>
-  <span class='ivar'>@code</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>node [labeljust=l,nojustify=true,fontname=monospace];</span><span class='tstring_end'>&quot;</span></span>
-  <span class='ivar'>@code</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>rankdir=TB;\n</span><span class='tstring_end'>&quot;</span></span>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_initialize identifier id'>initialize</span>
+  <span class='rubyid_@code ivar id'>@code</span> <span class='assign token'>=</span> <span class='string val'>&quot;digraph {\n&quot;</span>
+  <span class='rubyid_@code ivar id'>@code</span> <span class='lshft op'>&lt;&lt;</span> <span class='string val'>&quot;node [labeljust=l,nojustify=true,fontname=monospace];&quot;</span>
+  <span class='rubyid_@code ivar id'>@code</span> <span class='lshft op'>&lt;&lt;</span> <span class='string val'>&quot;rankdir=TB;\n&quot;</span>
 
-  <span class='kw'>yield</span> <span class='kw'>self</span>
+  <span class='rubyid_yield yield kw'>yield</span> <span class='rubyid_self self kw'>self</span>
 
-  <span class='ivar'>@code</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>}</span><span class='tstring_end'>&quot;</span></span>
-<span class='kw'>end</span></pre>
+  <span class='rubyid_@code ivar id'>@code</span> <span class='lshft op'>&lt;&lt;</span> <span class='string val'>&quot;}&quot;</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -349,12 +354,13 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/graphviz.rb', line 35</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_edge'>edge</span><span class='lparen'>(</span><span class='id identifier rubyid_from'>from</span><span class='comma'>,</span> <span class='id identifier rubyid_to'>to</span><span class='comma'>,</span> <span class='id identifier rubyid_label'>label</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='lbrace'>{</span>
-    <span class='label'>label:</span> <span class='id identifier rubyid_label'>label</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span>
-  <span class='rbrace'>}</span><span class='rparen'>)</span>
-  <span class='ivar'>@code</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>%Q{</span><span class='tstring_content'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_from'>from</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'>&quot; -&gt; &quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_to'>to</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'>&quot; </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_graphviz_options'>graphviz_options</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_content'>;\n</span><span class='tstring_end'>}</span></span>
-<span class='kw'>end</span></pre>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_edge identifier id'>edge</span><span class='lparen token'>(</span><span class='rubyid_from identifier id'>from</span><span class='comma token'>,</span> <span class='rubyid_to identifier id'>to</span><span class='comma token'>,</span> <span class='rubyid_label identifier id'>label</span><span class='assign token'>=</span><span class='string val'>&quot;&quot;</span><span class='comma token'>,</span> <span class='rubyid_options identifier id'>options</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span>
+  <span class='rubyid_options identifier id'>options</span> <span class='assign token'>=</span> <span class='rubyid_options identifier id'>options</span><span class='dot token'>.</span><span class='rubyid_merge identifier id'>merge</span><span class='lparen token'>(</span><span class='lbrace token'>{</span>
+    <span class='rubyid_label identifier id'>label</span><span class='colon op'>:</span> <span class='rubyid_label identifier id'>label</span><span class='dot token'>.</span><span class='rubyid_inspect identifier id'>inspect</span>
+  <span class='rbrace token'>}</span><span class='rparen token'>)</span>
+  <span class='rubyid_@code ivar id'>@code</span> <span class='lshft op'>&lt;&lt;</span> <span class='dstring node'>%Q{&quot;#{from.inspect}&quot; -&gt; &quot;#{to.inspect}&quot; #{graphviz_options(options)};\n}</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -382,9 +388,10 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/graphviz.rb', line 46</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_graphviz_options'>graphviz_options</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
-  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>[</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_k'>k</span><span class='comma'>,</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_k'>k</span><span class='rbrace'>}</span><span class='tstring_content'>=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_v'>v</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>,</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span>
-<span class='kw'>end</span></pre>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_graphviz_options identifier id'>graphviz_options</span><span class='lparen token'>(</span><span class='rubyid_options identifier id'>options</span><span class='rparen token'>)</span>
+  <span class='dstring node'>&quot;[#{options.map { |k,v| &quot;#{k}=#{v}&quot; }.join(&quot;,&quot;)}]&quot;</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -429,26 +436,27 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/graphviz.rb', line 14</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_node'>node</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_content'>content</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_content'>content</span><span class='period'>.</span><span class='id identifier rubyid_gsub!'>gsub!</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&amp;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&amp;amp;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_content'>content</span><span class='period'>.</span><span class='id identifier rubyid_gsub!'>gsub!</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&gt;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&amp;gt;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_content'>content</span><span class='period'>.</span><span class='id identifier rubyid_gsub!'>gsub!</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&amp;lt;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_content'>content</span><span class='period'>.</span><span class='id identifier rubyid_gsub!'>gsub!</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\*\*(.+?)\*\*</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>&lt;b&gt;\1&lt;/b&gt;</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_content'>content</span> <span class='op'>=</span> <span class='id identifier rubyid_content'>content</span><span class='period'>.</span><span class='id identifier rubyid_lines'>lines</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_l'>l</span><span class='op'>|</span> <span class='tstring'><span class='tstring_beg'>%Q{</span><span class='tstring_content'>&lt;tr&gt;&lt;td align=&quot;left&quot;&gt;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_l'>l</span><span class='rbrace'>}</span><span class='tstring_content'>&lt;/td&gt;&lt;/tr&gt;</span><span class='tstring_end'>}</span></span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_node identifier id'>node</span><span class='lparen token'>(</span><span class='rubyid_name identifier id'>name</span><span class='comma token'>,</span> <span class='rubyid_content identifier id'>content</span><span class='comma token'>,</span> <span class='rubyid_options identifier id'>options</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span>
+  <span class='rubyid_content identifier id'>content</span><span class='dot token'>.</span><span class='rubyid_gsub! fid id'>gsub!</span><span class='lparen token'>(</span><span class='string val'>&quot;&amp;&quot;</span><span class='comma token'>,</span> <span class='string val'>&quot;&amp;amp;&quot;</span><span class='rparen token'>)</span>
+  <span class='rubyid_content identifier id'>content</span><span class='dot token'>.</span><span class='rubyid_gsub! fid id'>gsub!</span><span class='lparen token'>(</span><span class='string val'>&quot;&gt;&quot;</span><span class='comma token'>,</span> <span class='string val'>&quot;&amp;gt;&quot;</span><span class='rparen token'>)</span>
+  <span class='rubyid_content identifier id'>content</span><span class='dot token'>.</span><span class='rubyid_gsub! fid id'>gsub!</span><span class='lparen token'>(</span><span class='string val'>&quot;&lt;&quot;</span><span class='comma token'>,</span> <span class='string val'>&quot;&amp;lt;&quot;</span><span class='rparen token'>)</span>
+  <span class='rubyid_content identifier id'>content</span><span class='dot token'>.</span><span class='rubyid_gsub! fid id'>gsub!</span><span class='lparen token'>(</span><span class='regexp val'>/\*\*(.+?)\*\*/</span><span class='comma token'>,</span> <span class='string val'>'&lt;b&gt;\1&lt;/b&gt;'</span><span class='rparen token'>)</span>
+  <span class='rubyid_content identifier id'>content</span> <span class='assign token'>=</span> <span class='rubyid_content identifier id'>content</span><span class='dot token'>.</span><span class='rubyid_lines identifier id'>lines</span><span class='dot token'>.</span><span class='rubyid_map identifier id'>map</span> <span class='lbrace token'>{</span> <span class='bitor op'>|</span><span class='rubyid_l identifier id'>l</span><span class='bitor op'>|</span> <span class='dstring node'>%Q{&lt;tr&gt;&lt;td align=&quot;left&quot;&gt;#{l}&lt;/td&gt;&lt;/tr&gt;}</span> <span class='rbrace token'>}</span><span class='dot token'>.</span><span class='rubyid_join identifier id'>join</span>
 
-  <span class='kw'>if</span> <span class='id identifier rubyid_content'>content</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
-    <span class='id identifier rubyid_label'>label</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;&amp;lt;empty&amp;gt;&gt;</span><span class='tstring_end'>&quot;</span></span>
-  <span class='kw'>else</span>
-    <span class='id identifier rubyid_label'>label</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;&lt;table border=\&quot;0\&quot;&gt;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_content'>content</span><span class='rbrace'>}</span><span class='tstring_content'>&lt;/table&gt;&gt;</span><span class='tstring_end'>&quot;</span></span>
-  <span class='kw'>end</span>
+  <span class='rubyid_if if kw'>if</span> <span class='rubyid_content identifier id'>content</span><span class='dot token'>.</span><span class='rubyid_empty? fid id'>empty?</span>
+    <span class='rubyid_label identifier id'>label</span> <span class='assign token'>=</span> <span class='string val'>&quot;&lt;&amp;lt;empty&amp;gt;&gt;&quot;</span>
+  <span class='rubyid_else else kw'>else</span>
+    <span class='rubyid_label identifier id'>label</span> <span class='assign token'>=</span> <span class='dstring node'>&quot;&lt;&lt;table border=\&quot;0\&quot;&gt;#{content}&lt;/table&gt;&gt;&quot;</span>
+  <span class='rubyid_end end kw'>end</span>
 
-  <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='lbrace'>{</span>
-    <span class='label'>shape:</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>box</span><span class='tstring_end'>'</span></span><span class='comma'>,</span>
-    <span class='label'>label:</span> <span class='id identifier rubyid_label'>label</span>
-  <span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='rubyid_options identifier id'>options</span> <span class='assign token'>=</span> <span class='rubyid_options identifier id'>options</span><span class='dot token'>.</span><span class='rubyid_merge identifier id'>merge</span><span class='lparen token'>(</span><span class='lbrace token'>{</span>
+    <span class='rubyid_shape identifier id'>shape</span><span class='colon op'>:</span> <span class='string val'>'box'</span><span class='comma token'>,</span>
+    <span class='rubyid_label identifier id'>label</span><span class='colon op'>:</span> <span class='rubyid_label identifier id'>label</span>
+  <span class='rbrace token'>}</span><span class='rparen token'>)</span>
 
-  <span class='ivar'>@code</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>%Q{</span><span class='tstring_content'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'>&quot; </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_graphviz_options'>graphviz_options</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_content'>;\n</span><span class='tstring_end'>}</span></span>
-<span class='kw'>end</span></pre>
+  <span class='rubyid_@code ivar id'>@code</span> <span class='lshft op'>&lt;&lt;</span> <span class='dstring node'>%Q{&quot;#{name.inspect}&quot; #{graphviz_options(options)};\n}</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -476,9 +484,10 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/graphviz.rb', line 42</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_to_s'>to_s</span>
-  <span class='ivar'>@code</span>
-<span class='kw'>end</span></pre>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_to_s identifier id'>to_s</span>
+  <span class='rubyid_@code ivar id'>@code</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -489,7 +498,7 @@
 </div>
 
     <div id="footer">
-  Generated on Sat Jan  5 13:24:56 2013 by
+  Generated on Thu Jan 10 20:50:38 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.9.3).
 </div>

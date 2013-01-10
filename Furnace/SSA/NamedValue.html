@@ -124,8 +124,6 @@
   
   
     
-      <span class="note title readonly">readonly</span>
-    
     
   
   
@@ -221,7 +219,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+</div></span>
   
 </li>
 
@@ -243,7 +242,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+</div></span>
   
 </li>
 
@@ -261,7 +261,7 @@
   
   
   <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Value.html" title="Furnace::SSA::Value (class)">Value</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="Value.html#%3D%3D-instance_method" title="Furnace::SSA::Value#== (method)">#==</a></span>, <span class='object_link'><a href="Value.html#add_use-instance_method" title="Furnace::SSA::Value#add_use (method)">#add_use</a></span>, <span class='object_link'><a href="Value.html#constant%3F-instance_method" title="Furnace::SSA::Value#constant? (method)">#constant?</a></span>, <span class='object_link'><a href="Value.html#each_use-instance_method" title="Furnace::SSA::Value#each_use (method)">#each_use</a></span>, <span class='object_link'><a href="Value.html#pretty_print-instance_method" title="Furnace::SSA::Value#pretty_print (method)">#pretty_print</a></span>, <span class='object_link'><a href="Value.html#remove_use-instance_method" title="Furnace::SSA::Value#remove_use (method)">#remove_use</a></span>, <span class='object_link'><a href="Value.html#replace_all_uses_with-instance_method" title="Furnace::SSA::Value#replace_all_uses_with (method)">#replace_all_uses_with</a></span>, <span class='object_link'><a href="Value.html#to_value-instance_method" title="Furnace::SSA::Value#to_value (method)">#to_value</a></span>, <span class='object_link'><a href="Value.html#type-instance_method" title="Furnace::SSA::Value#type (method)">#type</a></span>, <span class='object_link'><a href="Value.html#use_count-instance_method" title="Furnace::SSA::Value#use_count (method)">#use_count</a></span>, <span class='object_link'><a href="Value.html#used%3F-instance_method" title="Furnace::SSA::Value#used? (method)">#used?</a></span></p>
+  <p class="inherited"><span class='object_link'><a href="Value.html#%3D%3D-instance_method" title="Furnace::SSA::Value#== (method)">#==</a></span>, <span class='object_link'><a href="Value.html#add_use-instance_method" title="Furnace::SSA::Value#add_use (method)">#add_use</a></span>, <span class='object_link'><a href="Value.html#constant%3F-instance_method" title="Furnace::SSA::Value#constant? (method)">#constant?</a></span>, <span class='object_link'><a href="Value.html#each_use-instance_method" title="Furnace::SSA::Value#each_use (method)">#each_use</a></span>, <span class='object_link'><a href="Value.html#initialize_copy-instance_method" title="Furnace::SSA::Value#initialize_copy (method)">#initialize_copy</a></span>, <span class='object_link'><a href="Value.html#pretty_print-instance_method" title="Furnace::SSA::Value#pretty_print (method)">#pretty_print</a></span>, <span class='object_link'><a href="Value.html#remove_use-instance_method" title="Furnace::SSA::Value#remove_use (method)">#remove_use</a></span>, <span class='object_link'><a href="Value.html#replace_all_uses_with-instance_method" title="Furnace::SSA::Value#replace_all_uses_with (method)">#replace_all_uses_with</a></span>, <span class='object_link'><a href="Value.html#to_value-instance_method" title="Furnace::SSA::Value#to_value (method)">#to_value</a></span>, <span class='object_link'><a href="Value.html#type-instance_method" title="Furnace::SSA::Value#type (method)">#type</a></span>, <span class='object_link'><a href="Value.html#use_count-instance_method" title="Furnace::SSA::Value#use_count (method)">#use_count</a></span>, <span class='object_link'><a href="Value.html#used%3F-instance_method" title="Furnace::SSA::Value#used? (method)">#used?</a></span></p>
 <div id="constructor_details" class="method_details_list">
   <h2>Constructor Details</h2>
   
@@ -300,12 +300,13 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/named_value.rb', line 6</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_function'>function</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
-  <span class='kw'>super</span><span class='lparen'>(</span><span class='rparen'>)</span>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='rubyid_function identifier id'>function</span><span class='comma token'>,</span> <span class='rubyid_name identifier id'>name</span><span class='rparen token'>)</span>
+  <span class='rubyid_super super kw'>super</span><span class='lparen token'>(</span><span class='rparen token'>)</span>
 
-  <span class='ivar'>@function</span> <span class='op'>=</span> <span class='id identifier rubyid_function'>function</span>
-  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='id identifier rubyid_name'>name</span>
-<span class='kw'>end</span></pre>
+  <span class='rubyid_@function ivar id'>@function</span> <span class='assign token'>=</span> <span class='rubyid_function identifier id'>function</span>
+  <span class='rubyid_self self kw'>self</span><span class='dot token'>.</span><span class='rubyid_name identifier id'>name</span> <span class='assign token'>=</span> <span class='rubyid_name identifier id'>name</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -317,11 +318,11 @@
     <h2>Instance Attribute Details</h2>
     
       
-      <span id=""></span>
+      <span id="function=-instance_method"></span>
       <div class="method_details first">
   <h3 class="signature first" id="function-instance_method">
   
-    - (<tt>Object</tt>) <strong>function</strong>  <span class="extras">(readonly)</span>
+    - (<tt>Object</tt>) <strong>function</strong> 
   
 
   
@@ -350,9 +351,10 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/named_value.rb', line 3</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_function'>function</span>
-  <span class='ivar'>@function</span>
-<span class='kw'>end</span></pre>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_function identifier id'>function</span>
+  <span class='rubyid_@function ivar id'>@function</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -392,9 +394,10 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/named_value.rb', line 4</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_name'>name</span>
-  <span class='ivar'>@name</span>
-<span class='kw'>end</span></pre>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_name identifier id'>name</span>
+  <span class='rubyid_@name ivar id'>@name</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -429,9 +432,10 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/named_value.rb', line 21</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_inspect'>inspect</span>
-  <span class='id identifier rubyid_pretty_print'>pretty_print</span>
-<span class='kw'>end</span></pre>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_inspect identifier id'>inspect</span>
+  <span class='rubyid_pretty_print identifier id'>pretty_print</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -459,9 +463,10 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/named_value.rb', line 17</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_inspect_as_value'>inspect_as_value</span><span class='lparen'>(</span><span class='id identifier rubyid_p'>p</span><span class='op'>=</span><span class='const'>SSA</span><span class='op'>::</span><span class='const'>PrettyPrinter</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='id identifier rubyid_name'>name</span>
-<span class='kw'>end</span></pre>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_inspect_as_value identifier id'>inspect_as_value</span><span class='lparen token'>(</span><span class='rubyid_p identifier id'>p</span><span class='assign token'>=</span><span class='rubyid_SSA constant id'>SSA</span><span class='colon2 op'>::</span><span class='rubyid_PrettyPrinter constant id'>PrettyPrinter</span><span class='dot token'>.</span><span class='rubyid_new identifier id'>new</span><span class='rparen token'>)</span>
+  <span class='rubyid_p identifier id'>p</span><span class='dot token'>.</span><span class='rubyid_name identifier id'>name</span> <span class='rubyid_name identifier id'>name</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -472,7 +477,7 @@
 </div>
 
     <div id="footer">
-  Generated on Sat Jan  5 13:24:56 2013 by
+  Generated on Thu Jan 10 20:50:42 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.9.3).
 </div>

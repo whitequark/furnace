@@ -161,7 +161,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+</div></span>
   
 </li>
 
@@ -208,12 +209,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+</div></span>
   
 </li>
 
       
-        <li class="public ">
+        <li class="protected ">
   <span class="summary_signature">
     
       <a href="#pretty_operands-instance_method" title="#pretty_operands (instance method)">- (Object) <strong>pretty_operands</strong>(p) </a>
@@ -224,13 +226,37 @@
   
   
   
-  
+  <span class="note title protected">protected</span>
   
   
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+</div></span>
+  
+</li>
+
+      
+        <li class="protected ">
+  <span class="summary_signature">
+    
+      <a href="#replace_uses_of_operands-instance_method" title="#replace_uses_of_operands (instance method)">- (Object) <strong>replace_uses_of_operands</strong>(use, new_use) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title protected">protected</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+</div></span>
   
 </li>
 
@@ -238,7 +264,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#replace_uses_of-instance_method" title="#replace_uses_of (instance method)">- (Object) <strong>replace_uses_of</strong>(value, new_value) </a>
+      <a href="#translate_operands-instance_method" title="#translate_operands (instance method)">- (Object) <strong>translate_operands</strong>(map) </a>
     
 
     
@@ -252,7 +278,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+</div></span>
   
 </li>
 
@@ -276,7 +303,7 @@
   
   
   <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Instruction.html" title="Furnace::SSA::Instruction (class)">Instruction</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="Instruction.html#inspect_as_value-instance_method" title="Furnace::SSA::Instruction#inspect_as_value (method)">#inspect_as_value</a></span>, <span class='object_link'><a href="Instruction.html#opcode-instance_method" title="Furnace::SSA::Instruction#opcode (method)">#opcode</a></span>, <span class='object_link'><a href="Instruction.html#opcode-class_method" title="Furnace::SSA::Instruction.opcode (method)">opcode</a></span>, <span class='object_link'><a href="Instruction.html#pretty_parameters-instance_method" title="Furnace::SSA::Instruction#pretty_parameters (method)">#pretty_parameters</a></span>, <span class='object_link'><a href="Instruction.html#pretty_print-instance_method" title="Furnace::SSA::Instruction#pretty_print (method)">#pretty_print</a></span>, <span class='object_link'><a href="Instruction.html#syntax-class_method" title="Furnace::SSA::Instruction.syntax (method)">syntax</a></span>, <span class='object_link'><a href="Instruction.html#terminator%3F-instance_method" title="Furnace::SSA::Instruction#terminator? (method)">#terminator?</a></span></p>
+  <p class="inherited"><span class='object_link'><a href="Instruction.html#has_side_effects%3F-instance_method" title="Furnace::SSA::Instruction#has_side_effects? (method)">#has_side_effects?</a></span>, <span class='object_link'><a href="Instruction.html#initialize_copy-instance_method" title="Furnace::SSA::Instruction#initialize_copy (method)">#initialize_copy</a></span>, <span class='object_link'><a href="Instruction.html#inspect_as_value-instance_method" title="Furnace::SSA::Instruction#inspect_as_value (method)">#inspect_as_value</a></span>, <span class='object_link'><a href="Instruction.html#opcode-class_method" title="Furnace::SSA::Instruction.opcode (method)">opcode</a></span>, <span class='object_link'><a href="Instruction.html#opcode-instance_method" title="Furnace::SSA::Instruction#opcode (method)">#opcode</a></span>, <span class='object_link'><a href="Instruction.html#pretty_parameters-instance_method" title="Furnace::SSA::Instruction#pretty_parameters (method)">#pretty_parameters</a></span>, <span class='object_link'><a href="Instruction.html#pretty_print-instance_method" title="Furnace::SSA::Instruction#pretty_print (method)">#pretty_print</a></span>, <span class='object_link'><a href="Instruction.html#remove-instance_method" title="Furnace::SSA::Instruction#remove (method)">#remove</a></span>, <span class='object_link'><a href="Instruction.html#replace_with-instance_method" title="Furnace::SSA::Instruction#replace_with (method)">#replace_with</a></span>, <span class='object_link'><a href="Instruction.html#syntax-class_method" title="Furnace::SSA::Instruction.syntax (method)">syntax</a></span>, <span class='object_link'><a href="Instruction.html#terminator%3F-instance_method" title="Furnace::SSA::Instruction#terminator? (method)">#terminator?</a></span></p>
 
   
   
@@ -287,7 +314,7 @@
   
   
   <h3 class="inherited">Methods inherited from <span class='object_link'><a href="User.html" title="Furnace::SSA::User (class)">User</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="User.html#update_use_lists-instance_method" title="Furnace::SSA::User#update_use_lists (method)">#update_use_lists</a></span>, <span class='object_link'><a href="User.html#valid%3F-instance_method" title="Furnace::SSA::User#valid? (method)">#valid?</a></span>, <span class='object_link'><a href="User.html#verify%21-instance_method" title="Furnace::SSA::User#verify! (method)">#verify!</a></span></p>
+  <p class="inherited"><span class='object_link'><a href="User.html#detach-instance_method" title="Furnace::SSA::User#detach (method)">#detach</a></span>, <span class='object_link'><a href="User.html#replace_uses_of-instance_method" title="Furnace::SSA::User#replace_uses_of (method)">#replace_uses_of</a></span>, <span class='object_link'><a href="User.html#update_use_lists-instance_method" title="Furnace::SSA::User#update_use_lists (method)">#update_use_lists</a></span>, <span class='object_link'><a href="User.html#valid%3F-instance_method" title="Furnace::SSA::User#valid? (method)">#valid?</a></span>, <span class='object_link'><a href="User.html#verify%21-instance_method" title="Furnace::SSA::User#verify! (method)">#verify!</a></span></p>
 
   
   
@@ -309,7 +336,7 @@
   
   
   <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Value.html" title="Furnace::SSA::Value (class)">Value</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="Value.html#%3D%3D-instance_method" title="Furnace::SSA::Value#== (method)">#==</a></span>, <span class='object_link'><a href="Value.html#add_use-instance_method" title="Furnace::SSA::Value#add_use (method)">#add_use</a></span>, <span class='object_link'><a href="Value.html#constant%3F-instance_method" title="Furnace::SSA::Value#constant? (method)">#constant?</a></span>, <span class='object_link'><a href="Value.html#each_use-instance_method" title="Furnace::SSA::Value#each_use (method)">#each_use</a></span>, <span class='object_link'><a href="Value.html#inspect_as_value-instance_method" title="Furnace::SSA::Value#inspect_as_value (method)">#inspect_as_value</a></span>, <span class='object_link'><a href="Value.html#pretty_print-instance_method" title="Furnace::SSA::Value#pretty_print (method)">#pretty_print</a></span>, <span class='object_link'><a href="Value.html#remove_use-instance_method" title="Furnace::SSA::Value#remove_use (method)">#remove_use</a></span>, <span class='object_link'><a href="Value.html#replace_all_uses_with-instance_method" title="Furnace::SSA::Value#replace_all_uses_with (method)">#replace_all_uses_with</a></span>, <span class='object_link'><a href="Value.html#to_value-instance_method" title="Furnace::SSA::Value#to_value (method)">#to_value</a></span>, <span class='object_link'><a href="Value.html#type-instance_method" title="Furnace::SSA::Value#type (method)">#type</a></span>, <span class='object_link'><a href="Value.html#use_count-instance_method" title="Furnace::SSA::Value#use_count (method)">#use_count</a></span>, <span class='object_link'><a href="Value.html#used%3F-instance_method" title="Furnace::SSA::Value#used? (method)">#used?</a></span></p>
+  <p class="inherited"><span class='object_link'><a href="Value.html#%3D%3D-instance_method" title="Furnace::SSA::Value#== (method)">#==</a></span>, <span class='object_link'><a href="Value.html#add_use-instance_method" title="Furnace::SSA::Value#add_use (method)">#add_use</a></span>, <span class='object_link'><a href="Value.html#constant%3F-instance_method" title="Furnace::SSA::Value#constant? (method)">#constant?</a></span>, <span class='object_link'><a href="Value.html#each_use-instance_method" title="Furnace::SSA::Value#each_use (method)">#each_use</a></span>, <span class='object_link'><a href="Value.html#initialize_copy-instance_method" title="Furnace::SSA::Value#initialize_copy (method)">#initialize_copy</a></span>, <span class='object_link'><a href="Value.html#inspect_as_value-instance_method" title="Furnace::SSA::Value#inspect_as_value (method)">#inspect_as_value</a></span>, <span class='object_link'><a href="Value.html#pretty_print-instance_method" title="Furnace::SSA::Value#pretty_print (method)">#pretty_print</a></span>, <span class='object_link'><a href="Value.html#remove_use-instance_method" title="Furnace::SSA::Value#remove_use (method)">#remove_use</a></span>, <span class='object_link'><a href="Value.html#replace_all_uses_with-instance_method" title="Furnace::SSA::Value#replace_all_uses_with (method)">#replace_all_uses_with</a></span>, <span class='object_link'><a href="Value.html#to_value-instance_method" title="Furnace::SSA::Value#to_value (method)">#to_value</a></span>, <span class='object_link'><a href="Value.html#type-instance_method" title="Furnace::SSA::Value#type (method)">#type</a></span>, <span class='object_link'><a href="Value.html#use_count-instance_method" title="Furnace::SSA::Value#use_count (method)">#use_count</a></span>, <span class='object_link'><a href="Value.html#used%3F-instance_method" title="Furnace::SSA::Value#used? (method)">#used?</a></span></p>
 <div id="constructor_details" class="method_details_list">
   <h2>Constructor Details</h2>
   
@@ -345,9 +372,10 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/instructions/phi.rb', line 3</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_basic_block'>basic_block</span><span class='comma'>,</span> <span class='id identifier rubyid_type'>type</span><span class='comma'>,</span> <span class='id identifier rubyid_operands'>operands</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_basic_block'>basic_block</span><span class='comma'>,</span> <span class='id identifier rubyid_type'>type</span><span class='comma'>,</span> <span class='id identifier rubyid_operands'>operands</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
-<span class='kw'>end</span></pre>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='rubyid_basic_block identifier id'>basic_block</span><span class='comma token'>,</span> <span class='rubyid_type identifier id'>type</span><span class='comma token'>,</span> <span class='rubyid_operands identifier id'>operands</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='comma token'>,</span> <span class='rubyid_name identifier id'>name</span><span class='assign token'>=</span><span class='rubyid_nil nil kw'>nil</span><span class='rparen token'>)</span>
+  <span class='rubyid_super super kw'>super</span><span class='lparen token'>(</span><span class='rubyid_basic_block identifier id'>basic_block</span><span class='comma token'>,</span> <span class='rubyid_type identifier id'>type</span><span class='comma token'>,</span> <span class='rubyid_operands identifier id'>operands</span><span class='comma token'>,</span> <span class='rubyid_name identifier id'>name</span><span class='rparen token'>)</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -377,14 +405,29 @@
 
 7
 8
-9</pre>
+9
+10
+11
+12
+13
+14
+15
+16</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/instructions/phi.rb', line 7</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_each_operand'>each_operand</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
-  <span class='ivar'>@operands</span><span class='period'>.</span><span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span> <span class='kw'>if</span> <span class='ivar'>@operands</span>
-<span class='kw'>end</span></pre>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_each_operand identifier id'>each_operand</span><span class='lparen token'>(</span><span class='bitand op'>&amp;</span><span class='rubyid_block identifier id'>block</span><span class='rparen token'>)</span>
+  <span class='rubyid_return return kw'>return</span> <span class='rubyid_to_enum identifier id'>to_enum</span><span class='lparen token'>(</span><span class='symbol val'>:each_operand</span><span class='rparen token'>)</span> <span class='rubyid_if if_mod kw'>if</span> <span class='rubyid_block identifier id'>block</span><span class='dot token'>.</span><span class='rubyid_nil? fid id'>nil?</span>
+
+  <span class='rubyid_if if kw'>if</span> <span class='rubyid_@operands ivar id'>@operands</span>
+    <span class='rubyid_@operands ivar id'>@operands</span><span class='dot token'>.</span><span class='rubyid_each identifier id'>each</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_basic_block identifier id'>basic_block</span><span class='comma token'>,</span> <span class='rubyid_value identifier id'>value</span><span class='bitor op'>|</span>
+      <span class='rubyid_yield yield kw'>yield</span> <span class='rubyid_basic_block identifier id'>basic_block</span>
+      <span class='rubyid_yield yield kw'>yield</span> <span class='rubyid_value identifier id'>value</span>
+    <span class='rubyid_end end kw'>end</span>
+  <span class='rubyid_end end kw'>end</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -405,20 +448,21 @@
       <pre class="lines">
 
 
-11
-12
-13
-14
-15</pre>
+18
+19
+20
+21
+22</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/furnace/ssa/instructions/phi.rb', line 11</span>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ssa/instructions/phi.rb', line 18</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_operands='>operands=</span><span class='lparen'>(</span><span class='id identifier rubyid_operands'>operands</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_update_use_lists'>update_use_lists</span> <span class='kw'>do</span>
-    <span class='ivar'>@operands</span> <span class='op'>=</span> <span class='id identifier rubyid_operands'>operands</span>
-  <span class='kw'>end</span>
-<span class='kw'>end</span></pre>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_operands= identifier id'>operands=</span><span class='lparen token'>(</span><span class='rubyid_operands identifier id'>operands</span><span class='rparen token'>)</span>
+  <span class='rubyid_update_use_lists identifier id'>update_use_lists</span> <span class='rubyid_do do kw'>do</span>
+    <span class='rubyid_@operands ivar id'>@operands</span> <span class='assign token'>=</span> <span class='rubyid_operands identifier id'>operands</span>
+  <span class='rubyid_end end kw'>end</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -427,7 +471,7 @@
       <div class="method_details ">
   <h3 class="signature " id="pretty_operands-instance_method">
   
-    - (<tt>Object</tt>) <strong>pretty_operands</strong>(p) 
+    - (<tt>Object</tt>) <strong>pretty_operands</strong>(p)  <span class="extras">(protected)</span>
   
 
   
@@ -439,37 +483,38 @@
       <pre class="lines">
 
 
+32
+33
+34
+35
+36
 37
 38
 39
-40
-41
-42
-43
-44
-45</pre>
+40</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/furnace/ssa/instructions/phi.rb', line 37</span>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ssa/instructions/phi.rb', line 32</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_pretty_operands'>pretty_operands</span><span class='lparen'>(</span><span class='id identifier rubyid_p'>p</span><span class='rparen'>)</span>
-  <span class='ivar'>@operands</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='lparen'>(</span><span class='id identifier rubyid_basic_block'>basic_block</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_index'>index</span><span class='op'>|</span>
-    <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='id identifier rubyid_basic_block'>basic_block</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span>
-    <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_text'>text</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>=&gt;</span><span class='tstring_end'>'</span></span>
-    <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_inspect_as_value'>inspect_as_value</span> <span class='id identifier rubyid_p'>p</span>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_pretty_operands identifier id'>pretty_operands</span><span class='lparen token'>(</span><span class='rubyid_p identifier id'>p</span><span class='rparen token'>)</span>
+  <span class='rubyid_@operands ivar id'>@operands</span><span class='dot token'>.</span><span class='rubyid_each_with_index identifier id'>each_with_index</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='lparen token'>(</span><span class='rubyid_basic_block identifier id'>basic_block</span><span class='comma token'>,</span> <span class='rubyid_value identifier id'>value</span><span class='rparen token'>)</span><span class='comma token'>,</span> <span class='rubyid_index identifier id'>index</span><span class='bitor op'>|</span>
+    <span class='rubyid_p identifier id'>p</span><span class='dot token'>.</span><span class='rubyid_name identifier id'>name</span> <span class='rubyid_basic_block identifier id'>basic_block</span><span class='dot token'>.</span><span class='rubyid_name identifier id'>name</span>
+    <span class='rubyid_p identifier id'>p</span><span class='dot token'>.</span><span class='rubyid_text identifier id'>text</span> <span class='string val'>'=&gt;'</span>
+    <span class='rubyid_value identifier id'>value</span><span class='dot token'>.</span><span class='rubyid_inspect_as_value identifier id'>inspect_as_value</span> <span class='rubyid_p identifier id'>p</span>
 
-    <span class='id identifier rubyid_p'>p</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>,</span><span class='tstring_end'>'</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_index'>index</span> <span class='op'>&lt;</span> <span class='ivar'>@operands</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span> <span class='op'>-</span> <span class='int'>1</span>
-  <span class='kw'>end</span>
-<span class='kw'>end</span></pre>
+    <span class='rubyid_p identifier id'>p</span> <span class='lshft op'>&lt;&lt;</span> <span class='string val'>','</span> <span class='rubyid_if if_mod kw'>if</span> <span class='rubyid_index identifier id'>index</span> <span class='lt op'>&lt;</span> <span class='rubyid_@operands ivar id'>@operands</span><span class='dot token'>.</span><span class='rubyid_count identifier id'>count</span> <span class='minus op'>-</span> <span class='integer val'>1</span>
+  <span class='rubyid_end end kw'>end</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
 </div>
     
       <div class="method_details ">
-  <h3 class="signature " id="replace_uses_of-instance_method">
+  <h3 class="signature " id="replace_uses_of_operands-instance_method">
   
-    - (<tt>Object</tt>) <strong>replace_uses_of</strong>(value, new_value) 
+    - (<tt>Object</tt>) <strong>replace_uses_of_operands</strong>(use, new_use)  <span class="extras">(protected)</span>
   
 
   
@@ -481,48 +526,86 @@
       <pre class="lines">
 
 
-17
-18
-19
-20
-21
-22
-23
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ssa/instructions/phi.rb', line 42</span>
+
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_replace_uses_of_operands identifier id'>replace_uses_of_operands</span><span class='lparen token'>(</span><span class='rubyid_use identifier id'>use</span><span class='comma token'>,</span> <span class='rubyid_new_use identifier id'>new_use</span><span class='rparen token'>)</span>
+  <span class='rubyid_if if kw'>if</span> <span class='rubyid_@operands ivar id'>@operands</span><span class='dot token'>.</span><span class='rubyid_include? fid id'>include?</span> <span class='rubyid_use identifier id'>use</span>
+    <span class='rubyid_value identifier id'>value</span> <span class='assign token'>=</span> <span class='rubyid_@operands ivar id'>@operands</span><span class='lbrack token'>[</span><span class='rubyid_use identifier id'>use</span><span class='rbrack token'>]</span>
+    <span class='rubyid_@operands ivar id'>@operands</span><span class='dot token'>.</span><span class='rubyid_delete identifier id'>delete</span> <span class='rubyid_use identifier id'>use</span>
+    <span class='rubyid_@operands ivar id'>@operands</span><span class='lbrack token'>[</span><span class='rubyid_new_use identifier id'>new_use</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='rubyid_value identifier id'>value</span>
+
+    <span class='rubyid_true true kw'>true</span>
+  <span class='rubyid_else else kw'>else</span>
+    <span class='rubyid_found identifier id'>found</span> <span class='assign token'>=</span> <span class='rubyid_false false kw'>false</span>
+
+    <span class='rubyid_@operands ivar id'>@operands</span><span class='dot token'>.</span><span class='rubyid_each identifier id'>each</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_basic_block identifier id'>basic_block</span><span class='comma token'>,</span> <span class='rubyid_operand identifier id'>operand</span><span class='bitor op'>|</span>
+      <span class='rubyid_if if kw'>if</span> <span class='rubyid_operand identifier id'>operand</span> <span class='eq op'>==</span> <span class='rubyid_use identifier id'>use</span>
+        <span class='rubyid_found identifier id'>found</span> <span class='assign token'>=</span> <span class='rubyid_true true kw'>true</span>
+        <span class='rubyid_@operands ivar id'>@operands</span><span class='lbrack token'>[</span><span class='rubyid_basic_block identifier id'>basic_block</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='rubyid_new_use identifier id'>new_use</span>
+      <span class='rubyid_end end kw'>end</span>
+    <span class='rubyid_end end kw'>end</span>
+
+    <span class='rubyid_found identifier id'>found</span>
+  <span class='rubyid_end end kw'>end</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="translate_operands-instance_method">
+  
+    - (<tt>Object</tt>) <strong>translate_operands</strong>(map) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
 24
 25
 26
 27
-28
-29
-30
-31
-32
-33
-34
-35</pre>
+28</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/furnace/ssa/instructions/phi.rb', line 17</span>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ssa/instructions/phi.rb', line 24</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_replace_uses_of'>replace_uses_of</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='id identifier rubyid_new_value'>new_value</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_found'>found</span> <span class='op'>=</span> <span class='kw'>false</span>
-
-  <span class='ivar'>@operands</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_basic_block'>basic_block</span><span class='comma'>,</span> <span class='id identifier rubyid_operand'>operand</span><span class='op'>|</span>
-    <span class='kw'>if</span> <span class='id identifier rubyid_operand'>operand</span> <span class='op'>==</span> <span class='id identifier rubyid_value'>value</span>
-      <span class='id identifier rubyid_found'>found</span> <span class='op'>=</span> <span class='kw'>true</span>
-      <span class='ivar'>@operands</span><span class='lbracket'>[</span><span class='id identifier rubyid_basic_block'>basic_block</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_new_value'>new_value</span>
-    <span class='kw'>end</span>
-  <span class='kw'>end</span>
-
-  <span class='kw'>if</span> <span class='id identifier rubyid_found'>found</span>
-    <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_remove_use'>remove_use</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_new_value'>new_value</span><span class='period'>.</span><span class='id identifier rubyid_add_use'>add_use</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span>
-  <span class='kw'>else</span>
-    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'> is not used in </span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
-  <span class='kw'>end</span>
-
-  <span class='kw'>self</span>
-<span class='kw'>end</span></pre>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_translate_operands identifier id'>translate_operands</span><span class='lparen token'>(</span><span class='rubyid_map identifier id'>map</span><span class='rparen token'>)</span>
+  <span class='rubyid_Hash constant id'>Hash</span><span class='lbrack token'>[</span><span class='rubyid_@operands ivar id'>@operands</span><span class='dot token'>.</span><span class='rubyid_map identifier id'>map</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_basic_block identifier id'>basic_block</span><span class='comma token'>,</span> <span class='rubyid_value identifier id'>value</span><span class='bitor op'>|</span>
+    <span class='lbrack token'>[</span> <span class='rubyid_map identifier id'>map</span><span class='lbrack token'>[</span><span class='rubyid_basic_block identifier id'>basic_block</span><span class='rbrack token'>]</span><span class='comma token'>,</span> <span class='rubyid_map identifier id'>map</span><span class='lbrack token'>[</span><span class='rubyid_value identifier id'>value</span><span class='rbrack token'>]</span> <span class='rbrack token'>]</span>
+  <span class='rubyid_end end kw'>end</span><span class='rbrack token'>]</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -533,7 +616,7 @@
 </div>
 
     <div id="footer">
-  Generated on Sat Jan  5 13:24:57 2013 by
+  Generated on Thu Jan 10 20:50:43 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.9.3).
 </div>

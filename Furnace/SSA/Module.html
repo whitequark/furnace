@@ -131,7 +131,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+</div></span>
   
 </li>
 
@@ -153,7 +154,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+</div></span>
   
 </li>
 
@@ -175,7 +177,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+</div></span>
   
 </li>
 
@@ -197,7 +200,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+</div></span>
   
 </li>
 
@@ -244,7 +248,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+</div></span>
   
 </li>
 
@@ -266,7 +271,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+</div></span>
   
 </li>
 
@@ -288,7 +294,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+</div></span>
   
 </li>
 
@@ -332,10 +339,11 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/module.rb', line 3</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span>
-  <span class='ivar'>@functions</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
-  <span class='ivar'>@next_id</span>   <span class='op'>=</span> <span class='int'>0</span>
-<span class='kw'>end</span></pre>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_initialize identifier id'>initialize</span>
+  <span class='rubyid_@functions ivar id'>@functions</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span><span class='rbrace token'>}</span>
+  <span class='rubyid_@next_id ivar id'>@next_id</span>   <span class='assign token'>=</span> <span class='integer val'>0</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -374,13 +382,14 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/module.rb', line 20</span>
 
-<span class='kw'>def</span> <span class='op'>[]</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
-  <span class='kw'>unless</span> <span class='ivar'>@functions</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span> <span class='id identifier rubyid_name'>name</span>
-    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>function </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='rbrace'>}</span><span class='tstring_content'> is not found</span><span class='tstring_end'>&quot;</span></span>
-  <span class='kw'>end</span>
+<span class='rubyid_def def kw'>def</span> <span class='aref op'>[]</span><span class='lparen token'>(</span><span class='rubyid_name identifier id'>name</span><span class='rparen token'>)</span>
+  <span class='rubyid_unless unless kw'>unless</span> <span class='rubyid_@functions ivar id'>@functions</span><span class='dot token'>.</span><span class='rubyid_include? fid id'>include?</span> <span class='rubyid_name identifier id'>name</span>
+    <span class='rubyid_raise identifier id'>raise</span> <span class='rubyid_ArgumentError constant id'>ArgumentError</span><span class='comma token'>,</span> <span class='dstring node'>&quot;function #{name} is not found&quot;</span>
+  <span class='rubyid_end end kw'>end</span>
 
-  <span class='ivar'>@functions</span><span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span>
-<span class='kw'>end</span></pre>
+  <span class='rubyid_@functions ivar id'>@functions</span><span class='lbrack token'>[</span><span class='rubyid_name identifier id'>name</span><span class='rbrack token'>]</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -410,21 +419,28 @@
 34
 35
 36
-37</pre>
+37
+38
+39
+40</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/module.rb', line 28</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span><span class='id identifier rubyid_function'>function</span><span class='comma'>,</span> <span class='id identifier rubyid_name_prefix'>name_prefix</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_name_prefix'>name_prefix</span> <span class='op'>||</span>
-      <span class='id identifier rubyid_function'>function</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>||</span>
-      <span class='ivar'>@functions</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_function'>function</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_add identifier id'>add</span><span class='lparen token'>(</span><span class='rubyid_function identifier id'>function</span><span class='comma token'>,</span> <span class='rubyid_name_prefix identifier id'>name_prefix</span><span class='assign token'>=</span><span class='rubyid_nil nil kw'>nil</span><span class='rparen token'>)</span>
+  <span class='rubyid_if if kw'>if</span> <span class='rubyid_name_prefix identifier id'>name_prefix</span> <span class='orop op'>||</span>
+      <span class='rubyid_function identifier id'>function</span><span class='dot token'>.</span><span class='rubyid_name identifier id'>name</span><span class='dot token'>.</span><span class='rubyid_nil? fid id'>nil?</span> <span class='orop op'>||</span>
+      <span class='rubyid_@functions ivar id'>@functions</span><span class='dot token'>.</span><span class='rubyid_include? fid id'>include?</span><span class='lparen token'>(</span><span class='rubyid_function identifier id'>function</span><span class='dot token'>.</span><span class='rubyid_name identifier id'>name</span><span class='rparen token'>)</span>
 
-    <span class='id identifier rubyid_function'>function</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name_prefix'>name_prefix</span> <span class='op'>||</span> <span class='id identifier rubyid_function'>function</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>function</span><span class='tstring_end'>'</span></span><span class='rbrace'>}</span><span class='tstring_content'>$</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_make_id'>make_id</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
-  <span class='kw'>end</span>
+    <span class='rubyid_basename identifier id'>basename</span> <span class='assign token'>=</span> <span class='rubyid_name_prefix identifier id'>name_prefix</span> <span class='orop op'>||</span> <span class='rubyid_function identifier id'>function</span><span class='dot token'>.</span><span class='rubyid_name identifier id'>name</span> <span class='orop op'>||</span> <span class='string val'>'function'</span>
+    <span class='rubyid_basename identifier id'>basename</span> <span class='assign token'>=</span> <span class='rubyid_basename identifier id'>basename</span><span class='dot token'>.</span><span class='rubyid_gsub identifier id'>gsub</span> <span class='regexp val'>/;\d+$/</span><span class='comma token'>,</span> <span class='string val'>''</span>
 
-  <span class='ivar'>@functions</span><span class='lbracket'>[</span><span class='id identifier rubyid_function'>function</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_function'>function</span>
-<span class='kw'>end</span></pre>
+    <span class='rubyid_function identifier id'>function</span><span class='dot token'>.</span><span class='rubyid_name identifier id'>name</span> <span class='assign token'>=</span> <span class='dstring node'>&quot;#{basename};#{make_id}&quot;</span>
+  <span class='rubyid_end end kw'>end</span>
+
+  <span class='rubyid_@functions ivar id'>@functions</span><span class='lbrack token'>[</span><span class='rubyid_function identifier id'>function</span><span class='dot token'>.</span><span class='rubyid_name identifier id'>name</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='rubyid_function identifier id'>function</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -452,9 +468,10 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/module.rb', line 12</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_each'>each</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
-  <span class='ivar'>@functions</span><span class='period'>.</span><span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
-<span class='kw'>end</span></pre>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_each identifier id'>each</span><span class='lparen token'>(</span><span class='bitand op'>&amp;</span><span class='rubyid_block identifier id'>block</span><span class='rparen token'>)</span>
+  <span class='rubyid_@functions ivar id'>@functions</span><span class='dot token'>.</span><span class='rubyid_values identifier id'>values</span><span class='dot token'>.</span><span class='rubyid_each identifier id'>each</span><span class='lparen token'>(</span><span class='bitand op'>&amp;</span><span class='rubyid_block identifier id'>block</span><span class='rparen token'>)</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -472,6 +489,7 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+
 
   </div>
 </div>
@@ -504,9 +522,10 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/module.rb', line 16</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
-  <span class='ivar'>@functions</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span> <span class='id identifier rubyid_name'>name</span>
-<span class='kw'>end</span></pre>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_include? fid id'>include?</span><span class='lparen token'>(</span><span class='rubyid_name identifier id'>name</span><span class='rparen token'>)</span>
+  <span class='rubyid_@functions ivar id'>@functions</span><span class='dot token'>.</span><span class='rubyid_include? fid id'>include?</span> <span class='rubyid_name identifier id'>name</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -527,16 +546,17 @@
       <pre class="lines">
 
 
-45
-46
-47</pre>
+48
+49
+50</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/furnace/ssa/module.rb', line 45</span>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ssa/module.rb', line 48</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_make_id'>make_id</span>
-  <span class='ivar'>@next_id</span> <span class='op'>+=</span> <span class='int'>1</span>
-<span class='kw'>end</span></pre>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_make_id identifier id'>make_id</span>
+  <span class='rubyid_@next_id ivar id'>@next_id</span> <span class='opasgn op'>+=</span> <span class='integer val'>1</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -557,16 +577,17 @@
       <pre class="lines">
 
 
-39
-40
-41</pre>
+42
+43
+44</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/furnace/ssa/module.rb', line 39</span>
+      <pre class="code"><span class="info file"># File 'lib/furnace/ssa/module.rb', line 42</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_remove'>remove</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
-  <span class='ivar'>@functions</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span> <span class='id identifier rubyid_name'>name</span>
-<span class='kw'>end</span></pre>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_remove identifier id'>remove</span><span class='lparen token'>(</span><span class='rubyid_name identifier id'>name</span><span class='rparen token'>)</span>
+  <span class='rubyid_@functions ivar id'>@functions</span><span class='dot token'>.</span><span class='rubyid_delete identifier id'>delete</span> <span class='rubyid_name identifier id'>name</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -594,9 +615,10 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/module.rb', line 8</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_to_a'>to_a</span>
-  <span class='ivar'>@functions</span><span class='period'>.</span><span class='id identifier rubyid_values'>values</span>
-<span class='kw'>end</span></pre>
+<span class='rubyid_def def kw'>def</span> <span class='rubyid_to_a identifier id'>to_a</span>
+  <span class='rubyid_@functions ivar id'>@functions</span><span class='dot token'>.</span><span class='rubyid_values identifier id'>values</span>
+<span class='rubyid_end end kw'>end</span>
+</pre>
     </td>
   </tr>
 </table>
@@ -607,7 +629,7 @@
 </div>
 
     <div id="footer">
-  Generated on Sat Jan  5 13:24:56 2013 by
+  Generated on Thu Jan 10 20:50:40 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.9.3).
 </div>
