@@ -19,10 +19,10 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'ansi'
 
-  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rake',  '~> 10.0'
   s.add_development_dependency 'bacon', '~> 1.2'
   s.add_development_dependency 'bacon-colored_output'
   s.add_development_dependency 'simplecov'
   s.add_development_dependency 'yard'
-  s.add_development_dependency 'redcarpet'
+  s.add_development_dependency 'kramdown'
 end
