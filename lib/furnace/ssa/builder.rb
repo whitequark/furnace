@@ -51,13 +51,15 @@ module Furnace
 
     def fork(post_block)
       old_block = @block
-      @block    = add_block
+      new_block = add_block
+
+      @block    = new_block
 
       value     = yield old_block
 
       branch post_block
 
-      [ @block, value ]
+      [ new_block, value ]
     ensure
       @block    = old_block
     end
