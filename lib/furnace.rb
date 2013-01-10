@@ -6,7 +6,7 @@
 # data structure being used:
 #
 #  * Abstract syntax trees: {AST}
-#  * Control flow graphs: {CFG}
+#  * Static single assignment representation: {SSA}
 #  * Transformations: {Transform}
 #
 # Additionally, a simple {Graphviz} adapter is provided.
