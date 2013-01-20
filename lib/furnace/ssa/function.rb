@@ -1,17 +1,20 @@
 module Furnace
   class SSA::Function
+    attr_accessor :instrumentation
+
     attr_reader   :original_name
-    attr_accessor :name
+    attr_reader   :name
     attr_reader   :arguments
-    attr_accessor :return_type
+    attr_reader   :return_type
 
     attr_accessor :entry
 
-    def initialize(name=nil, arguments=[], return_type=SSA.void)
-      @original_name = name
-      @name          = name
-      self.arguments = arguments
-      @return_type   = return_type
+    def initialize(name=nil, arguments=[], return_type=SSA.void, instrument=nil)
+      @original_name   = name
+      @instrumentation = instrument
+      self.name        = name
+      self.arguments   = arguments
+      self.return_type = return_type
 
       @basic_blocks  = Set.new
 
@@ -64,8 +67,18 @@ module Furnace
       end
     end
 
+    def name=(name)
+      @name = name
+    end
+
     def arguments=(arguments)
       @arguments = sanitize_arguments(arguments)
+      instrument { |i| i.set_arguments @arguments }
+    end
+
+    def return_type=(return_type)
+      @return_type = return_type.to_type
+      instrument { |i| i.set_return_type @return_type }
     end
 
     def make_name(prefix=nil)
@@ -103,12 +116,14 @@ module Furnace
 
     def add(block)
       @basic_blocks.add block
+      instrument { |i| i.add block }
     end
 
     alias << add
 
     def remove(block)
       @basic_blocks.delete block
+      instrument { |i| i.remove block }
     end
 
     def each_instruction(type=nil, &proc)
@@ -158,24 +173,8 @@ module Furnace
 
     alias inspect pretty_print
 
-    def to_graphviz
-      Graphviz.new do |graph|
-        @basic_blocks.each do |block|
-          options = {}
-
-          if @entry == block
-            options.merge!({ color: 'green' })
-          elsif block.returns?
-            options.merge!({ color: 'red'   })
-          end
-
-          graph.node block.name, block.inspect, options
-
-          block.successor_names.each do |name|
-            graph.edge block.name, name
-          end
-        end
-      end
+    def instrument
+      yield @instrumentation if @instrumentation
     end
 
     protected

@@ -8,8 +8,6 @@
 #  * Abstract syntax trees: {AST}
 #  * Static single assignment representation: {SSA}
 #  * Transformations: {Transform}
-#
-# Additionally, a simple {Graphviz} adapter is provided.
 module Furnace
   require "furnace/version"
 
@@ -18,6 +16,4 @@ module Furnace
 
   require "furnace/transform/pipeline"
   require "furnace/transform/iterative"
-
-  require "furnace/graphviz"
 end

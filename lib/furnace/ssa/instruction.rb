@@ -21,6 +21,12 @@ module Furnace
       @operands = nil
     end
 
+    def name=(name)
+      old_name = @name
+      super
+      @function.instrument { |i| i.rename(self, old_name) }
+    end
+
     def opcode
       self.class.opcode
     end
@@ -76,17 +82,21 @@ module Furnace
       end
     end
 
-    protected
-
-    def pretty_parameters(p)
+    def pretty_parameters(p=SSA::PrettyPrinter.new)
     end
 
-    def pretty_operands(p)
+    def pretty_operands(p=SSA::PrettyPrinter.new)
       if @operands
         p.values @operands
       else
         p.text '<DETACHED>'
       end
+    end
+
+    protected
+
+    def instrument_update
+      @function.instrument { |i| i.update_instruction(self) }
     end
   end
 end

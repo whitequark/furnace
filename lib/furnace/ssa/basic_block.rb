@@ -37,16 +37,22 @@ module Furnace
 
     def append(instruction)
       @instructions.push instruction
+      @function.instrument { |i| i.add instruction }
     end
 
     alias << append
 
+    def index(instruction)
+      @instructions.index(instruction)
+    end
+
     def insert(before, instruction)
-      unless index = @instructions.index(before)
+      unless idx = index(before)
         raise ArgumentError, "Instruction #{before} is not found"
       end
 
-      @instructions.insert index, instruction
+      @instructions.insert idx, instruction
+      @function.instrument { |i| i.add instruction }
     end
 
     def replace(instruction, replace_with)
@@ -56,6 +62,7 @@ module Furnace
 
     def remove(instruction)
       @instructions.delete instruction
+      @function.instrument { |i| i.remove instruction }
     end
 
     def terminator

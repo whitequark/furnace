@@ -65,6 +65,8 @@ module Furnace
         operand.add_use(self)
       end
 
+      instrument_update
+
       value
     end
 
@@ -78,7 +80,12 @@ module Furnace
         end
       end
 
+      instrument_update
+
       found
+    end
+
+    def instrument_update
     end
   end
 end

@@ -3,13 +3,20 @@ require_relative 'test_helper'
 describe SSA do
   SSA::PrettyPrinter.colorize = false
 
-  class SSARubyType < SSA::GenericType
+  class SSARubyType < SSA::Type
+    attr_reader :ruby_type
+
     def initialize(ruby_type)
       @ruby_type = ruby_type
     end
 
-    def parameters
-      [@ruby_type]
+    def ==(other)
+      other.instance_of?(SSARubyType) &&
+          @ruby_type == other.ruby_type
+    end
+
+    def hash
+      [self.class, @ruby_type].hash
     end
 
     def inspect
@@ -896,7 +903,7 @@ foo:
       bar, = @f.arguments
       bar.type.should == Integer.to_type
       bar.name.should == 'bar'
-      @f.return_type.should == Float
+      @f.return_type.should == Float.to_type
 
       bb = @f.find('1')
       @f.entry.should == bb
@@ -1057,6 +1064,87 @@ foo:
       i = SyntaxUntypedInsn.new(@basic_block, [ @iconst, @fconst ])
       i.replace_uses_of @iconst, @fconst
       i.foo.should == @fconst
+    end
+  end
+
+  describe SSA::EventStream do
+    before do
+      @b   = TestBuilder.new('foo',
+              [ [Integer, 'bar'], [Binding, 'baz'] ],
+              Float,
+              instrument: true)
+      @fun = @b.function
+      @es  = @fun.instrumentation
+
+      @mod  = SSA::Module.new
+      @mod.add @fun
+    end
+
+    it 'instruments functions' do
+      iconst  = SSA::Constant.new(Integer, 1)
+      iconst2 = @b.append :dup, [ iconst ]
+
+      iconst2.name = 'dupped'
+
+      @b.add_block do
+        @b.return iconst2
+      end
+
+      @es.transform_start("footrans")
+      @fun.remove @b.block
+
+      @mod.instrumentation.should ==
+      [{
+        :name=>"foo",
+        :events=>[
+          {:event=>"set_arguments", :arguments=>[]},
+          {:event=>"type", :id=>0, :kind=>"monotype", :name=>"^Float"},
+          {:event=>"set_return_type", :return_type=>0},
+          {:event=>"type", :id=>1, :kind=>"monotype", :name=>"^Integer"},
+          {:event=>"type", :id=>2, :kind=>"monotype", :name=>"^Binding"},
+          {:event=>"set_arguments",
+           :arguments=>[{:name=>"bar", :type=>1}, {:name=>"baz", :type=>2}]},
+          {:event=>"add_basic_block", :name=>"1"},
+          {:event=>"set_instruction_parameters",
+           :name=>"2",
+           :parameters=>"",
+           :operands=>[{:kind=>"constant", :type=>1, :value=>"1"}],
+           :type=>1},
+          {:event=>"add_instruction",
+           :name=>"2",
+           :opcode=>"dup",
+           :basic_block=>"1",
+           :index=>0},
+          {:event=>"rename_instruction", :name=>"2", :new_name=>"dupped"},
+          {:event=>"add_basic_block", :name=>"3"},
+          {:event=>"type", :id=>3, :kind=>"void"},
+          {:event=>"set_instruction_parameters",
+           :name=>"4",
+           :parameters=>"",
+           :operands=>[{:kind=>"basic_block", :name=>"3"}],
+           :type=>3},
+          {:event=>"add_instruction",
+           :name=>"4",
+           :opcode=>"branch",
+           :basic_block=>"1",
+           :index=>1},
+          {:event=>"set_instruction_parameters",
+           :name=>"5",
+           :parameters=>"",
+           :operands=>[{:kind=>"instruction", :name=>"dupped"}],
+           :type=>3},
+          {:event=>"add_instruction",
+           :name=>"5",
+           :opcode=>"return",
+           :basic_block=>"3",
+           :index=>0},
+          {:event=>"transform_start",
+           :name=>"footrans"},
+          {:event=>"remove_basic_block",
+           :name=>"3"}
+        ],
+        :present=>true
+      }]
     end
   end
 
