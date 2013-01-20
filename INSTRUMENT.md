@@ -186,12 +186,17 @@ Should render as:
 
     #{opcode} #{parameters} #{operands}
 
+If `opcode` is `phi`, render `operands` comma-separated with each operand as:
+
+    #{operand[0]} => #{operand[1]}
+
+Else, render `operands` as comma-separated operands.
+
 ### Add instruction
 
 {
   "event":       "add_instruction",
   "name":        <string>,
-  "opcode":      <string>,
   "basic_block": <string>,
   "position":    <number>
 }
@@ -200,17 +205,12 @@ Should render as:
 
 {
   "event":       "update_instruction",
+  "opcode":      <string>,
   "name":        <string>
   "parameters":  <string>
-  "operands":    null | <array of Operand>
+  "operands":    <array>
   "type":        <Type>
 }
-
-If `operands` is `null`, render as:
-
-    <DETACHED>
-
-Else, render as comma-separated operands.
 
 ### Remove instruction
 

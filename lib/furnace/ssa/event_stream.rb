@@ -1,5 +1,5 @@
-module Furnace::SSA
-  class EventStream
+module Furnace
+  class SSA::EventStream
     def initialize
       @types  = Hash.new { |h, k| dump_type(k) }
       @events = []
@@ -14,7 +14,6 @@ module Furnace::SSA
       when SSA::Instruction
         emit("add_instruction",
             name:        object.name,
-            opcode:      object.opcode,
             basic_block: object.basic_block.name,
             index:       object.basic_block.index(object))
 
@@ -49,16 +48,25 @@ module Furnace::SSA
 
     def update_instruction(insn)
       if insn.operands
-        operands = dump_all(insn.operands)
+        if insn.is_a? SSA::PhiInsn
+          operands = insn.operands.map do |basic_block, operand|
+            [ dump(basic_block), dump(operand) ]
+          end
+        else
+          operands = dump_all(insn.operands)
+        end
+
+        params = insn.pretty_parameters(SSA::PrettyPrinter.new(false)).to_s
+
+        emit("update_instruction",
+            name:       insn.name,
+            opcode:     insn.opcode,
+            parameters: params,
+            operands:   operands,
+            type:       @types[insn.type])
       else
         operands = nil
       end
-
-      emit("set_instruction_parameters",
-          name:       insn.name,
-          parameters: insn.pretty_parameters.to_s,
-          operands:   operands,
-          type:       @types[insn.type])
     end
 
     def transform_start(name)

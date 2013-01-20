@@ -81,7 +81,7 @@ module Furnace
     end
 
     def return_type=(return_type)
-      @return_type = return_type.to_type
+      @return_type = return_type.to_type if return_type
       instrument { |i| i.set_return_type @return_type }
     end
 
