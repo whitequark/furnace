@@ -25,6 +25,10 @@ module Furnace
     def initialize_copy(original)
       @name = @original_name
 
+      if @instrumentation
+        @instrumentation = SSA::EventStream.new
+      end
+
       value_map = Hash.new do |value_map, value|
         new_value = value.dup
         value_map[value] = new_value
