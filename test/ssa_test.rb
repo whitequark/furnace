@@ -1103,7 +1103,9 @@ foo:
           {:event=>"type", :id=>1, :kind=>"monotype", :name=>"^Integer"},
           {:event=>"type", :id=>2, :kind=>"monotype", :name=>"^Binding"},
           {:event=>"set_arguments",
-           :arguments=>[{:name=>"bar", :type=>1}, {:name=>"baz", :type=>2}]},
+           :arguments=>
+            [{:kind=>"argument", :name=>"bar", :type=>1},
+             {:kind=>"argument", :name=>"baz", :type=>2}]},
           {:event=>"add_basic_block", :name=>"1"},
           {:event=>"update_instruction",
            :name=>"2",

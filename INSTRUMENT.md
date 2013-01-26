@@ -62,6 +62,7 @@ Function
 
 {
   "name":        <string>,
+  "present":     <Boolean>,
   "events":      <array of Event>
 }
 
@@ -135,6 +136,17 @@ Operand
 Should render as:
 
     #{type} #{value}
+
+### Argument operand
+
+{
+  "kind":        "argument",
+  "name":        <string>
+}
+
+Should render as:
+
+    %#{name}
 
 ### Instruction operand
 

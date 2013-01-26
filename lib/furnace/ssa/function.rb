@@ -41,7 +41,7 @@ module Furnace
         new_value
       end
 
-      @arguments = @arguments.map do |arg|
+      self.arguments = @arguments.map do |arg|
         new_arg = arg.dup
         new_arg.function = self
         value_map[arg] = new_arg
@@ -49,13 +49,16 @@ module Furnace
         new_arg
       end
 
-      @basic_blocks = @basic_blocks.map do |bb|
+      old_basic_blocks = @basic_blocks
+      @basic_blocks    = Set[]
+
+      old_basic_blocks.each do |bb|
         new_bb = bb.dup
         new_bb.function = self
 
         value_map[bb] = new_bb
 
-        new_bb
+        add new_bb
       end
 
       @entry = value_map[@entry]

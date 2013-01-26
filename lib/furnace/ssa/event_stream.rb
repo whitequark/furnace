@@ -49,9 +49,9 @@ module Furnace
     def update_instruction(insn)
       if insn.operands
         if insn.is_a? SSA::PhiInsn
-          operands = insn.operands.map do |basic_block, operand|
-            [ dump(basic_block), dump(operand) ]
-          end
+          operands = Hash[insn.operands.map do |basic_block, operand|
+            [ basic_block.name, dump(operand) ]
+          end]
         else
           operands = dump_all(insn.operands)
         end
@@ -94,7 +94,8 @@ module Furnace
         dump_type(object)
 
       when SSA::Argument
-        { name:  object.name,
+        { kind:  "argument",
+          name:  object.name,
           type:  @types[object.type] }
 
       when SSA::Constant
