@@ -568,14 +568,13 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/pretty_printer.rb', line 11</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='rubyid_colorize identifier id'>colorize</span><span class='assign token'>=</span><span class='rubyid_self self kw'>self</span><span class='dot token'>.</span><span class='rubyid_class identifier id'>class</span><span class='dot token'>.</span><span class='rubyid_colorize identifier id'>colorize</span><span class='rparen token'>)</span>
-  <span class='rubyid_@colorize ivar id'>@colorize</span>   <span class='assign token'>=</span> <span class='rubyid_colorize identifier id'>colorize</span>
-  <span class='rubyid_@buffer ivar id'>@buffer</span>     <span class='assign token'>=</span> <span class='string val'>&quot;&quot;</span>
-  <span class='rubyid_@need_space ivar id'>@need_space</span> <span class='assign token'>=</span> <span class='rubyid_false false kw'>false</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_colorize'>colorize</span><span class='op'>=</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_colorize'>colorize</span><span class='rparen'>)</span>
+  <span class='ivar'>@colorize</span>   <span class='op'>=</span> <span class='id identifier rubyid_colorize'>colorize</span>
+  <span class='ivar'>@buffer</span>     <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+  <span class='ivar'>@need_space</span> <span class='op'>=</span> <span class='kw'>false</span>
 
-  <span class='rubyid_yield yield kw'>yield</span> <span class='rubyid_self self kw'>self</span> <span class='rubyid_if if_mod kw'>if</span> <span class='rubyid_block_given? fid id'>block_given?</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+  <span class='kw'>yield</span> <span class='kw'>self</span> <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -620,10 +619,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/pretty_printer.rb', line 8</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_colorize identifier id'>colorize</span>
-  <span class='rubyid_@colorize ivar id'>@colorize</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_colorize'>colorize</span>
+  <span class='ivar'>@colorize</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -660,12 +658,11 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/pretty_printer.rb', line 33</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='lshft op'>&lt;&lt;</span><span class='lparen token'>(</span><span class='rubyid_what identifier id'>what</span><span class='rparen token'>)</span>
-  <span class='rubyid_@buffer ivar id'>@buffer</span> <span class='lshft op'>&lt;&lt;</span> <span class='rubyid_what identifier id'>what</span>
+<span class='kw'>def</span> <span class='op'>&lt;&lt;</span><span class='lparen'>(</span><span class='id identifier rubyid_what'>what</span><span class='rparen'>)</span>
+  <span class='ivar'>@buffer</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_what'>what</span>
 
-  <span class='rubyid_self self kw'>self</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+  <span class='kw'>self</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -693,10 +690,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/pretty_printer.rb', line 25</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='eq op'>==</span><span class='lparen token'>(</span><span class='rubyid_other identifier id'>other</span><span class='rparen token'>)</span>
-  <span class='rubyid_to_s identifier id'>to_s</span> <span class='eq op'>==</span> <span class='rubyid_other identifier id'>other</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='op'>==</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_to_s'>to_s</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -724,10 +720,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/pretty_printer.rb', line 29</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='match op'>=~</span><span class='lparen token'>(</span><span class='rubyid_other identifier id'>other</span><span class='rparen token'>)</span>
-  <span class='rubyid_to_s identifier id'>to_s</span> <span class='match op'>=~</span> <span class='rubyid_other identifier id'>other</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='op'>=~</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_to_s'>to_s</span> <span class='op'>=~</span> <span class='id identifier rubyid_other'>other</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -764,19 +759,18 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/pretty_printer.rb', line 100</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_ensure_space identifier id'>ensure_space</span><span class='lparen token'>(</span><span class='rubyid_need_space_after identifier id'>need_space_after</span><span class='assign token'>=</span><span class='rubyid_true true kw'>true</span><span class='rparen token'>)</span>
-  <span class='rubyid_if if kw'>if</span> <span class='rubyid_@need_space ivar id'>@need_space</span>
-    <span class='rubyid_self self kw'>self</span> <span class='lshft op'>&lt;&lt;</span> <span class='string val'>&quot; &quot;</span>
-    <span class='rubyid_@need_space ivar id'>@need_space</span> <span class='assign token'>=</span> <span class='rubyid_false false kw'>false</span>
-  <span class='rubyid_end end kw'>end</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_ensure_space'>ensure_space</span><span class='lparen'>(</span><span class='id identifier rubyid_need_space_after'>need_space_after</span><span class='op'>=</span><span class='kw'>true</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='ivar'>@need_space</span>
+    <span class='kw'>self</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> </span><span class='tstring_end'>&quot;</span></span>
+    <span class='ivar'>@need_space</span> <span class='op'>=</span> <span class='kw'>false</span>
+  <span class='kw'>end</span>
 
-  <span class='rubyid_yield yield kw'>yield</span>
+  <span class='kw'>yield</span>
 
-  <span class='rubyid_@need_space ivar id'>@need_space</span> <span class='assign token'>=</span> <span class='rubyid_need_space_after identifier id'>need_space_after</span>
+  <span class='ivar'>@need_space</span> <span class='op'>=</span> <span class='id identifier rubyid_need_space_after'>need_space_after</span>
 
-  <span class='rubyid_self self kw'>self</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+  <span class='kw'>self</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -804,10 +798,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/pretty_printer.rb', line 62</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_keyword identifier id'>keyword</span><span class='lparen token'>(</span><span class='rubyid_what identifier id'>what</span><span class='rparen token'>)</span>
-  <span class='rubyid_text identifier id'>text</span> <span class='rubyid_with_ansi identifier id'>with_ansi</span><span class='lparen token'>(</span><span class='symbol val'>:bright</span><span class='comma token'>,</span> <span class='symbol val'>:white</span><span class='rparen token'>)</span> <span class='lbrace token'>{</span> <span class='rubyid_what identifier id'>what</span><span class='dot token'>.</span><span class='rubyid_to_s identifier id'>to_s</span> <span class='rbrace token'>}</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_keyword'>keyword</span><span class='lparen'>(</span><span class='id identifier rubyid_what'>what</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_text'>text</span> <span class='id identifier rubyid_with_ansi'>with_ansi</span><span class='lparen'>(</span><span class='symbol'>:bright</span><span class='comma'>,</span> <span class='symbol'>:white</span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_what'>what</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -839,14 +832,13 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/pretty_printer.rb', line 66</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_keyword_invalid identifier id'>keyword_invalid</span><span class='lparen token'>(</span><span class='rubyid_what identifier id'>what</span><span class='rparen token'>)</span>
-  <span class='rubyid_if if kw'>if</span> <span class='rubyid_@colorize ivar id'>@colorize</span>
-    <span class='rubyid_text identifier id'>text</span> <span class='rubyid_with_ansi identifier id'>with_ansi</span><span class='lparen token'>(</span><span class='symbol val'>:bright</span><span class='comma token'>,</span> <span class='symbol val'>:red</span><span class='rparen token'>)</span> <span class='lbrace token'>{</span> <span class='rubyid_what identifier id'>what</span><span class='dot token'>.</span><span class='rubyid_to_s identifier id'>to_s</span> <span class='rbrace token'>}</span>
-  <span class='rubyid_else else kw'>else</span>
-    <span class='rubyid_text identifier id'>text</span> <span class='dstring node'>&quot;!#{what}&quot;</span><span class='dot token'>.</span><span class='rubyid_to_s identifier id'>to_s</span>
-  <span class='rubyid_end end kw'>end</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_keyword_invalid'>keyword_invalid</span><span class='lparen'>(</span><span class='id identifier rubyid_what'>what</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='ivar'>@colorize</span>
+    <span class='id identifier rubyid_text'>text</span> <span class='id identifier rubyid_with_ansi'>with_ansi</span><span class='lparen'>(</span><span class='symbol'>:bright</span><span class='comma'>,</span> <span class='symbol'>:red</span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_what'>what</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='rbrace'>}</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_text'>text</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>!</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_what'>what</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -874,10 +866,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/pretty_printer.rb', line 54</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_name identifier id'>name</span><span class='lparen token'>(</span><span class='rubyid_what identifier id'>what</span><span class='rparen token'>)</span>
-  <span class='rubyid_text identifier id'>text</span> <span class='string val'>'%'</span><span class='comma token'>,</span> <span class='rubyid_what identifier id'>what</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_name'>name</span><span class='lparen'>(</span><span class='id identifier rubyid_what'>what</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_text'>text</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>%</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='id identifier rubyid_what'>what</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -907,12 +898,11 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/pretty_printer.rb', line 48</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_newline identifier id'>newline</span>
-  <span class='rubyid_@need_space ivar id'>@need_space</span> <span class='assign token'>=</span> <span class='rubyid_false false kw'>false</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_newline'>newline</span>
+  <span class='ivar'>@need_space</span> <span class='op'>=</span> <span class='kw'>false</span>
 
-  <span class='rubyid_self self kw'>self</span> <span class='lshft op'>&lt;&lt;</span> <span class='string val'>&quot;\n&quot;</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+  <span class='kw'>self</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -946,16 +936,15 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/pretty_printer.rb', line 74</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_objects identifier id'>objects</span><span class='lparen token'>(</span><span class='rubyid_objects identifier id'>objects</span><span class='comma token'>,</span> <span class='rubyid_separator identifier id'>separator</span><span class='assign token'>=</span><span class='string val'>&quot;,&quot;</span><span class='comma token'>,</span> <span class='rubyid_printer identifier id'>printer</span><span class='assign token'>=</span><span class='symbol val'>:pretty_print</span><span class='rparen token'>)</span>
-  <span class='rubyid_objects identifier id'>objects</span><span class='dot token'>.</span><span class='rubyid_each_with_index identifier id'>each_with_index</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_object identifier id'>object</span><span class='comma token'>,</span> <span class='rubyid_index identifier id'>index</span><span class='bitor op'>|</span>
-    <span class='rubyid_object identifier id'>object</span><span class='dot token'>.</span><span class='rubyid_send identifier id'>send</span><span class='lparen token'>(</span><span class='rubyid_printer identifier id'>printer</span><span class='comma token'>,</span> <span class='rubyid_self self kw'>self</span><span class='rparen token'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_objects'>objects</span><span class='lparen'>(</span><span class='id identifier rubyid_objects'>objects</span><span class='comma'>,</span> <span class='id identifier rubyid_separator'>separator</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>,</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_printer'>printer</span><span class='op'>=</span><span class='symbol'>:pretty_print</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_objects'>objects</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_object'>object</span><span class='comma'>,</span> <span class='id identifier rubyid_index'>index</span><span class='op'>|</span>
+    <span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_printer'>printer</span><span class='comma'>,</span> <span class='kw'>self</span><span class='rparen'>)</span>
 
-    <span class='rubyid_self self kw'>self</span> <span class='lshft op'>&lt;&lt;</span> <span class='rubyid_separator identifier id'>separator</span> <span class='rubyid_if if_mod kw'>if</span> <span class='rubyid_index identifier id'>index</span> <span class='lt op'>&lt;</span> <span class='rubyid_objects identifier id'>objects</span><span class='dot token'>.</span><span class='rubyid_count identifier id'>count</span> <span class='minus op'>-</span> <span class='integer val'>1</span>
-  <span class='rubyid_end end kw'>end</span>
+    <span class='kw'>self</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_separator'>separator</span> <span class='kw'>if</span> <span class='id identifier rubyid_index'>index</span> <span class='op'>&lt;</span> <span class='id identifier rubyid_objects'>objects</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span> <span class='op'>-</span> <span class='int'>1</span>
+  <span class='kw'>end</span>
 
-  <span class='rubyid_self self kw'>self</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+  <span class='kw'>self</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -988,15 +977,14 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/pretty_printer.rb', line 39</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_text identifier id'>text</span><span class='lparen token'>(</span><span class='mult op'>*</span><span class='rubyid_what identifier id'>what</span><span class='rparen token'>)</span>
-  <span class='rubyid_what identifier id'>what</span> <span class='assign token'>=</span> <span class='rubyid_what identifier id'>what</span><span class='dot token'>.</span><span class='rubyid_map identifier id'>map</span><span class='lparen token'>(</span><span class='bitand op'>&amp;</span><span class='symbol val'>:to_s</span><span class='rparen token'>)</span>
-  <span class='rubyid_return return kw'>return</span> <span class='rubyid_if if_mod kw'>if</span> <span class='rubyid_what identifier id'>what</span><span class='dot token'>.</span><span class='rubyid_all? fid id'>all?</span><span class='lparen token'>(</span><span class='bitand op'>&amp;</span><span class='symbol val'>:empty?</span><span class='rparen token'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_text'>text</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_what'>what</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_what'>what</span> <span class='op'>=</span> <span class='id identifier rubyid_what'>what</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>if</span> <span class='id identifier rubyid_what'>what</span><span class='period'>.</span><span class='id identifier rubyid_all?'>all?</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:empty?</span><span class='rparen'>)</span>
 
-  <span class='rubyid_ensure_space identifier id'>ensure_space</span> <span class='rubyid_do do kw'>do</span>
-    <span class='rubyid_self self kw'>self</span> <span class='lshft op'>&lt;&lt;</span> <span class='rubyid_what identifier id'>what</span><span class='dot token'>.</span><span class='rubyid_join identifier id'>join</span>
-  <span class='rubyid_end end kw'>end</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+  <span class='id identifier rubyid_ensure_space'>ensure_space</span> <span class='kw'>do</span>
+    <span class='kw'>self</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_what'>what</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -1028,10 +1016,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/pretty_printer.rb', line 19</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_to_s identifier id'>to_s</span>
-  <span class='rubyid_@buffer ivar id'>@buffer</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_to_s'>to_s</span>
+  <span class='ivar'>@buffer</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -1059,10 +1046,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/pretty_printer.rb', line 58</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_type identifier id'>type</span><span class='lparen token'>(</span><span class='rubyid_what identifier id'>what</span><span class='rparen token'>)</span>
-  <span class='rubyid_text identifier id'>text</span> <span class='rubyid_with_ansi identifier id'>with_ansi</span><span class='lparen token'>(</span><span class='symbol val'>:green</span><span class='rparen token'>)</span> <span class='lbrace token'>{</span> <span class='rubyid_Furnace constant id'>Furnace</span><span class='colon2 op'>::</span><span class='rubyid_SSA constant id'>SSA</span><span class='dot token'>.</span><span class='rubyid_inspect_type identifier id'>inspect_type</span><span class='lparen token'>(</span><span class='rubyid_what identifier id'>what</span><span class='rparen token'>)</span> <span class='rbrace token'>}</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_type'>type</span><span class='lparen'>(</span><span class='id identifier rubyid_what'>what</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_text'>text</span> <span class='id identifier rubyid_with_ansi'>with_ansi</span><span class='lparen'>(</span><span class='symbol'>:green</span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='const'>Furnace</span><span class='op'>::</span><span class='const'>SSA</span><span class='period'>.</span><span class='id identifier rubyid_inspect_type'>inspect_type</span><span class='lparen'>(</span><span class='id identifier rubyid_what'>what</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -1090,10 +1076,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/pretty_printer.rb', line 84</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_values identifier id'>values</span><span class='lparen token'>(</span><span class='rubyid_values identifier id'>values</span><span class='comma token'>,</span> <span class='rubyid_separator identifier id'>separator</span><span class='assign token'>=</span><span class='string val'>&quot;,&quot;</span><span class='rparen token'>)</span>
-  <span class='rubyid_objects identifier id'>objects</span><span class='lparen token'>(</span><span class='rubyid_values identifier id'>values</span><span class='comma token'>,</span> <span class='rubyid_separator identifier id'>separator</span><span class='comma token'>,</span> <span class='symbol val'>:inspect_as_value</span><span class='rparen token'>)</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_values'>values</span><span class='lparen'>(</span><span class='id identifier rubyid_values'>values</span><span class='comma'>,</span> <span class='id identifier rubyid_separator'>separator</span><span class='op'>=</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>,</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_objects'>objects</span><span class='lparen'>(</span><span class='id identifier rubyid_values'>values</span><span class='comma'>,</span> <span class='id identifier rubyid_separator'>separator</span><span class='comma'>,</span> <span class='symbol'>:inspect_as_value</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -1127,16 +1112,15 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/pretty_printer.rb', line 90</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_with_ansi identifier id'>with_ansi</span><span class='lparen token'>(</span><span class='mult op'>*</span><span class='rubyid_colors identifier id'>colors</span><span class='rparen token'>)</span>
-  <span class='rubyid_string identifier id'>string</span> <span class='assign token'>=</span> <span class='rubyid_yield yield kw'>yield</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_with_ansi'>with_ansi</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_colors'>colors</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_string'>string</span> <span class='op'>=</span> <span class='kw'>yield</span>
 
-  <span class='rubyid_if if kw'>if</span> <span class='rubyid_@colorize ivar id'>@colorize</span>
-    <span class='rubyid_ANSI constant id'>ANSI</span><span class='colon2 op'>::</span><span class='rubyid_Code constant id'>Code</span><span class='dot token'>.</span><span class='rubyid_ansi identifier id'>ansi</span><span class='lparen token'>(</span><span class='rubyid_yield yield kw'>yield</span><span class='comma token'>,</span> <span class='mult op'>*</span><span class='rubyid_colors identifier id'>colors</span><span class='rparen token'>)</span>
-  <span class='rubyid_else else kw'>else</span>
-    <span class='rubyid_yield yield kw'>yield</span>
-  <span class='rubyid_end end kw'>end</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+  <span class='kw'>if</span> <span class='ivar'>@colorize</span>
+    <span class='const'>ANSI</span><span class='op'>::</span><span class='const'>Code</span><span class='period'>.</span><span class='id identifier rubyid_ansi'>ansi</span><span class='lparen'>(</span><span class='kw'>yield</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_colors'>colors</span><span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='kw'>yield</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -1147,7 +1131,7 @@
 </div>
 
     <div id="footer">
-  Generated on Thu Jan 10 20:50:42 2013 by
+  Generated on Wed Jan 30 03:13:06 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.9.3).
 </div>

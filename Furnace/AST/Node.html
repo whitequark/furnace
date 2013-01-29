@@ -258,7 +258,8 @@ the codebase.</p>
   
 
   
-    <span class="summary_desc"><div class='inline'>
+    <span class="summary_desc"><div class='inline'><p>By default, each entry in the <code>properties</code> hash is assigned to
+a local variable in this instance of Node.</p>
 </div></span>
   
 </li>
@@ -503,14 +504,13 @@ your code does not expect the argument to be frozen, use <code>#dup</code>.</p>
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 57</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='rubyid_type identifier id'>type</span><span class='comma token'>,</span> <span class='rubyid_children identifier id'>children</span><span class='assign token'>=</span><span class='lbrack token'>[</span><span class='rbrack token'>]</span><span class='comma token'>,</span> <span class='rubyid_properties identifier id'>properties</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span>
-  <span class='rubyid_@type ivar id'>@type</span><span class='comma token'>,</span> <span class='rubyid_@children ivar id'>@children</span> <span class='assign token'>=</span> <span class='rubyid_type identifier id'>type</span><span class='dot token'>.</span><span class='rubyid_to_sym identifier id'>to_sym</span><span class='comma token'>,</span> <span class='rubyid_children identifier id'>children</span><span class='dot token'>.</span><span class='rubyid_to_a identifier id'>to_a</span><span class='dot token'>.</span><span class='rubyid_freeze identifier id'>freeze</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_type'>type</span><span class='comma'>,</span> <span class='id identifier rubyid_children'>children</span><span class='op'>=</span><span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_properties'>properties</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='ivar'>@type</span><span class='comma'>,</span> <span class='ivar'>@children</span> <span class='op'>=</span> <span class='id identifier rubyid_type'>type</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='comma'>,</span> <span class='id identifier rubyid_children'>children</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span>
 
-  <span class='rubyid_assign_properties identifier id'>assign_properties</span><span class='lparen token'>(</span><span class='rubyid_properties identifier id'>properties</span><span class='rparen token'>)</span>
+  <span class='id identifier rubyid_assign_properties'>assign_properties</span><span class='lparen'>(</span><span class='id identifier rubyid_properties'>properties</span><span class='rparen'>)</span>
 
-  <span class='rubyid_freeze identifier id'>freeze</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+  <span class='id identifier rubyid_freeze'>freeze</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -569,10 +569,9 @@ The returned value is frozen.</p>
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 46</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_children identifier id'>children</span>
-  <span class='rubyid_@children ivar id'>@children</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_children'>children</span>
+  <span class='ivar'>@children</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -625,10 +624,9 @@ The returned value is frozen.</p>
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 41</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_type identifier id'>type</span>
-  <span class='rubyid_@type ivar id'>@type</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_type'>type</span>
+  <span class='ivar'>@type</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -695,18 +693,17 @@ The returned value is frozen.</p>
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 114</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='eq op'>==</span><span class='lparen token'>(</span><span class='rubyid_other identifier id'>other</span><span class='rparen token'>)</span>
-  <span class='rubyid_if if kw'>if</span> <span class='rubyid_equal? fid id'>equal?</span><span class='lparen token'>(</span><span class='rubyid_other identifier id'>other</span><span class='rparen token'>)</span>
-    <span class='rubyid_true true kw'>true</span>
-  <span class='rubyid_elsif elsif kw'>elsif</span> <span class='rubyid_other identifier id'>other</span><span class='dot token'>.</span><span class='rubyid_respond_to? fid id'>respond_to?</span> <span class='symbol val'>:to_ast</span>
-    <span class='rubyid_other identifier id'>other</span> <span class='assign token'>=</span> <span class='rubyid_other identifier id'>other</span><span class='dot token'>.</span><span class='rubyid_to_ast identifier id'>to_ast</span>
-    <span class='rubyid_other identifier id'>other</span><span class='dot token'>.</span><span class='rubyid_type identifier id'>type</span> <span class='eq op'>==</span> <span class='rubyid_self self kw'>self</span><span class='dot token'>.</span><span class='rubyid_type identifier id'>type</span> <span class='andop op'>&amp;&amp;</span>
-      <span class='rubyid_other identifier id'>other</span><span class='dot token'>.</span><span class='rubyid_children identifier id'>children</span> <span class='eq op'>==</span> <span class='rubyid_self self kw'>self</span><span class='dot token'>.</span><span class='rubyid_children identifier id'>children</span>
-  <span class='rubyid_else else kw'>else</span>
-    <span class='rubyid_false false kw'>false</span>
-  <span class='rubyid_end end kw'>end</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='op'>==</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_equal?'>equal?</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
+    <span class='kw'>true</span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span> <span class='symbol'>:to_ast</span>
+    <span class='id identifier rubyid_other'>other</span> <span class='op'>=</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_to_ast'>to_ast</span>
+    <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span> <span class='op'>&amp;&amp;</span>
+      <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_children'>children</span> <span class='op'>==</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_children'>children</span>
+  <span class='kw'>else</span>
+    <span class='kw'>false</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -723,7 +720,11 @@ The returned value is frozen.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p>By default, each entry in the <code>properties</code> hash is assigned to
+a local variable in this instance of Node. A subclass should define
+attribute readers for such variables. The values passed in the hash
+are not frozen or whitelisted; such behavior can also be implemented\
+by subclassing Node and overriding this method.</p>
 
 
   </div>
@@ -761,14 +762,13 @@ The returned value is frozen.</p>
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 72</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_assign_properties identifier id'>assign_properties</span><span class='lparen token'>(</span><span class='rubyid_properties identifier id'>properties</span><span class='rparen token'>)</span>
-  <span class='rubyid_properties identifier id'>properties</span><span class='dot token'>.</span><span class='rubyid_each identifier id'>each</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_name identifier id'>name</span><span class='comma token'>,</span> <span class='rubyid_value identifier id'>value</span><span class='bitor op'>|</span>
-    <span class='rubyid_instance_variable_set identifier id'>instance_variable_set</span> <span class='symbol val'>:&quot;@#{name}&quot;</span><span class='comma token'>,</span> <span class='rubyid_value identifier id'>value</span>
-  <span class='rubyid_end end kw'>end</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_assign_properties'>assign_properties</span><span class='lparen'>(</span><span class='id identifier rubyid_properties'>properties</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_properties'>properties</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span>
+    <span class='id identifier rubyid_instance_variable_set'>instance_variable_set</span> <span class='symbol'>:@</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span>
+  <span class='kw'>end</span>
 
-  <span class='rubyid_nil nil kw'>nil</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+  <span class='kw'>nil</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -833,10 +833,9 @@ nicely looking s-expressions.</p>
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 197</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_fancy_type identifier id'>fancy_type</span>
-  <span class='rubyid_@type ivar id'>@type</span><span class='dot token'>.</span><span class='rubyid_to_s identifier id'>to_s</span><span class='dot token'>.</span><span class='rubyid_gsub identifier id'>gsub</span><span class='lparen token'>(</span><span class='string val'>'_'</span><span class='comma token'>,</span> <span class='string val'>'-'</span><span class='rparen token'>)</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_fancy_type'>fancy_type</span>
+  <span class='ivar'>@type</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>_</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>-</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -856,12 +855,12 @@ nicely looking s-expressions.</p>
     <p>Returns <span class='object_link'><a href="#children-instance_method" title="Furnace::AST::Node#children (method)">#children</a></span>. This is very useful in order to decompose nodes
 concisely. For example:</p>
 
-<pre class="code ruby18"><code>node = s(:gasgn, :$foo, s(:integer, 1))
-s
-var_name, value = *node
-p var_name # =&gt; :$foo
-p value    # =&gt; (integer 1)
-</code></pre>
+<pre class="code ruby"><code><span class='id identifier rubyid_node'>node</span> <span class='op'>=</span> <span class='id identifier rubyid_s'>s</span><span class='lparen'>(</span><span class='symbol'>:gasgn</span><span class='comma'>,</span> <span class='symbol'>:$foo</span><span class='comma'>,</span> <span class='id identifier rubyid_s'>s</span><span class='lparen'>(</span><span class='symbol'>:integer</span><span class='comma'>,</span> <span class='int'>1</span><span class='rparen'>)</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_s'>s</span>
+<span class='id identifier rubyid_var_name'>var_name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='op'>*</span><span class='id identifier rubyid_node'>node</span>
+<span class='id identifier rubyid_p'>p</span> <span class='id identifier rubyid_var_name'>var_name</span> <span class='comment'># =&gt; :$foo
+</span><span class='id identifier rubyid_p'>p</span> <span class='id identifier rubyid_value'>value</span>    <span class='comment'># =&gt; (integer 1)
+</span></code></pre>
 
 
   </div>
@@ -895,10 +894,9 @@ p value    # =&gt; (integer 1)
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 143</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_to_a identifier id'>to_a</span>
-  <span class='rubyid_children identifier id'>children</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_to_a'>to_a</span>
+  <span class='id identifier rubyid_children'>children</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -953,10 +951,9 @@ p value    # =&gt; (integer 1)
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 186</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_to_ast identifier id'>to_ast</span>
-  <span class='rubyid_self self kw'>self</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_to_ast'>to_ast</span>
+  <span class='kw'>self</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -1007,10 +1004,9 @@ p value    # =&gt; (integer 1)
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 129</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_to_s identifier id'>to_s</span>
-  <span class='dstring node'>&quot;(#{fancy_type} ...)&quot;</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_to_s'>to_s</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_fancy_type'>fancy_type</span><span class='rbrace'>}</span><span class='tstring_content'> ...)</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -1115,39 +1111,38 @@ p value    # =&gt; (integer 1)
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 151</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_to_sexp identifier id'>to_sexp</span><span class='lparen token'>(</span><span class='rubyid_indent identifier id'>indent</span><span class='assign token'>=</span><span class='integer val'>0</span><span class='rparen token'>)</span>
-  <span class='rubyid_indented identifier id'>indented</span> <span class='assign token'>=</span> <span class='string val'>&quot;  &quot;</span> <span class='mult op'>*</span> <span class='rubyid_indent identifier id'>indent</span>
-  <span class='rubyid_sexp identifier id'>sexp</span> <span class='assign token'>=</span> <span class='dstring node'>&quot;#{indented}(#{fancy_type}&quot;</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_to_sexp'>to_sexp</span><span class='lparen'>(</span><span class='id identifier rubyid_indent'>indent</span><span class='op'>=</span><span class='int'>0</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_indented'>indented</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>  </span><span class='tstring_end'>&quot;</span></span> <span class='op'>*</span> <span class='id identifier rubyid_indent'>indent</span>
+  <span class='id identifier rubyid_sexp'>sexp</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_indented'>indented</span><span class='rbrace'>}</span><span class='tstring_content'>(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_fancy_type'>fancy_type</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
 
-  <span class='rubyid_first_node_child identifier id'>first_node_child</span> <span class='assign token'>=</span> <span class='rubyid_children identifier id'>children</span><span class='dot token'>.</span><span class='rubyid_index identifier id'>index</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_child identifier id'>child</span><span class='bitor op'>|</span>
-    <span class='rubyid_child identifier id'>child</span><span class='dot token'>.</span><span class='rubyid_is_a? fid id'>is_a?</span><span class='lparen token'>(</span><span class='rubyid_Node constant id'>Node</span><span class='rparen token'>)</span> <span class='orop op'>||</span> <span class='rubyid_child identifier id'>child</span><span class='dot token'>.</span><span class='rubyid_is_a? fid id'>is_a?</span><span class='lparen token'>(</span><span class='rubyid_Array constant id'>Array</span><span class='rparen token'>)</span>
-  <span class='rubyid_end end kw'>end</span> <span class='orop op'>||</span> <span class='rubyid_children identifier id'>children</span><span class='dot token'>.</span><span class='rubyid_count identifier id'>count</span>
+  <span class='id identifier rubyid_first_node_child'>first_node_child</span> <span class='op'>=</span> <span class='id identifier rubyid_children'>children</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_child'>child</span><span class='op'>|</span>
+    <span class='id identifier rubyid_child'>child</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Node</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id identifier rubyid_child'>child</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Array</span><span class='rparen'>)</span>
+  <span class='kw'>end</span> <span class='op'>||</span> <span class='id identifier rubyid_children'>children</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span>
 
-  <span class='rubyid_children identifier id'>children</span><span class='dot token'>.</span><span class='rubyid_each_with_index identifier id'>each_with_index</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_child identifier id'>child</span><span class='comma token'>,</span> <span class='rubyid_idx identifier id'>idx</span><span class='bitor op'>|</span>
-    <span class='rubyid_if if kw'>if</span> <span class='rubyid_child identifier id'>child</span><span class='dot token'>.</span><span class='rubyid_is_a? fid id'>is_a?</span><span class='lparen token'>(</span><span class='rubyid_Node constant id'>Node</span><span class='rparen token'>)</span> <span class='andop op'>&amp;&amp;</span> <span class='rubyid_idx identifier id'>idx</span> <span class='geq op'>&gt;=</span> <span class='rubyid_first_node_child identifier id'>first_node_child</span>
-      <span class='rubyid_sexp identifier id'>sexp</span> <span class='lshft op'>&lt;&lt;</span> <span class='dstring node'>&quot;\n#{child.to_sexp(indent + 1)}&quot;</span>
-    <span class='rubyid_elsif elsif kw'>elsif</span> <span class='rubyid_child identifier id'>child</span><span class='dot token'>.</span><span class='rubyid_is_a? fid id'>is_a?</span><span class='lparen token'>(</span><span class='rubyid_Hash constant id'>Hash</span><span class='rparen token'>)</span>
-      <span class='rubyid_sexp identifier id'>sexp</span> <span class='lshft op'>&lt;&lt;</span> <span class='string val'>&quot; {\n&quot;</span>
-      <span class='rubyid_child identifier id'>child</span><span class='dot token'>.</span><span class='rubyid_each identifier id'>each</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_key identifier id'>key</span><span class='comma token'>,</span> <span class='rubyid_value identifier id'>value</span><span class='bitor op'>|</span>
-        <span class='rubyid_if if kw'>if</span> <span class='rubyid_value identifier id'>value</span><span class='dot token'>.</span><span class='rubyid_is_a? fid id'>is_a?</span><span class='lparen token'>(</span><span class='rubyid_Node constant id'>Node</span><span class='rparen token'>)</span>
-          <span class='rubyid_pretty_value identifier id'>pretty_value</span> <span class='assign token'>=</span> <span class='rubyid_value identifier id'>value</span><span class='dot token'>.</span><span class='rubyid_to_sexp identifier id'>to_sexp</span><span class='lparen token'>(</span><span class='rubyid_indent identifier id'>indent</span> <span class='plus op'>+</span> <span class='integer val'>2</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='rubyid_lstrip identifier id'>lstrip</span>
-        <span class='rubyid_else else kw'>else</span>
-          <span class='rubyid_pretty_value identifier id'>pretty_value</span> <span class='assign token'>=</span> <span class='rubyid_value identifier id'>value</span><span class='dot token'>.</span><span class='rubyid_inspect identifier id'>inspect</span>
-        <span class='rubyid_end end kw'>end</span>
+  <span class='id identifier rubyid_children'>children</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_child'>child</span><span class='comma'>,</span> <span class='id identifier rubyid_idx'>idx</span><span class='op'>|</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_child'>child</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Node</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_idx'>idx</span> <span class='op'>&gt;=</span> <span class='id identifier rubyid_first_node_child'>first_node_child</span>
+      <span class='id identifier rubyid_sexp'>sexp</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_child'>child</span><span class='period'>.</span><span class='id identifier rubyid_to_sexp'>to_sexp</span><span class='lparen'>(</span><span class='id identifier rubyid_indent'>indent</span> <span class='op'>+</span> <span class='int'>1</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>elsif</span> <span class='id identifier rubyid_child'>child</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Hash</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_sexp'>sexp</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> {\n</span><span class='tstring_end'>&quot;</span></span>
+      <span class='id identifier rubyid_child'>child</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span>
+        <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Node</span><span class='rparen'>)</span>
+          <span class='id identifier rubyid_pretty_value'>pretty_value</span> <span class='op'>=</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_to_sexp'>to_sexp</span><span class='lparen'>(</span><span class='id identifier rubyid_indent'>indent</span> <span class='op'>+</span> <span class='int'>2</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_lstrip'>lstrip</span>
+        <span class='kw'>else</span>
+          <span class='id identifier rubyid_pretty_value'>pretty_value</span> <span class='op'>=</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span>
+        <span class='kw'>end</span>
 
-        <span class='rubyid_sexp identifier id'>sexp</span> <span class='lshft op'>&lt;&lt;</span> <span class='dstring node'>&quot;#{indented}    #{key.inspect} =&gt; #{pretty_value}\n&quot;</span>
-      <span class='rubyid_end end kw'>end</span>
-      <span class='rubyid_sexp identifier id'>sexp</span> <span class='lshft op'>&lt;&lt;</span> <span class='dstring node'>&quot;#{indented}  }&quot;</span>
-    <span class='rubyid_else else kw'>else</span>
-      <span class='rubyid_sexp identifier id'>sexp</span> <span class='lshft op'>&lt;&lt;</span> <span class='dstring node'>&quot; #{child.inspect}&quot;</span>
-    <span class='rubyid_end end kw'>end</span>
-  <span class='rubyid_end end kw'>end</span>
+        <span class='id identifier rubyid_sexp'>sexp</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_indented'>indented</span><span class='rbrace'>}</span><span class='tstring_content'>    </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'> =&gt; </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_pretty_value'>pretty_value</span><span class='rbrace'>}</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span>
+      <span class='kw'>end</span>
+      <span class='id identifier rubyid_sexp'>sexp</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_indented'>indented</span><span class='rbrace'>}</span><span class='tstring_content'>  }</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_sexp'>sexp</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_child'>child</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
 
-  <span class='rubyid_sexp identifier id'>sexp</span> <span class='lshft op'>&lt;&lt;</span> <span class='string val'>&quot;)&quot;</span>
+  <span class='id identifier rubyid_sexp'>sexp</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span>
 
-  <span class='rubyid_sexp identifier id'>sexp</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+  <span class='id identifier rubyid_sexp'>sexp</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -1258,20 +1253,19 @@ yield <code>(foo)</code>.</p>
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ast/node.rb', line 96</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_updated identifier id'>updated</span><span class='lparen token'>(</span><span class='rubyid_type identifier id'>type</span><span class='assign token'>=</span><span class='rubyid_nil nil kw'>nil</span><span class='comma token'>,</span> <span class='rubyid_children identifier id'>children</span><span class='assign token'>=</span><span class='rubyid_nil nil kw'>nil</span><span class='comma token'>,</span> <span class='rubyid_properties identifier id'>properties</span><span class='assign token'>=</span><span class='rubyid_nil nil kw'>nil</span><span class='rparen token'>)</span>
-  <span class='rubyid_new_type identifier id'>new_type</span>       <span class='assign token'>=</span> <span class='rubyid_type identifier id'>type</span>       <span class='orop op'>||</span> <span class='rubyid_@type ivar id'>@type</span>
-  <span class='rubyid_new_children identifier id'>new_children</span>   <span class='assign token'>=</span> <span class='rubyid_children identifier id'>children</span>   <span class='orop op'>||</span> <span class='rubyid_@children ivar id'>@children</span>
-  <span class='rubyid_new_properties identifier id'>new_properties</span> <span class='assign token'>=</span> <span class='rubyid_properties identifier id'>properties</span> <span class='orop op'>||</span> <span class='lbrace token'>{</span><span class='rbrace token'>}</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_updated'>updated</span><span class='lparen'>(</span><span class='id identifier rubyid_type'>type</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_children'>children</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_properties'>properties</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_new_type'>new_type</span>       <span class='op'>=</span> <span class='id identifier rubyid_type'>type</span>       <span class='op'>||</span> <span class='ivar'>@type</span>
+  <span class='id identifier rubyid_new_children'>new_children</span>   <span class='op'>=</span> <span class='id identifier rubyid_children'>children</span>   <span class='op'>||</span> <span class='ivar'>@children</span>
+  <span class='id identifier rubyid_new_properties'>new_properties</span> <span class='op'>=</span> <span class='id identifier rubyid_properties'>properties</span> <span class='op'>||</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
 
-  <span class='rubyid_if if kw'>if</span> <span class='rubyid_@type ivar id'>@type</span> <span class='eq op'>==</span> <span class='rubyid_new_type identifier id'>new_type</span> <span class='andop op'>&amp;&amp;</span>
-      <span class='rubyid_@children ivar id'>@children</span> <span class='eq op'>==</span> <span class='rubyid_new_children identifier id'>new_children</span> <span class='andop op'>&amp;&amp;</span>
-      <span class='rubyid_properties identifier id'>properties</span><span class='dot token'>.</span><span class='rubyid_nil? fid id'>nil?</span>
-    <span class='rubyid_self self kw'>self</span>
-  <span class='rubyid_else else kw'>else</span>
-    <span class='rubyid_dup identifier id'>dup</span><span class='dot token'>.</span><span class='rubyid_send identifier id'>send</span> <span class='symbol val'>:initialize</span><span class='comma token'>,</span> <span class='rubyid_new_type identifier id'>new_type</span><span class='comma token'>,</span> <span class='rubyid_new_children identifier id'>new_children</span><span class='comma token'>,</span> <span class='rubyid_new_properties identifier id'>new_properties</span>
-  <span class='rubyid_end end kw'>end</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+  <span class='kw'>if</span> <span class='ivar'>@type</span> <span class='op'>==</span> <span class='id identifier rubyid_new_type'>new_type</span> <span class='op'>&amp;&amp;</span>
+      <span class='ivar'>@children</span> <span class='op'>==</span> <span class='id identifier rubyid_new_children'>new_children</span> <span class='op'>&amp;&amp;</span>
+      <span class='id identifier rubyid_properties'>properties</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='kw'>self</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_dup'>dup</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span> <span class='symbol'>:initialize</span><span class='comma'>,</span> <span class='id identifier rubyid_new_type'>new_type</span><span class='comma'>,</span> <span class='id identifier rubyid_new_children'>new_children</span><span class='comma'>,</span> <span class='id identifier rubyid_new_properties'>new_properties</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -1282,7 +1276,7 @@ yield <code>(foo)</code>.</p>
 </div>
 
     <div id="footer">
-  Generated on Thu Jan 10 20:50:39 2013 by
+  Generated on Wed Jan 30 03:13:05 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.9.3).
 </div>

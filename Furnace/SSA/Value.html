@@ -480,10 +480,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/value.rb', line 3</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_initialize identifier id'>initialize</span>
-  <span class='rubyid_@uses ivar id'>@uses</span> <span class='assign token'>=</span> <span class='rubyid_Set constant id'>Set</span><span class='dot token'>.</span><span class='rubyid_new identifier id'>new</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span>
+  <span class='ivar'>@uses</span> <span class='op'>=</span> <span class='const'>Set</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -519,11 +518,10 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/value.rb', line 49</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='eq op'>==</span><span class='lparen token'>(</span><span class='rubyid_other identifier id'>other</span><span class='rparen token'>)</span>
-  <span class='rubyid_other identifier id'>other</span><span class='dot token'>.</span><span class='rubyid_respond_to? fid id'>respond_to?</span><span class='lparen token'>(</span><span class='symbol val'>:to_value</span><span class='rparen token'>)</span> <span class='andop op'>&amp;&amp;</span>
-      <span class='rubyid_equal? fid id'>equal?</span><span class='lparen token'>(</span><span class='rubyid_other identifier id'>other</span><span class='dot token'>.</span><span class='rubyid_to_value identifier id'>to_value</span><span class='rparen token'>)</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='op'>==</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:to_value</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span>
+      <span class='id identifier rubyid_equal?'>equal?</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_to_value'>to_value</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -551,10 +549,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/value.rb', line 19</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_add_use identifier id'>add_use</span><span class='lparen token'>(</span><span class='rubyid_use identifier id'>use</span><span class='rparen token'>)</span>
-  <span class='rubyid_@uses ivar id'>@uses</span><span class='dot token'>.</span><span class='rubyid_add identifier id'>add</span> <span class='rubyid_use identifier id'>use</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_add_use'>add_use</span><span class='lparen'>(</span><span class='id identifier rubyid_use'>use</span><span class='rparen'>)</span>
+  <span class='ivar'>@uses</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='id identifier rubyid_use'>use</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -605,10 +602,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/value.rb', line 15</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_constant? fid id'>constant?</span>
-  <span class='rubyid_false false kw'>false</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_constant?'>constant?</span>
+  <span class='kw'>false</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -636,10 +632,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/value.rb', line 27</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_each_use identifier id'>each_use</span><span class='lparen token'>(</span><span class='bitand op'>&amp;</span><span class='rubyid_block identifier id'>block</span><span class='rparen token'>)</span>
-  <span class='rubyid_@uses ivar id'>@uses</span><span class='dot token'>.</span><span class='rubyid_each identifier id'>each</span><span class='lparen token'>(</span><span class='bitand op'>&amp;</span><span class='rubyid_block identifier id'>block</span><span class='rparen token'>)</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_each_use'>each_use</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+  <span class='ivar'>@uses</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -667,10 +662,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/value.rb', line 7</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_initialize_copy identifier id'>initialize_copy</span><span class='lparen token'>(</span><span class='rubyid_original identifier id'>original</span><span class='rparen token'>)</span>
-  <span class='rubyid_@uses ivar id'>@uses</span> <span class='assign token'>=</span> <span class='rubyid_Set constant id'>Set</span><span class='dot token'>.</span><span class='rubyid_new identifier id'>new</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize_copy'>initialize_copy</span><span class='lparen'>(</span><span class='id identifier rubyid_original'>original</span><span class='rparen'>)</span>
+  <span class='ivar'>@uses</span> <span class='op'>=</span> <span class='const'>Set</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -698,10 +692,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/value.rb', line 58</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_inspect_as_value identifier id'>inspect_as_value</span><span class='lparen token'>(</span><span class='rubyid_p identifier id'>p</span><span class='assign token'>=</span><span class='rubyid_SSA constant id'>SSA</span><span class='colon2 op'>::</span><span class='rubyid_PrettyPrinter constant id'>PrettyPrinter</span><span class='dot token'>.</span><span class='rubyid_new identifier id'>new</span><span class='rparen token'>)</span>
-  <span class='rubyid_p identifier id'>p</span><span class='dot token'>.</span><span class='rubyid_text identifier id'>text</span> <span class='rubyid_inspect identifier id'>inspect</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_inspect_as_value'>inspect_as_value</span><span class='lparen'>(</span><span class='id identifier rubyid_p'>p</span><span class='op'>=</span><span class='const'>SSA</span><span class='op'>::</span><span class='const'>PrettyPrinter</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_text'>text</span> <span class='id identifier rubyid_inspect'>inspect</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -729,10 +722,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/value.rb', line 54</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_pretty_print identifier id'>pretty_print</span><span class='lparen token'>(</span><span class='rubyid_p identifier id'>p</span><span class='assign token'>=</span><span class='rubyid_SSA constant id'>SSA</span><span class='colon2 op'>::</span><span class='rubyid_PrettyPrinter constant id'>PrettyPrinter</span><span class='dot token'>.</span><span class='rubyid_new identifier id'>new</span><span class='rparen token'>)</span>
-  <span class='rubyid_inspect_as_value identifier id'>inspect_as_value</span><span class='lparen token'>(</span><span class='rubyid_p identifier id'>p</span><span class='rparen token'>)</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_pretty_print'>pretty_print</span><span class='lparen'>(</span><span class='id identifier rubyid_p'>p</span><span class='op'>=</span><span class='const'>SSA</span><span class='op'>::</span><span class='const'>PrettyPrinter</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_inspect_as_value'>inspect_as_value</span><span class='lparen'>(</span><span class='id identifier rubyid_p'>p</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -760,10 +752,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/value.rb', line 23</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_remove_use identifier id'>remove_use</span><span class='lparen token'>(</span><span class='rubyid_use identifier id'>use</span><span class='rparen token'>)</span>
-  <span class='rubyid_@uses ivar id'>@uses</span><span class='dot token'>.</span><span class='rubyid_delete identifier id'>delete</span> <span class='rubyid_use identifier id'>use</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_remove_use'>remove_use</span><span class='lparen'>(</span><span class='id identifier rubyid_use'>use</span><span class='rparen'>)</span>
+  <span class='ivar'>@uses</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span> <span class='id identifier rubyid_use'>use</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -793,12 +784,11 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/value.rb', line 39</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_replace_all_uses_with identifier id'>replace_all_uses_with</span><span class='lparen token'>(</span><span class='rubyid_value identifier id'>value</span><span class='rparen token'>)</span>
-  <span class='rubyid_each_use identifier id'>each_use</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_user identifier id'>user</span><span class='bitor op'>|</span>
-    <span class='rubyid_user identifier id'>user</span><span class='dot token'>.</span><span class='rubyid_replace_uses_of identifier id'>replace_uses_of</span> <span class='rubyid_self self kw'>self</span><span class='comma token'>,</span> <span class='rubyid_value identifier id'>value</span>
-  <span class='rubyid_end end kw'>end</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_replace_all_uses_with'>replace_all_uses_with</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_each_use'>each_use</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_user'>user</span><span class='op'>|</span>
+    <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_replace_uses_of'>replace_uses_of</span> <span class='kw'>self</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -826,10 +816,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/value.rb', line 45</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_to_value identifier id'>to_value</span>
-  <span class='rubyid_self self kw'>self</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_to_value'>to_value</span>
+  <span class='kw'>self</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -857,10 +846,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/value.rb', line 11</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_type identifier id'>type</span>
-  <span class='rubyid_SSA constant id'>SSA</span><span class='dot token'>.</span><span class='rubyid_void identifier id'>void</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_type'>type</span>
+  <span class='const'>SSA</span><span class='period'>.</span><span class='id identifier rubyid_void'>void</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -888,10 +876,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/value.rb', line 31</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_use_count identifier id'>use_count</span>
-  <span class='rubyid_@uses ivar id'>@uses</span><span class='dot token'>.</span><span class='rubyid_count identifier id'>count</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_use_count'>use_count</span>
+  <span class='ivar'>@uses</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -942,10 +929,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/value.rb', line 35</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_used? fid id'>used?</span>
-  <span class='rubyid_@uses ivar id'>@uses</span><span class='dot token'>.</span><span class='rubyid_any? fid id'>any?</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_used?'>used?</span>
+  <span class='ivar'>@uses</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -956,7 +942,7 @@
 </div>
 
     <div id="footer">
-  Generated on Thu Jan 10 20:50:40 2013 by
+  Generated on Wed Jan 30 03:13:05 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.9.3).
 </div>

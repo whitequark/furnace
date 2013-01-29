@@ -286,11 +286,10 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/argument.rb', line 5</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='rubyid_function identifier id'>function</span><span class='comma token'>,</span> <span class='rubyid_type identifier id'>type</span><span class='comma token'>,</span> <span class='rubyid_name identifier id'>name</span><span class='rparen token'>)</span>
-  <span class='rubyid_super super kw'>super</span><span class='lparen token'>(</span><span class='rubyid_function identifier id'>function</span><span class='comma token'>,</span> <span class='rubyid_name identifier id'>name</span><span class='rparen token'>)</span>
-  <span class='rubyid_self self kw'>self</span><span class='dot token'>.</span><span class='rubyid_type identifier id'>type</span> <span class='assign token'>=</span> <span class='rubyid_type identifier id'>type</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_function'>function</span><span class='comma'>,</span> <span class='id identifier rubyid_type'>type</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+  <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_function'>function</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span> <span class='op'>=</span> <span class='id identifier rubyid_type'>type</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -335,10 +334,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/argument.rb', line 3</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_type identifier id'>type</span>
-  <span class='rubyid_@type ivar id'>@type</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_type'>type</span>
+  <span class='ivar'>@type</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -396,10 +394,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/argument.rb', line 14</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_has_side_effects? fid id'>has_side_effects?</span>
-  <span class='rubyid_true true kw'>true</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_has_side_effects?'>has_side_effects?</span>
+  <span class='kw'>true</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -428,11 +425,10 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/argument.rb', line 18</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_pretty_print identifier id'>pretty_print</span><span class='lparen token'>(</span><span class='rubyid_p identifier id'>p</span><span class='assign token'>=</span><span class='rubyid_SSA constant id'>SSA</span><span class='colon2 op'>::</span><span class='rubyid_PrettyPrinter constant id'>PrettyPrinter</span><span class='dot token'>.</span><span class='rubyid_new identifier id'>new</span><span class='rparen token'>)</span>
-  <span class='rubyid_p identifier id'>p</span><span class='dot token'>.</span><span class='rubyid_type identifier id'>type</span> <span class='rubyid_type identifier id'>type</span>
-  <span class='rubyid_p identifier id'>p</span><span class='dot token'>.</span><span class='rubyid_name identifier id'>name</span> <span class='rubyid_name identifier id'>name</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_pretty_print'>pretty_print</span><span class='lparen'>(</span><span class='id identifier rubyid_p'>p</span><span class='op'>=</span><span class='const'>SSA</span><span class='op'>::</span><span class='const'>PrettyPrinter</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span> <span class='id identifier rubyid_type'>type</span>
+  <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='id identifier rubyid_name'>name</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -443,7 +439,7 @@
 </div>
 
     <div id="footer">
-  Generated on Thu Jan 10 20:50:40 2013 by
+  Generated on Wed Jan 30 03:13:05 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.9.3).
 </div>

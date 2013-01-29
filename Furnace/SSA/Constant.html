@@ -342,13 +342,12 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/constant.rb', line 6</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='rubyid_type identifier id'>type</span><span class='comma token'>,</span> <span class='rubyid_value identifier id'>value</span><span class='rparen token'>)</span>
-  <span class='rubyid_super super kw'>super</span><span class='lparen token'>(</span><span class='rparen token'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_type'>type</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+  <span class='kw'>super</span><span class='lparen'>(</span><span class='rparen'>)</span>
 
-  <span class='rubyid_self self kw'>self</span><span class='dot token'>.</span><span class='rubyid_type identifier id'>type</span> <span class='assign token'>=</span> <span class='rubyid_type identifier id'>type</span>
-  <span class='rubyid_@value ivar id'>@value</span>    <span class='assign token'>=</span> <span class='rubyid_value identifier id'>value</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span> <span class='op'>=</span> <span class='id identifier rubyid_type'>type</span>
+  <span class='ivar'>@value</span>    <span class='op'>=</span> <span class='id identifier rubyid_value'>value</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -393,10 +392,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/constant.rb', line 3</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_type identifier id'>type</span>
-  <span class='rubyid_@type ivar id'>@type</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_type'>type</span>
+  <span class='ivar'>@type</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -436,10 +434,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/constant.rb', line 4</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_value identifier id'>value</span>
-  <span class='rubyid_@value ivar id'>@value</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_value'>value</span>
+  <span class='ivar'>@value</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -482,18 +479,17 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/constant.rb', line 21</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='eq op'>==</span><span class='lparen token'>(</span><span class='rubyid_other identifier id'>other</span><span class='rparen token'>)</span>
-  <span class='rubyid_if if kw'>if</span> <span class='rubyid_other identifier id'>other</span><span class='dot token'>.</span><span class='rubyid_respond_to? fid id'>respond_to?</span> <span class='colon op'>:</span><span class='rubyid_to_value identifier id'>to_value</span>
-    <span class='rubyid_other_value identifier id'>other_value</span> <span class='assign token'>=</span> <span class='rubyid_other identifier id'>other</span><span class='dot token'>.</span><span class='rubyid_to_value identifier id'>to_value</span>
+<span class='kw'>def</span> <span class='op'>==</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span> <span class='symbol'>:to_value</span>
+    <span class='id identifier rubyid_other_value'>other_value</span> <span class='op'>=</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_to_value'>to_value</span>
 
-    <span class='rubyid_other_value identifier id'>other_value</span><span class='dot token'>.</span><span class='rubyid_constant? fid id'>constant?</span> <span class='andop op'>&amp;&amp;</span>
-        <span class='rubyid_other_value identifier id'>other_value</span><span class='dot token'>.</span><span class='rubyid_type identifier id'>type</span>  <span class='eq op'>==</span> <span class='rubyid_type identifier id'>type</span> <span class='andop op'>&amp;&amp;</span>
-        <span class='rubyid_other_value identifier id'>other_value</span><span class='dot token'>.</span><span class='rubyid_value identifier id'>value</span> <span class='eq op'>==</span> <span class='rubyid_value identifier id'>value</span>
-  <span class='rubyid_else else kw'>else</span>
-    <span class='rubyid_false false kw'>false</span>
-  <span class='rubyid_end end kw'>end</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+    <span class='id identifier rubyid_other_value'>other_value</span><span class='period'>.</span><span class='id identifier rubyid_constant?'>constant?</span> <span class='op'>&amp;&amp;</span>
+        <span class='id identifier rubyid_other_value'>other_value</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span>  <span class='op'>==</span> <span class='id identifier rubyid_type'>type</span> <span class='op'>&amp;&amp;</span>
+        <span class='id identifier rubyid_other_value'>other_value</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span> <span class='op'>==</span> <span class='id identifier rubyid_value'>value</span>
+  <span class='kw'>else</span>
+    <span class='kw'>false</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -544,10 +540,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/constant.rb', line 17</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_constant? fid id'>constant?</span>
-  <span class='rubyid_true true kw'>true</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_constant?'>constant?</span>
+  <span class='kw'>true</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -575,10 +570,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/constant.rb', line 39</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_inspect identifier id'>inspect</span>
-  <span class='rubyid_pretty_print identifier id'>pretty_print</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_inspect'>inspect</span>
+  <span class='id identifier rubyid_pretty_print'>pretty_print</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -608,12 +602,11 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/furnace/ssa/constant.rb', line 33</span>
 
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_inspect_as_value identifier id'>inspect_as_value</span><span class='lparen token'>(</span><span class='rubyid_p identifier id'>p</span><span class='assign token'>=</span><span class='rubyid_SSA constant id'>SSA</span><span class='colon2 op'>::</span><span class='rubyid_PrettyPrinter constant id'>PrettyPrinter</span><span class='dot token'>.</span><span class='rubyid_new identifier id'>new</span><span class='rparen token'>)</span>
-  <span class='rubyid_p identifier id'>p</span><span class='dot token'>.</span><span class='rubyid_type identifier id'>type</span> <span class='rubyid_type identifier id'>type</span>
-  <span class='rubyid_p identifier id'>p</span><span class='dot token'>.</span><span class='rubyid_text identifier id'>text</span> <span class='rubyid_@value ivar id'>@value</span><span class='dot token'>.</span><span class='rubyid_inspect identifier id'>inspect</span> <span class='rubyid_unless unless_mod kw'>unless</span> <span class='rubyid_type identifier id'>type</span> <span class='eq op'>==</span> <span class='rubyid_SSA constant id'>SSA</span><span class='dot token'>.</span><span class='rubyid_void identifier id'>void</span>
-  <span class='rubyid_p identifier id'>p</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_inspect_as_value'>inspect_as_value</span><span class='lparen'>(</span><span class='id identifier rubyid_p'>p</span><span class='op'>=</span><span class='const'>SSA</span><span class='op'>::</span><span class='const'>PrettyPrinter</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span> <span class='id identifier rubyid_type'>type</span>
+  <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_text'>text</span> <span class='ivar'>@value</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span> <span class='kw'>unless</span> <span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='const'>SSA</span><span class='period'>.</span><span class='id identifier rubyid_void'>void</span>
+  <span class='id identifier rubyid_p'>p</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -624,7 +617,7 @@
 </div>
 
     <div id="footer">
-  Generated on Thu Jan 10 20:50:41 2013 by
+  Generated on Wed Jan 30 03:13:06 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.9.3).
 </div>
