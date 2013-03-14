@@ -45,9 +45,12 @@ module Furnace
           define_method(:"#{operand}=") do |value|
             value = value.to_value
 
+            return if @operands[index] == value
+
             @operands[index].remove_use self if @operands[index]
             @operands[index] = value
             value.add_use self if value
+            instrument_update
 
             value
           end
