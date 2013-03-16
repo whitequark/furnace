@@ -42,4 +42,43 @@ describe Type do
       Type::Value.new(1).to_s.should == %{'1}
     end
   end
+
+  describe Type::Variable do
+    before do
+      @var = Type::Variable.new
+    end
+
+    it 'converts to type' do
+      @var.to_type.should.equal? @var
+    end
+
+    it 'is a subtype of itself' do
+      @var.should.be.subtype_of @var
+    end
+
+    it 'is a supertype of itself' do
+      @var.should.be.supertype_of @var
+    end
+
+    it 'compares by identity' do
+      @var.should == @var
+      @var.should.not == Type::Variable.new
+    end
+  end
+
+  describe Type::Variable::Annotator do
+    it 'allocates distinct instances' do
+      Type::Variable.new.
+          should.not.equal? Type::Variable.new
+    end
+
+    it 'annotates variables with successive letters' do
+      annotator = Type::Variable::Annotator.new
+      var1, var2 = 2.times.map { Type::Variable.new }
+
+      annotator.annotate(var1).should == 'a'
+      annotator.annotate(var1).should == 'a'
+      annotator.annotate(var2).should == 'b'
+    end
+  end
 end

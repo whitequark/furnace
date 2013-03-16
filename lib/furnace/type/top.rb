@@ -1,6 +1,12 @@
 module Furnace
   class Type::Top
     class << self
+      def new(*params)
+        @instances[params]
+      end
+
+      protected
+
       def setup_singleton
         @instances = Hash.new do |hash, params|
           inst = allocate
@@ -12,10 +18,6 @@ module Furnace
 
       def inherited(klass)
         klass.setup_singleton
-      end
-
-      def new(*params)
-        @instances[params]
       end
     end
 
