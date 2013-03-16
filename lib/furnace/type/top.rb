@@ -46,7 +46,7 @@ module Furnace
     end
 
     def contravariant?(other)
-      false
+      other.covariant?(self)
     end
   end
 end
