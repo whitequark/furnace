@@ -97,7 +97,7 @@ module Furnace
             value = send operand
 
             if !value.type.subtype_of?(type)
-              raise TypeError, "Wrong type for operand ##{index + 1} `#{operand}': #{type} is expected, #{value.type} is present"
+              raise TypeError, "Wrong type for operand ##{index + 1} `#{operand}' of #{self.class}: #{type} is expected, #{value.type} is present"
             end
           end
 
