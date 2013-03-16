@@ -44,17 +44,5 @@ module Furnace
     def contravariant?(other)
       false
     end
-
-    def ==(other)
-      eql? other
-    end
-
-    def eql?(other)
-      other.instance_of?(self.class)
-    end
-
-    def hash
-      [self.class].hash
-    end
   end
 end
