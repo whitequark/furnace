@@ -1,7 +1,7 @@
 module Furnace
   class Type::Top
     class << self
-      def normalize(params)
+      def normalize(*params)
         params
       end
 
