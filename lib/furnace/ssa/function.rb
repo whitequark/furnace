@@ -143,6 +143,21 @@ module Furnace
       end
     end
 
+    def replace_type_with(type, replacement)
+      @arguments.each do |arg|
+        arg.replace_type_with(type, replacement)
+      end
+      instrument { |i| i.set_arguments @arguments }
+
+      each_instruction do |insn|
+        insn.replace_type_with(type, replacement)
+      end
+
+      self.return_type = return_type.replace_type_with(type, replacement)
+
+      nil
+    end
+
     def predecessors_for(name)
       predecessors = Set[]
 

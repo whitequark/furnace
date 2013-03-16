@@ -11,6 +11,10 @@ module Furnace
       @type = type.to_type
     end
 
+    def replace_type_with(type, replacement)
+      self.type = self.type.replace_type_with(type, replacement)
+    end
+
     def has_side_effects?
       true
     end

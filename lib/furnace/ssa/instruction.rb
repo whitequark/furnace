@@ -47,6 +47,9 @@ module Furnace
       end
     end
 
+    def replace_type_with(type, replacement)
+    end
+
     def has_side_effects?
       false
     end
