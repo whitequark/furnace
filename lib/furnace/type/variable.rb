@@ -16,6 +16,10 @@ module Furnace
     def supertype_of?(other)
       other.subtype_of?(self)
     end
+
+    def pretty_print(p=SSA::PrettyPrinter.new)
+      p.type_var self
+    end
   end
 
   class Type::Variable::Annotator

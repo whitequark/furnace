@@ -48,5 +48,13 @@ module Furnace
     def contravariant?(other)
       other.covariant?(self)
     end
+
+    def to_s
+      'top'
+    end
+
+    def pretty_print(p=SSA::PrettyPrinter.new)
+      p.type self.to_s
+    end
   end
 end

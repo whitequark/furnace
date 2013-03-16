@@ -163,7 +163,7 @@ module Furnace
 
     def pretty_print(p=SSA::PrettyPrinter.new)
       p.keyword 'function'
-      p.type    @return_type
+      @return_type.pretty_print(p)
       p.text    @name, '('
       p.objects @arguments
       p.text    ') {'

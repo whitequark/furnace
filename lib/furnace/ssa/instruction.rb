@@ -57,7 +57,7 @@ module Furnace
 
     def pretty_print(p=SSA::PrettyPrinter.new)
       unless type == Type::Bottom.new
-        p.type  type
+        type.pretty_print(p)
         p.name  name
         p.text  '='
       end
@@ -76,7 +76,7 @@ module Furnace
 
     def inspect_as_value(p=SSA::PrettyPrinter.new)
       if type == Type::Bottom.new
-        p.type  type
+        type.pretty_print(p)
       else
         super
       end

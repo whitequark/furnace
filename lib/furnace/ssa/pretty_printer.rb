@@ -12,6 +12,7 @@ module Furnace
       @colorize   = colorize
       @buffer     = ""
       @need_space = false
+      @annotator  = Type::Variable::Annotator.new
 
       yield self if block_given?
     end
@@ -59,6 +60,10 @@ module Furnace
       text with_ansi(:green) { what.to_s }
     end
 
+    def type_var(what)
+      text with_ansi(:bright, :magenta) { '~' + @annotator.annotate(what) }
+    end
+
     def keyword(what)
       text with_ansi(:bright, :white) { what.to_s }
     end
@@ -73,7 +78,11 @@ module Furnace
 
     def objects(objects, separator=",", printer=:pretty_print)
       objects.each_with_index do |object, index|
-        object.send(printer, self)
+        if block_given?
+          yield object
+        else
+          object.send(printer, self)
+        end
 
         self << separator if index < objects.count - 1
       end

@@ -90,7 +90,7 @@ describe SSA do
       end.to_s.should == 'foo'
 
       SSA::PrettyPrinter.new do |p|
-        p.type Integer.to_type
+        Integer.to_type.pretty_print(p)
       end.to_s.should == '^Integer'
 
       SSA::PrettyPrinter.new do |p|
