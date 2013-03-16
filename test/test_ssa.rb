@@ -1031,7 +1031,7 @@ foo:
            :index=>0},
           {:event=>"rename_instruction", :name=>"2", :new_name=>"dupped"},
           {:event=>"add_basic_block", :name=>"3"},
-          {:event=>"type", :id=>3, :kind=>"monotype", :name=>"bottom"},
+          {:event=>"type", :id=>3, :kind=>"void"},
           {:event=>"update_instruction",
            :name=>"4",
            :opcode=>"branch",

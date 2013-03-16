@@ -19,13 +19,14 @@ module Furnace
       @instructions.include? instruction
     end
 
-    def each(types=[], &proc)
+    def each(*types, &proc)
       if types.empty?
         @instructions.each(&proc)
       else
-        return to_enum(:each, type) if proc.nil?
+        return to_enum(:each, *types) if proc.nil?
 
         @instructions.each do |insn|
+          p types.first.class, insn.class
           if types.include?(insn.class)
             yield insn
           end

@@ -139,7 +139,7 @@ module Furnace
       return to_enum(:each_instruction, *types) if proc.nil?
 
       each do |block|
-        block.each(types, &proc)
+        block.each(*types, &proc)
       end
     end
 
