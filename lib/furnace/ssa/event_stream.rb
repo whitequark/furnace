@@ -1,8 +1,9 @@
 module Furnace
   class SSA::EventStream
     def initialize
-      @types  = Hash.new { |h, k| dump_type(k) }
-      @events = []
+      @types     = Hash.new { |h, k| dump_type(k) }
+      @events    = []
+      @annotator = Type::Variable::Annotator.new
     end
 
     def data
@@ -56,7 +57,7 @@ module Furnace
           operands = dump_all(insn.operands)
         end
 
-        params = insn.pretty_parameters(SSA::PrettyPrinter.new(false)).to_s
+        params = insn.pretty_parameters(printer).to_s
 
         emit("update_instruction",
             name:       insn.name,
@@ -119,14 +120,12 @@ module Furnace
       @types[type] = id
 
       case type
-      #when SSA::GenericType # HACK
-      #  desc = { kind:      "parametric",
-      #           name:       type.inspect,
-      #           parameters: dump_all(type.parameters) }
+      when Type::Bottom
+        desc = { kind: "void" }
 
-      when Type::Top
-        desc = { kind:      "monotype",
-                 name:      type.to_s }
+      when Type::Top, Type::Variable
+        desc = { kind: "monotype",
+                 name: type.pretty_print(printer).to_s }
 
       else
         raise "Cannot dump type #{type}:#{type.class}"
@@ -154,6 +153,12 @@ module Furnace
       else
         raise "Unknown object kind for #{object.class}"
       end
+    end
+
+    protected
+
+    def printer
+      SSA::PrettyPrinter.new(false, @annotator)
     end
   end
 end
