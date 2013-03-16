@@ -41,6 +41,10 @@ module Furnace
       other.subtype_of?(self)
     end
 
+    def variable?
+      false
+    end
+
     def replace_type_with(type, replacement)
       if self == type
         replacement.to_type
