@@ -41,14 +41,6 @@ module Furnace
       other.subtype_of?(self)
     end
 
-    def covariant?(other)
-      false
-    end
-
-    def contravariant?(other)
-      other.covariant?(self)
-    end
-
     def to_s
       'top'
     end
