@@ -8,7 +8,7 @@ module Furnace
     end
 
     def type=(type)
-      @type = type.to_type if type
+      @type = type.to_type
     end
 
     def has_side_effects?

@@ -92,7 +92,7 @@ module Furnace
     end
 
     def self.to_type
-      SSA::BasicBlockType.instance
+      SSA::BasicBlockType.new
     end
 
     def type

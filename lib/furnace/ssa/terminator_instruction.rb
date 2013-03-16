@@ -9,13 +9,13 @@ module Furnace
     end
 
     def exits?
-      raise NotImplementedError, "reimplement SSA::TerminatorInstruction#exits? in a subclass"
+      raise NotImplementedError, "reimplement #{self.class}#exits?"
     end
 
     def successors
       operands.
         select do |value|
-          value.type == SSA::BasicBlockType.instance
+          value.type == SSA::BasicBlockType.new
         end.map do |value|
           value.name
         end

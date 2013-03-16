@@ -12,7 +12,7 @@ module Furnace
       codegen
     end
 
-    def operand(name, type=nil)
+    def operand(name, type=Type::Top.new)
       check_for_splat
 
       type = type.to_type unless type.nil?
@@ -90,17 +90,14 @@ module Furnace
           values
         end
 
-        define_method(:verify!) do |ignore_nil_types=true|
+        define_method(:verify!) do
           return if @operands.nil?
 
           operands.each_with_index do |(operand, type), index|
-            next if type.nil?
-
             value = send operand
-            next if ignore_nil_types && value.type.nil?
 
-            if value.type.nil? || !value.type.subtype_of?(type)
-              raise TypeError, "Wrong type for operand ##{index + 1} `#{operand}': #{SSA.inspect_type type} is expected, #{SSA.inspect_type value.type} is present"
+            if !value.type.subtype_of?(type)
+              raise TypeError, "Wrong type for operand ##{index + 1} `#{operand}': #{type} is expected, #{value.type} is present"
             end
           end
 

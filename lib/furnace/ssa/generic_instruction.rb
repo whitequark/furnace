@@ -8,7 +8,8 @@ module Furnace
     end
 
     def type=(type)
-      @type = type.to_type if type
+      @type = type.to_type
+
       instrument_update
     end
   end

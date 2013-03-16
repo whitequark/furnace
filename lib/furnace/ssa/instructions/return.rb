@@ -1,7 +1,6 @@
 module Furnace
   class SSA::ReturnInsn < SSA::TerminatorInstruction
-    syntax do |s|
-      s.operand :value
+    syntax do
     end
 
     def exits?

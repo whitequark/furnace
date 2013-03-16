@@ -1,4 +1,4 @@
-require_relative 'test_helper'
+require_relative 'helper'
 
 describe AST::Node do
   extend Furnace::AST::Sexp

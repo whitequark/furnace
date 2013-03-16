@@ -9,7 +9,7 @@ module Furnace
 
     attr_accessor :entry
 
-    def initialize(name=nil, arguments=[], return_type=SSA.void, instrument=nil)
+    def initialize(name=nil, arguments=[], return_type=Type::Bottom.new, instrument=nil)
       @original_name   = name
       @instrumentation = instrument
       self.name        = name
@@ -154,7 +154,7 @@ module Furnace
     end
 
     def self.to_type
-      SSA::FunctionType.instance
+      SSA::FunctionType.new
     end
 
     def to_value

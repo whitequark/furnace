@@ -1,34 +1,7 @@
-require_relative 'test_helper'
+require_relative 'helper'
 
 describe SSA do
   SSA::PrettyPrinter.colorize = false
-
-  class SSARubyType < SSA::Type
-    attr_reader :ruby_type
-
-    def initialize(ruby_type)
-      @ruby_type = ruby_type
-    end
-
-    def ==(other)
-      other.instance_of?(SSARubyType) &&
-          @ruby_type == other.ruby_type
-    end
-
-    def hash
-      [self.class, @ruby_type].hash
-    end
-
-    def inspect
-      "^#{@ruby_type}"
-    end
-  end
-
-  class Class
-    def to_type
-      SSARubyType.new(self)
-    end
-  end
 
   class BindingInsn < SSA::Instruction
     def type
@@ -163,56 +136,13 @@ describe SSA do
     end
   end
 
-  describe SSA::Type do
-    before do
-      @type = SSA::Type.new
-    end
-
-    it 'converts to type' do
-      @type.to_type.should.be.equal @type
-    end
-
-    it 'is a monotype' do
-      @type.should.be.monotype
-    end
-
-    it 'should be ==, eql?, subtype_of? and have the same hash as another instance' do
-      other = SSA::Type.new
-      @type.should == other
-      @type.should.be.eql other
-      @type.should.be.subtype_of other
-      @type.hash.should == other.hash
-    end
-
-    describe SSA::GenericType do
-      before do
-        @type = Integer.to_type
-      end
-
-      it 'should compare its parameters' do
-        otheri = Integer.to_type
-        otherf = Float.to_type
-
-        @type.should == otheri
-        @type.should.be.eql otheri
-        @type.should.be.subtype_of otheri
-        @type.hash.should == otheri.hash
-
-        @type.should.not == otherf
-        @type.should.not.be.eql otherf
-        @type.should.not.be.subtype_of otherf
-        @type.hash.should.not == otherf.hash
-      end
-    end
-  end
-
   describe SSA::Value do
     before do
       @val = SSA::Value.new
     end
 
-    it 'has void type' do
-      @val.type.should == SSA.void
+    it 'has bottom type' do
+      @val.type.should == Type::Bottom.new
     end
 
     it 'is not constant' do
@@ -286,22 +216,6 @@ describe SSA do
     end
   end
 
-  describe SSA::VoidType do
-    it 'allows to retrieve a constant' do
-      const = SSA.void_value
-      const.should.be.constant
-      const.type.should.be.instance_of SSA::VoidType
-    end
-
-    it 'inspects as void' do
-      SSA.void.inspect.should == 'void'
-    end
-
-    it 'inspects as void in constants' do
-      SSA.void_value.inspect.should == 'void'
-    end
-  end
-
   describe SSA::NamedValue do
     it 'receives unique names' do
       values = 5.times.map { SSA::NamedValue.new(@function, nil) }
@@ -320,15 +234,12 @@ describe SSA do
 
   describe SSA::Argument do
     before do
-      @val = SSA::Argument.new(@function, nil, 'foo')
+      @val = SSA::Argument.new(@function, Integer, 'foo')
     end
 
     it 'pretty prints' do
-      SSA::Argument.new(@function, nil, 'baz').pretty_print.
-          should == '<?> %baz'
-
-      SSA::Argument.new(@function, Integer, 'bar').pretty_print.
-          should == '^Integer %bar'
+      @val.pretty_print.
+          should == '^Integer %foo'
     end
 
     it 'converts to value' do
@@ -341,7 +252,7 @@ describe SSA do
     end
 
     it 'compares by identity' do
-      @val.should.not == SSA::Argument.new(@function, nil, 'foo')
+      @val.should.not == SSA::Argument.new(@function, Integer, 'foo')
     end
 
     it 'is not constant' do
@@ -478,7 +389,7 @@ describe SSA do
 
       zero_all = TestScope::NestedInsn.new(@basic_block)
       zero_all.pretty_print.should == 'nested'
-      zero_all.inspect_as_value.should == 'void'
+      zero_all.inspect_as_value.should == 'bottom'
     end
 
     describe SSA::GenericInstruction do
@@ -492,7 +403,7 @@ describe SSA do
       describe SSA::PhiInsn do
         it 'accepts operand hash' do
           -> {
-            phi = SSA::PhiInsn.new(@basic_block, nil,
+            phi = SSA::PhiInsn.new(@basic_block, Integer,
                 { @basic_block => SSA::Constant.new(Integer, 1) })
           }.should.not.raise
         end
@@ -501,21 +412,21 @@ describe SSA do
           val1, val2 = 2.times.map { SSA::Value.new }
           bb1,  bb2  = 2.times.map { SSA::BasicBlock.new(@function) }
 
-          phi = SSA::PhiInsn.new(@basic_block, nil,
+          phi = SSA::PhiInsn.new(@basic_block, Integer,
               { bb1 => val1, bb2 => val2 })
           phi.should.enumerate :each_operand, [val1, val2, bb1, bb2]
         end
 
         it 'pretty prints' do
-          phi = SSA::PhiInsn.new(@basic_block, nil,
+          phi = SSA::PhiInsn.new(@basic_block, Integer,
               { @basic_block => SSA::Constant.new(Integer, 1) })
           phi.pretty_print.should =~
-            /<?> %\d = phi %\d => \^Integer 1/
+            /\^Integer %\d = phi %\d => \^Integer 1/
         end
 
         it 'maintains use chains' do
           val = SSA::Value.new
-          phi = SSA::PhiInsn.new(@basic_block, nil,
+          phi = SSA::PhiInsn.new(@basic_block, Integer,
               { @basic_block => val })
           val.should.enumerate :each_use, [phi]
           @basic_block.should.enumerate :each_use, [phi]
@@ -524,7 +435,7 @@ describe SSA do
         it 'can replace uses of values' do
           val1, val2 = 2.times.map { SSA::Value.new }
 
-          phi = SSA::PhiInsn.new(@basic_block, nil,
+          phi = SSA::PhiInsn.new(@basic_block, Integer,
               { @basic_block => val1 })
           phi.replace_uses_of(val1, val2)
 
@@ -536,7 +447,7 @@ describe SSA do
           val = SSA::Value.new
           bb2 = SSA::BasicBlock.new(@function)
 
-          phi = SSA::PhiInsn.new(@basic_block, nil,
+          phi = SSA::PhiInsn.new(@basic_block, Integer,
               { @basic_block => val })
           phi.replace_uses_of(@basic_block, bb2)
 
@@ -548,7 +459,7 @@ describe SSA do
         it 'barfs on #replace_uses_of if the value is not used' do
           val1, val2 = 2.times.map { SSA::Value.new }
 
-          phi = SSA::PhiInsn.new(@basic_block, nil,
+          phi = SSA::PhiInsn.new(@basic_block, Integer,
               { @basic_block => val1 })
 
           -> { phi.replace_uses_of(val2, val1) }.should.raise ArgumentError
@@ -581,7 +492,14 @@ describe SSA do
 
       describe SSA::ReturnInsn do
         it 'exits the method' do
-          i = SSA::ReturnInsn.new(@basic_block, [SSA.void_value])
+          i = SSA::ReturnInsn.new(@basic_block)
+          i.exits?.should == true
+        end
+      end
+
+      describe SSA::ReturnValueInsn do
+        it 'exits the method' do
+          i = SSA::ReturnValueInsn.new(@basic_block, [SSA::Constant.new(Integer, 1)])
           i.exits?.should == true
         end
       end
@@ -594,7 +512,7 @@ describe SSA do
     end
 
     it 'has the type of BasicBlock' do
-      @basic_block.type.should == SSA::BasicBlock.to_type
+      @basic_block.type.should == SSA::BasicBlockType.new
     end
 
     it 'pretty prints' do
@@ -645,7 +563,7 @@ describe SSA do
       i1 = BindingInsn.new(@basic_block)
       @basic_block.append i1
 
-      i2 = GenericInsn.new(@basic_block)
+      i2 = GenericInsn.new(@basic_block, Integer)
       @basic_block.append i2
 
       @basic_block.each(BindingInsn).should.enumerate :each, [i1]
@@ -700,8 +618,7 @@ describe SSA do
               [ @ret_bb ])
         @body_bb.append @uncond_br
 
-        @ret = SSA::ReturnInsn.new(@ret_bb,
-              [ SSA.void_value ])
+        @ret = SSA::ReturnInsn.new(@ret_bb)
         @ret_bb.append @ret
       end
 
@@ -746,7 +663,7 @@ describe SSA do
     end
 
     it 'converts to type' do
-      SSA::Function.to_type.should == SSA::FunctionType.instance
+      SSA::Function.to_type.should == SSA::FunctionType.new
     end
 
     it 'generates numeric names in #make_name(nil)' do
@@ -801,7 +718,7 @@ describe SSA do
       bb2.append insn_unary(@basic_block, SSA::Constant.new(Integer, 1))
 
       @function.pretty_print.should == <<-END
-function void foo( ^Integer %count, ^Binding %outer ) {
+function bottom foo( ^Integer %count, ^Binding %outer ) {
 1:
    ^Array %2 = tuple_concat %count, %outer
 
@@ -836,7 +753,7 @@ foo:
       f1bb3 = SSA::BasicBlock.new(@function, 'bb3')
       @function.add f1bb3
 
-      f1phi = SSA::PhiInsn.new(f1bb3, nil,
+      f1phi = SSA::PhiInsn.new(f1bb3, Integer,
           { f1bb1 => f1i1, f1bb2 => f1i2 })
       f1bb3.append f1phi
 
@@ -924,10 +841,19 @@ foo:
     end
 
     it 'builds ReturnInsn' do
-      @b.return SSA.void_value
+      @b.return
       i, = @b.block.to_a
       i.should.be.instance_of SSA::ReturnInsn
-      i.operands.should == [SSA.void_value]
+      i.operands.should == []
+    end
+
+    it 'builds ReturnValueInsn' do
+      v1 = SSA::Constant.new(Integer, 1)
+
+      @b.return_value v1
+      i, = @b.block.to_a
+      i.should.be.instance_of SSA::ReturnValueInsn
+      i.operands.should == [v1]
     end
   end
 
@@ -1037,20 +963,6 @@ foo:
       i.pretty_print.should =~ /!syntax_typed/
     end
 
-    it 'allows to treat nil type as error' do
-      phi = SSA::PhiInsn.new(@basic_block, nil)
-
-      i   = SyntaxTypedInsn.new(@basic_block, [ @iconst ])
-      i.should.be.valid(true)
-      i.should.be.valid(false)
-      -> { i.verify!(false) }.should.not.raise
-
-      i.foo = phi
-      i.should.be.valid(true)
-      i.should.not.be.valid(false)
-      -> { i.verify!(false) }.should.raise TypeError, %r|<?>|
-    end
-
     it 'does not interfere with def-use tracking' do
       i = SyntaxUntypedInsn.new(@basic_block, [ @iconst, @fconst ])
       @fconst.should.enumerate :each_use, [ i ]
@@ -1087,7 +999,7 @@ foo:
       iconst2.name = 'dupped'
 
       @b.add_block do
-        @b.return iconst2
+        @b.return_value iconst2
       end
 
       @es.transform_start("footrans")
@@ -1119,7 +1031,7 @@ foo:
            :index=>0},
           {:event=>"rename_instruction", :name=>"2", :new_name=>"dupped"},
           {:event=>"add_basic_block", :name=>"3"},
-          {:event=>"type", :id=>3, :kind=>"void"},
+          {:event=>"type", :id=>3, :kind=>"monotype", :name=>"bottom"},
           {:event=>"update_instruction",
            :name=>"4",
            :opcode=>"branch",
@@ -1132,7 +1044,7 @@ foo:
            :index=>1},
           {:event=>"update_instruction",
            :name=>"5",
-           :opcode=>"return",
+           :opcode=>"return_value",
            :parameters=>"",
            :operands=>[{:kind=>"instruction", :name=>"dupped"}],
            :type=>3},

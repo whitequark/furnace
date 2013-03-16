@@ -9,7 +9,7 @@ module Furnace
     end
 
     def type
-      SSA.void
+      Type::Bottom.new
     end
 
     def constant?

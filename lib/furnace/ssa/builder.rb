@@ -87,8 +87,12 @@ module Furnace
                 end)
     end
 
-    def return(value)
-      append(:return, [ value ])
+    def return
+      append(:return)
+    end
+
+    def return_value(value)
+      append(:return_value, [ value ])
     end
 
     def method_missing(opcode, *args)

@@ -56,7 +56,7 @@ module Furnace
     end
 
     def type(what)
-      text with_ansi(:green) { Furnace::SSA.inspect_type(what) }
+      text with_ansi(:green) { what.to_s }
     end
 
     def keyword(what)

@@ -90,7 +90,7 @@ module Furnace
 
     def dump(object)
       case object
-      when SSA::Type
+      when Type::Top
         dump_type(object)
 
       when SSA::Argument
@@ -118,22 +118,18 @@ module Furnace
       id = @types.size
       @types[type] = id
 
-      if type == SSA.void
-        desc = {   kind:      "void" }
+      case type
+      #when SSA::GenericType # HACK
+      #  desc = { kind:      "parametric",
+      #           name:       type.inspect,
+      #           parameters: dump_all(type.parameters) }
+
+      when Type::Top
+        desc = { kind:      "monotype",
+                 name:      type.to_s }
+
       else
-        case type
-        when SSA::GenericType
-          desc = { kind:      "parametric",
-                   name:       type.inspect,
-                   parameters: dump_all(type.parameters) }
-
-        when SSA::Type
-          desc = { kind:      "monotype",
-                   name:      type.inspect }
-
-        else
-          raise "Cannot dump type #{type}:#{type.class}"
-        end
+        raise "Cannot dump type #{type}:#{type.class}"
       end
 
       @events << {

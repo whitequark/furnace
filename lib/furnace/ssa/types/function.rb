@@ -1,11 +1,7 @@
 module Furnace
-  class SSA::FunctionType < SSA::Type
-    def self.instance
-      @instance ||= new
-    end
-
-    def inspect
-      "function"
+  class SSA::FunctionType < Type::Top
+    def to_s
+      'function'
     end
   end
 end

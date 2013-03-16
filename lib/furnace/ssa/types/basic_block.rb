@@ -1,11 +1,7 @@
 module Furnace
-  class SSA::BasicBlockType < SSA::Type
-    def self.instance
-      @instance ||= new
-    end
-
-    def inspect
-      "label"
+  class SSA::BasicBlockType < Type::Top
+    def to_s
+      'label'
     end
   end
 end
