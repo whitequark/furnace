@@ -1,11 +1,11 @@
 module Furnace
-  class SSA::ReturnValueInsn < SSA::TerminatorInstruction
+  class SSA::ReturnValueInsn < SSA::ReturnInsn
     syntax do |s|
       s.operand :value
     end
 
-    def exits?
-      true
+    def value_type
+      value.type
     end
   end
 end

@@ -3,6 +3,10 @@ module Furnace
     syntax do
     end
 
+    def value_type
+      Type::Bottom.new
+    end
+
     def exits?
       true
     end
