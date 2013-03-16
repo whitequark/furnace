@@ -11,6 +11,7 @@ module Furnace
         @instances = Hash.new do |hash, params|
           inst = allocate
           inst.send :initialize, *params
+          inst.freeze
 
           hash[params] = inst
         end

@@ -1,5 +1,9 @@
 module Furnace
   class Type::Variable
+    def initialize
+      freeze
+    end
+
     def to_type
       self
     end
