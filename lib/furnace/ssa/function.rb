@@ -133,11 +133,11 @@ module Furnace
       instrument { |i| i.remove block }
     end
 
-    def each_instruction(type=nil, &proc)
-      return to_enum(:each_instruction, type) if proc.nil?
+    def each_instruction(*types, &proc)
+      return to_enum(:each_instruction, *types) if proc.nil?
 
       each do |block|
-        block.each(type, &proc)
+        block.each(types, &proc)
       end
     end
 
