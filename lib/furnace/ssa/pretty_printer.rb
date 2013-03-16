@@ -8,11 +8,12 @@ module Furnace
       attr_accessor :colorize
     end
 
-    def initialize(colorize=self.class.colorize)
+    def initialize(colorize=self.class.colorize,
+                    annotator=Type::Variable::Annotator.new)
       @colorize   = colorize
+      @annotator  = annotator
       @buffer     = ""
       @need_space = false
-      @annotator  = Type::Variable::Annotator.new
 
       yield self if block_given?
     end

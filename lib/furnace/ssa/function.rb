@@ -16,10 +16,10 @@ module Furnace
       self.arguments   = arguments
       self.return_type = return_type
 
-      @basic_blocks  = Set.new
+      @basic_blocks    = Set.new
 
-      @name_prefixes = [""].to_set
-      @next_name     = 0
+      @name_prefixes   = [""].to_set
+      @next_name       = 0
     end
 
     def initialize_copy(original)
@@ -123,6 +123,7 @@ module Furnace
 
     def add(block)
       @basic_blocks.add block
+
       instrument { |i| i.add block }
     end
 
@@ -130,6 +131,7 @@ module Furnace
 
     def remove(block)
       @basic_blocks.delete block
+
       instrument { |i| i.remove block }
     end
 
@@ -182,6 +184,8 @@ module Furnace
 
     def instrument
       yield @instrumentation if @instrumentation
+
+      nil
     end
 
     protected
