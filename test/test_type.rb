@@ -20,6 +20,13 @@ describe Type do
       @type.should.be.subtype_of @type
       @type.hash.should == @type.hash
     end
+
+    it 'can replace itself' do
+      @type.replace_type_with(@type, Type::Bottom.new).
+          should == Type::Bottom.new
+      @type.replace_type_with(Type::Bottom.new, nil).
+          should == @type
+    end
   end
 
   describe Type::Bottom do
@@ -63,6 +70,13 @@ describe Type do
     it 'compares by identity' do
       @var.should == @var
       @var.should.not == Type::Variable.new
+    end
+
+    it 'can replace itself' do
+      @var.replace_type_with(@var, Type::Bottom.new).
+          should == Type::Bottom.new
+      @var.replace_type_with(Type::Bottom.new, nil).
+          should == @var
     end
   end
 
