@@ -1,8 +1,12 @@
 module Furnace
   class Type::Top
     class << self
+      def normalize(params)
+        params
+      end
+
       def new(*params)
-        @instances[params]
+        @instances[normalize(params)]
       end
 
       protected
