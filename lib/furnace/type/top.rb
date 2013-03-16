@@ -6,7 +6,7 @@ module Furnace
       end
 
       def new(*params)
-        @instances[normalize(params)]
+        @instances[normalize(*params)]
       end
 
       protected
