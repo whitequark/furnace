@@ -15,10 +15,6 @@ module Furnace
       self.type = self.type.replace_type_with(type, replacement)
     end
 
-    def has_side_effects?
-      true
-    end
-
     def pretty_print(p=SSA::PrettyPrinter.new)
       @type.pretty_print(p)
       p.name name
