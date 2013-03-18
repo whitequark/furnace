@@ -1,11 +1,11 @@
 module Furnace
   class SSA::TerminatorInstruction < SSA::Instruction
-    def has_side_effects?
+    def terminator?
       true
     end
 
-    def terminator?
-      true
+    def has_side_effects?
+      exits?
     end
 
     def exits?

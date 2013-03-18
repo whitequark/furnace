@@ -47,7 +47,7 @@ module Furnace
     end
 
     def insert(before, instruction)
-      unless idx = index(before)
+      unless (idx = index(before))
         raise ArgumentError, "Instruction #{before} is not found"
       end
 

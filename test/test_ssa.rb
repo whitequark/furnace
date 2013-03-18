@@ -469,8 +469,10 @@ describe SSA do
         i.should.be.terminator
       end
 
-      it 'has side effects' do
+      it 'has side effects if exits?' do
         i = SSA::TerminatorInstruction.new(@basic_block, [])
+
+        def i.exits?; true; end
         i.has_side_effects?.should == true
       end
 
