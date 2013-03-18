@@ -130,9 +130,10 @@ module Furnace
     alias << add
 
     def remove(block)
-      @basic_blocks.delete block
-
       instrument { |i| i.remove block }
+
+      @basic_blocks.delete block
+      block.function = nil
     end
 
     def each_instruction(*types, &proc)

@@ -18,6 +18,14 @@ module Furnace
             basic_block: object.basic_block.name,
             index:       object.basic_block.index(object))
 
+      when SSA::BasicBlock
+        emit("add_basic_block",
+            name: object.name)
+
+        object.each do |insn|
+          add insn
+        end
+
       else
         emit("add_#{object_kind(object)}",
             name: object.name)
