@@ -53,6 +53,14 @@ module Furnace
       end
     end
 
+    def specialize(other)
+      if self == other
+        {}
+      else
+        raise ArgumentError, "cannot specialize #{self.to_s} with #{other.to_s}"
+      end
+    end
+
     def to_s
       'top'
     end
