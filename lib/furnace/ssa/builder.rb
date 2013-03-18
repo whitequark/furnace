@@ -68,7 +68,7 @@ module Furnace
       @block    = old_block
     end
 
-    def control_flow_op(instruction, type=nil, uses)
+    def control_flow_op(instruction, type=Type::Variable.new, uses)
       cond_block = @block
       post_block = add_block
 
