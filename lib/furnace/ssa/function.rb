@@ -23,7 +23,8 @@ module Furnace
     end
 
     def initialize_copy(original)
-      @name = @original_name
+      @name_prefixes = [""].to_set
+      @name          = @original_name
 
       if @instrumentation
         @instrumentation = SSA::EventStream.new
