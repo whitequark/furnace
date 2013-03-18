@@ -74,6 +74,21 @@ module Furnace
       instrument { |i| i.remove instruction }
     end
 
+    def splice(after)
+      unless (idx = index(after))
+        raise ArgumentError, "Instruction #{after} is not found"
+      end
+
+      result = []
+
+      @instructions[idx + 1..-1].each do |insn|
+        result << insn
+        remove insn
+      end
+
+      result
+    end
+
     def terminator
       @instructions.last
     end
