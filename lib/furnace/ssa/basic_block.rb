@@ -52,7 +52,8 @@ module Furnace
       end
 
       @instructions.insert idx, instruction
-      @function.instrument { |i| i.add instruction }
+
+      instrument { |i| i.add instruction }
     end
 
     def replace(instruction, replace_with)
@@ -62,7 +63,8 @@ module Furnace
 
     def remove(instruction)
       @instructions.delete instruction
-      @function.instrument { |i| i.remove instruction }
+
+      instrument { |i| i.remove instruction }
     end
 
     def terminator
@@ -119,6 +121,12 @@ module Furnace
     def inspect_as_value(p=SSA::PrettyPrinter.new)
       p.keyword 'label'
       p.name    name
+    end
+
+    protected
+
+    def instrument(&block)
+      @function.instrument(&block) if @function
     end
   end
 end
