@@ -35,9 +35,16 @@ module Furnace
 
     alias each_instruction each
 
+    def prepend(instruction)
+      @instructions.unshift instruction
+
+      instrument { |i| i.add instruction }
+    end
+
     def append(instruction)
       @instructions.push instruction
-      @function.instrument { |i| i.add instruction }
+
+      instrument { |i| i.add instruction }
     end
 
     alias << append
