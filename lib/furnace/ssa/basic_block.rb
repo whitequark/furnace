@@ -26,7 +26,6 @@ module Furnace
         return to_enum(:each, *types) if proc.nil?
 
         @instructions.each do |insn|
-          p types.first.class, insn.class
           if types.include?(insn.class)
             yield insn
           end
