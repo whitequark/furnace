@@ -30,12 +30,10 @@ module Furnace
     protected
 
     def awesome_print_operands(p)
-      @operands.each_with_index do |(basic_block, value), index|
-        p.name basic_block.name
-        p.text '=>'
+      p.collection('', ', ', '', @operands) do |basic_block, value|
+        p.name(basic_block.name).
+          text('=>')
         value.awesome_print_as_value p
-
-        p.append ',' if index < @operands.count - 1
       end
     end
 
