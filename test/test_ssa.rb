@@ -36,6 +36,9 @@ describe SSA do
     end
   end
 
+  class IsBInsn < SSA::Instruction
+  end
+
   module TestScope
     include SSA
 
@@ -75,12 +78,14 @@ describe SSA do
     SSA.class_name_to_opcode(DupInsn).should == 'dup'
     SSA.class_name_to_opcode(TupleConcatInsn).should == 'tuple_concat'
     SSA.class_name_to_opcode(TestScope::NestedInsn).should == 'nested'
+    SSA.class_name_to_opcode(IsBInsn).should == 'is_b'
   end
 
   it 'converts opcodes to class names' do
     SSA.opcode_to_class_name('foo').should == 'FooInsn'
     SSA.opcode_to_class_name('foo_bar').should == 'FooBarInsn'
     SSA.opcode_to_class_name(:foo_bar).should == 'FooBarInsn'
+    SSA.opcode_to_class_name(:is_b).should == 'IsBInsn'
   end
 
   describe SSA::Value do

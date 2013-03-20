@@ -1,13 +1,9 @@
 module Furnace
   module SSA
     def self.class_name_to_opcode(klass)
-      klass.to_s.split('::').last.gsub(/([a-z]|^)([A-Z])/) do
-        if $1.empty?
-          $2.downcase
-        else
-          "#{$1}_#{$2.downcase}"
-        end
-      end.gsub(/_insn$/, '')
+      klass.to_s.split('::').last.
+        gsub(/([A-Z])/) { '_' + $1.downcase }.
+        gsub(/^_(.+)_insn$/, '\1')
     end
 
     def self.opcode_to_class_name(opcode)
