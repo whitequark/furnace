@@ -27,8 +27,8 @@ describe SSA do
   class CondBranchInsn < SSA::TerminatorInstruction
     syntax do |s|
       s.operand :condition
-      s.operand :if_true,  SSA::BasicBlock
-      s.operand :if_false, SSA::BasicBlock
+      s.operand :if_true
+      s.operand :if_false
     end
 
     def exits?
@@ -54,21 +54,21 @@ describe SSA do
 
   before do
     @function    = SSA::Function.new('foo')
-    @basic_block = SSA::BasicBlock.new(@function)
+    @basic_block = SSA::BasicBlock.new
     @function.add @basic_block
     @function.entry = @basic_block
   end
 
-  def insn_noary(basic_block)
-    BindingInsn.new(basic_block)
+  def insn_noary
+    BindingInsn.new
   end
 
-  def insn_unary(basic_block, what)
-    DupInsn.new(basic_block, [what])
+  def insn_unary(what)
+    DupInsn.new([what])
   end
 
-  def insn_binary(basic_block, left, right)
-    TupleConcatInsn.new(basic_block, [left, right])
+  def insn_binary(left, right)
+    TupleConcatInsn.new([left, right])
   end
 
   it 'converts class names to opcodes' do
@@ -128,7 +128,7 @@ describe SSA do
     it 'can have all of its uses replaced' do
       val1, val2 = 2.times.map { SSA::Value.new }
 
-      user = SSA::User.new(@function, [val1])
+      user = SSA::User.new([val1])
 
       val1.replace_all_uses_with(val2)
 
@@ -165,28 +165,30 @@ describe SSA do
 
   describe SSA::NamedValue do
     it 'receives unique names' do
-      values = 5.times.map { SSA::NamedValue.new(@function, nil) }
-      values.map(&:name).uniq.count.should == values.size
+      values = 5.times.map do
+        v = SSA::NamedValue.new(nil)
+        v.function = @function
+        v
+      end
+
+      values.map(&:name).uniq.size.should == 5
     end
 
     it 'receives unique names even if explicitly specified name conflicts' do
-      i1 = SSA::NamedValue.new(@function, "foo")
-      i2 = SSA::NamedValue.new(@function, "foo")
-      i2.name.should.not == i1.name
+      i1 = SSA::NamedValue.new("foo")
+      i1.function = @function
 
-      i2.name = 'foo'
+      i2 = SSA::NamedValue.new("foo")
+      i2.name.should == i1.name
+
+      i2.function = @function
       i2.name.should.not == i1.name
     end
   end
 
   describe SSA::Argument do
     before do
-      @val = SSA::Argument.new(@function, Integer, 'foo')
-    end
-
-    it 'pretty prints' do
-      @val.awesome_print.
-          should == '^Integer %foo'
+      @val = SSA::Argument.new(Integer, 'foo')
     end
 
     it 'converts to value' do
@@ -199,11 +201,24 @@ describe SSA do
     end
 
     it 'compares by identity' do
-      @val.should.not == SSA::Argument.new(@function, Integer, 'foo')
+      @val.should.not == SSA::Argument.new(Integer, 'foo')
     end
 
     it 'is not constant' do
       @val.should.not.be.constant
+    end
+
+    it 'replaces its type' do
+      ty = Type::Variable.new
+
+      val = SSA::Argument.new(ty, 'foo')
+      val.replace_type_with(ty, Integer.to_type)
+      val.type.should == Integer.to_type
+    end
+
+    it 'pretty prints' do
+      @val.awesome_print.
+          should == '^Integer %foo'
     end
   end
 
@@ -211,14 +226,14 @@ describe SSA do
     it 'enumerates operands' do
       val1, val2 = 2.times.map { SSA::Value.new }
 
-      user = SSA::User.new(@function, [val1, val2])
+      user = SSA::User.new([val1, val2])
       user.should.enumerate :each_operand, [val1, val2]
     end
 
     it 'populates use lists' do
       val  = SSA::Value.new
 
-      user = SSA::User.new(@function)
+      user = SSA::User.new
       val.should.enumerate :each_use, []
 
       user.operands = [val]
@@ -228,7 +243,7 @@ describe SSA do
     it 'updates use lists' do
       val1, val2 = 2.times.map { SSA::Value.new }
 
-      user = SSA::User.new(@function)
+      user = SSA::User.new
       val1.should.enumerate :each_use, []
       val2.should.enumerate :each_use, []
 
@@ -243,17 +258,17 @@ describe SSA do
 
     it 'detaches from values' do
       val  = SSA::Value.new
-      user = SSA::User.new(@function, [val])
+      user = SSA::User.new([val])
 
       val.should.enumerate :each_use, [user]
-      user.detach
+      user.drop_references
       val.should.enumerate :each_use, []
     end
 
     it 'can replace uses of values' do
       val1, val2 = 2.times.map { SSA::Value.new }
 
-      user = SSA::User.new(@function, [val1])
+      user = SSA::User.new([val1])
       user.replace_uses_of(val1, val2)
 
       val1.should.enumerate :each_use, []
@@ -263,7 +278,7 @@ describe SSA do
     it 'barfs on #replace_uses_of if the value is not used' do
       val1, val2 = 2.times.map { SSA::Value.new }
 
-      user = SSA::User.new(@function, [val1])
+      user = SSA::User.new([val1])
 
       -> { user.replace_uses_of(val2, val1) }.should.raise ArgumentError
     end
@@ -271,33 +286,35 @@ describe SSA do
 
   describe SSA::Instruction do
     it 'is not terminator' do
-      i = insn_noary(@basic_block)
+      i = insn_noary
       i.should.not.be.terminator
     end
 
     it 'does not have side effects' do
-      i = insn_noary(@basic_block)
+      i = insn_noary
       i.has_side_effects?.should == false
     end
 
     it 'removes itself from basic block' do
-      i = insn_noary(@basic_block)
+      i = insn_noary
       @basic_block.append i
 
       i.remove
       @basic_block.to_a.should.be.empty
+      i.awesome_print.should =~ /\^Binding %\d+ = binding/
 
+      i.erase
       i.awesome_print.should =~ /\^Binding %\d+ = binding <DETACHED>/
     end
 
     it 'replaces uses of itself with instructions' do
-      i1 = insn_noary(@basic_block)
+      i1 = insn_noary
       @basic_block.append i1
 
-      i2 = insn_unary(@basic_block, i1)
+      i2 = insn_unary(i1)
       @basic_block.append i2
 
-      i1a = insn_noary(@basic_block)
+      i1a = insn_noary
       i1.replace_with i1a
 
       @basic_block.to_a.should == [i1a, i2]
@@ -305,10 +322,10 @@ describe SSA do
     end
 
     it 'replaces uses of itself with constants' do
-      i1 = insn_noary(@basic_block)
+      i1 = insn_noary
       @basic_block.append i1
 
-      i2 = insn_unary(@basic_block, i1)
+      i2 = insn_unary(i1)
       @basic_block.append i2
 
       c1 = SSA::Constant.new(Integer, 1)
@@ -319,60 +336,74 @@ describe SSA do
     end
 
     it 'pretty prints' do
-      dup = DupInsn.new(@basic_block, [SSA::Constant.new(Integer, 1)])
-      dup.awesome_print.should == '^Integer %2 = dup ^Integer 1'
-      dup.inspect_as_value.should == '%2'
+      dup = DupInsn.new([SSA::Constant.new(Integer, 1)])
+      dup.basic_block = @basic_block
+      dup.awesome_print.should =~ /\^Integer %\d+ = dup \^Integer 1/
+      dup.inspect_as_value.should =~ /^%\d+/
 
-      concat = TupleConcatInsn.new(@basic_block,
+      concat = TupleConcatInsn.new(
           [SSA::Constant.new(Array, [1]), SSA::Constant.new(Array, [2,3])])
-      concat.awesome_print.should == '^Array %3 = tuple_concat ^Array [1], ^Array [2, 3]'
-      concat.inspect_as_value.should == '%3'
+      concat.basic_block = @basic_block
+      concat.awesome_print.should =~ /\^Array %\d+ = tuple_concat \^Array \[1\], \^Array \[2, 3\]/
+      concat.inspect_as_value.should =~ /^%\d+/
 
-      zero_arity = BindingInsn.new(@basic_block)
-      zero_arity.awesome_print.should == '^Binding %4 = binding'
-      zero_arity.inspect_as_value.should == '%4'
+      zero_arity = BindingInsn.new
+      zero_arity.basic_block = @basic_block
+      zero_arity.awesome_print.should =~ /\^Binding %\d+ = binding/
+      zero_arity.inspect_as_value.should =~ /^%\d+/
 
-      zero_all = TestScope::NestedInsn.new(@basic_block)
+      zero_all = TestScope::NestedInsn.new
+      zero_all.basic_block = @basic_block
       zero_all.awesome_print.should == 'nested'
       zero_all.inspect_as_value.should == 'bottom'
     end
 
     describe SSA::GenericInstruction do
       it 'has settable type' do
-        i = GenericInsn.new(@basic_block, Integer, [])
+        i = GenericInsn.new(Integer, [])
+        i.basic_block = @basic_block
         i.awesome_print.should =~ /\^Integer %\d+ = generic/
         i.type = Binding
         i.awesome_print.should =~ /\^Binding %\d+ = generic/
       end
 
+      it 'replaces its type' do
+        ty = Type::Variable.new
+
+        i = GenericInsn.new(ty, [])
+        i.replace_type_with(ty, Integer.to_type)
+        i.type.should == Integer.to_type
+      end
+
       describe SSA::PhiInsn do
         it 'accepts operand hash' do
           -> {
-            phi = SSA::PhiInsn.new(@basic_block, Integer,
+            phi = SSA::PhiInsn.new(Integer,
                 { @basic_block => SSA::Constant.new(Integer, 1) })
           }.should.not.raise
         end
 
         it 'enumerates operands' do
           val1, val2 = 2.times.map { SSA::Value.new }
-          bb1,  bb2  = 2.times.map { SSA::BasicBlock.new(@function) }
+          bb1,  bb2  = 2.times.map { SSA::BasicBlock.new }
 
-          phi = SSA::PhiInsn.new(@basic_block, Integer,
+          phi = SSA::PhiInsn.new(Integer,
               { bb1 => val1, bb2 => val2 })
           phi.should.enumerate :each_operand, [val1, val2, bb1, bb2]
         end
 
         it 'pretty prints' do
-          phi = SSA::PhiInsn.new(@basic_block, Integer,
+          phi = SSA::PhiInsn.new(Integer,
               { @basic_block => SSA::Constant.new(Integer, 1) })
+          phi.basic_block = @basic_block
           phi.awesome_print.should =~
             /\^Integer %\d = phi %\d => \^Integer 1/
         end
 
         it 'maintains use chains' do
           val = SSA::Value.new
-          phi = SSA::PhiInsn.new(@basic_block, Integer,
-              { @basic_block => val })
+          phi = SSA::PhiInsn.new(Integer,
+                    { @basic_block => val })
           val.should.enumerate :each_use, [phi]
           @basic_block.should.enumerate :each_use, [phi]
         end
@@ -380,8 +411,8 @@ describe SSA do
         it 'can replace uses of values' do
           val1, val2 = 2.times.map { SSA::Value.new }
 
-          phi = SSA::PhiInsn.new(@basic_block, Integer,
-              { @basic_block => val1 })
+          phi = SSA::PhiInsn.new(Integer,
+                    { @basic_block => val1 })
           phi.replace_uses_of(val1, val2)
 
           val1.should.enumerate :each_use, []
@@ -390,9 +421,9 @@ describe SSA do
 
         it 'can replace uses of basic blocks' do
           val = SSA::Value.new
-          bb2 = SSA::BasicBlock.new(@function)
+          bb2 = SSA::BasicBlock.new
 
-          phi = SSA::PhiInsn.new(@basic_block, Integer,
+          phi = SSA::PhiInsn.new(Integer,
               { @basic_block => val })
           phi.replace_uses_of(@basic_block, bb2)
 
@@ -404,7 +435,7 @@ describe SSA do
         it 'barfs on #replace_uses_of if the value is not used' do
           val1, val2 = 2.times.map { SSA::Value.new }
 
-          phi = SSA::PhiInsn.new(@basic_block, Integer,
+          phi = SSA::PhiInsn.new(Integer,
               { @basic_block => val1 })
 
           -> { phi.replace_uses_of(val2, val1) }.should.raise ArgumentError
@@ -414,32 +445,32 @@ describe SSA do
 
     describe SSA::TerminatorInstruction do
       it 'is a terminator' do
-        i = SSA::TerminatorInstruction.new(@basic_block, [])
+        i = SSA::TerminatorInstruction.new([])
         i.should.be.terminator
       end
 
       it 'has side effects if exits?' do
-        i = SSA::TerminatorInstruction.new(@basic_block, [])
+        i = SSA::TerminatorInstruction.new([])
 
         def i.exits?; true; end
         i.has_side_effects?.should == true
       end
 
       it 'requires to implement #exits?' do
-        i = SSA::TerminatorInstruction.new(@basic_block, [])
+        i = SSA::TerminatorInstruction.new([])
         -> { i.exits? }.should.raise NotImplementedError
       end
 
       describe SSA::BranchInsn do
         it 'does not exit the method' do
-          i = SSA::BranchInsn.new(@basic_block, [@basic_block])
+          i = SSA::BranchInsn.new([@basic_block])
           i.exits?.should == false
         end
       end
 
       describe SSA::ReturnInsn do
         before do
-          @i = SSA::ReturnInsn.new(@basic_block)
+          @i = SSA::ReturnInsn.new
         end
 
         it 'exits the method' do
@@ -453,7 +484,7 @@ describe SSA do
 
       describe SSA::ReturnValueInsn do
         before do
-          @i = SSA::ReturnValueInsn.new(@basic_block, [SSA::Constant.new(Integer, 1)])
+          @i = SSA::ReturnValueInsn.new([SSA::Constant.new(Integer, 1)])
         end
 
         it 'exits the method' do
@@ -477,8 +508,8 @@ describe SSA do
     end
 
     it 'pretty prints' do
-      @basic_block.append insn_noary(@basic_block)
-      @basic_block.append insn_noary(@basic_block)
+      @basic_block.append insn_noary
+      @basic_block.append insn_noary
       @basic_block.awesome_print.should ==
           "1:\n   ^Binding %2 = binding\n   ^Binding %3 = binding\n\n"
     end
@@ -492,14 +523,21 @@ describe SSA do
     end
 
     it 'can append instructions' do
-      i1, i2 = 2.times.map { insn_noary(@basic_block) }
+      i1, i2 = 2.times.map { insn_noary }
       @basic_block.append i1
       @basic_block.append i2
       @basic_block.to_a.should == [i1, i2]
     end
 
+    it 'can prepend instructions' do
+      i1, i2 = 2.times.map { insn_noary }
+      @basic_block.prepend i1
+      @basic_block.prepend i2
+      @basic_block.to_a.should == [i2, i1]
+    end
+
     it 'can insert instructions' do
-      i1, i2, i3 = 3.times.map { insn_noary(@basic_block) }
+      i1, i2, i3 = 3.times.map { insn_noary }
       @basic_block.append i1
       -> { @basic_block.insert i3, i2 }.should.raise ArgumentError, %r|is not found|
       @basic_block.append i3
@@ -507,38 +545,49 @@ describe SSA do
       @basic_block.to_a.should == [i1, i2, i3]
     end
 
+    it 'can splice instructions' do
+      i1, i2, i3 = 3.times.map { insn_noary }
+      @basic_block.append i1
+      @basic_block.append i2
+      @basic_block.append i3
+      @basic_block.splice(i2).should == [i3]
+      @basic_block.to_a.should == [i1, i2]
+
+      -> { @basic_block.splice(i3) }.should.raise(ArgumentError, %r|is not found|)
+    end
+
     it 'is not affected by changes to #to_a value' do
-      i1 = insn_noary(@basic_block)
+      i1 = insn_noary
       @basic_block.append i1
       @basic_block.to_a.clear
       @basic_block.to_a.size.should == 1
     end
 
     it 'enumerates instructions' do
-      i1 = insn_noary(@basic_block)
+      i1 = insn_noary
       @basic_block.append i1
       @basic_block.should.enumerate :each, [i1]
     end
 
     it 'enumerates instructions by type' do
-      i1 = BindingInsn.new(@basic_block)
+      i1 = BindingInsn.new
       @basic_block.append i1
 
-      i2 = GenericInsn.new(@basic_block, Integer)
+      i2 = GenericInsn.new(Integer)
       @basic_block.append i2
 
       @basic_block.each(BindingInsn).should.enumerate :each, [i1]
     end
 
     it 'can check for presence of instructions' do
-      i1, i2 = 2.times.map { insn_noary(@basic_block) }
+      i1, i2 = 2.times.map { insn_noary }
       @basic_block.append i1
       @basic_block.should.include i1
       @basic_block.should.not.include i2
     end
 
     it 'can remove instructions' do
-      i1, i2 = 2.times.map { insn_noary(@basic_block) }
+      i1, i2 = 2.times.map { insn_noary }
       @basic_block.append i1
       @basic_block.append i2
       @basic_block.remove i1
@@ -546,7 +595,7 @@ describe SSA do
     end
 
     it 'can replace instructions' do
-      i1, i2, i3, i4 = 4.times.map { insn_noary(@basic_block) }
+      i1, i2, i3, i4 = 4.times.map { insn_noary }
       @basic_block.append i1
       @basic_block.append i2
       @basic_block.append i3
@@ -559,27 +608,26 @@ describe SSA do
         @branch_bb = @basic_block
         @branch_bb.name = 'branch'
 
-        @body_bb = SSA::BasicBlock.new(@function, 'body')
+        @body_bb = SSA::BasicBlock.new([], 'body')
         @function.add @body_bb
 
-        @ret_bb  = SSA::BasicBlock.new(@function, 'ret')
+        @ret_bb  = SSA::BasicBlock.new([], 'ret')
         @function.add @ret_bb
 
-        @cond = DupInsn.new(@branch_bb,
-              [ SSA::Constant.new(TrueClass, true) ])
+        @cond = DupInsn.new([ SSA::Constant.new(TrueClass, true) ])
         @branch_bb.append @cond
 
-        @cond_br = CondBranchInsn.new(@branch_bb,
+        @cond_br = CondBranchInsn.new(
               [ @cond,
                 @body_bb,
                 @ret_bb ])
         @branch_bb.append @cond_br
 
-        @uncond_br = SSA::BranchInsn.new(@body_bb,
+        @uncond_br = SSA::BranchInsn.new(
               [ @ret_bb ])
         @body_bb.append @uncond_br
 
-        @ret = SSA::ReturnInsn.new(@ret_bb)
+        @ret = SSA::ReturnInsn.new
         @ret_bb.append @ret
       end
 
@@ -647,36 +695,44 @@ describe SSA do
       @function.should.not.include 'foobar'
     end
 
+    it 'reports #size' do
+      @function.size.should == 1
+    end
+
     it 'removes blocks' do
       @function.remove @basic_block
       @function.should.not.include '1'
     end
 
     it 'iterates each instruction in each block' do
-      bb2 = SSA::BasicBlock.new(@function)
+      bb2 = SSA::BasicBlock.new
       @function.add bb2
 
-      i1 = insn_noary(@basic_block)
+      i1 = insn_noary
       @basic_block.append i1
 
-      i2 = insn_unary(@basic_block, i1)
+      i2 = insn_unary(i1)
       bb2.append i2
 
       @function.should.enumerate :each_instruction, [i1, i2]
     end
 
+    it 'sanitizes arguments' do
+      -> { @function.arguments = [1] }.should.raise(ArgumentError)
+    end
+
     it 'pretty prints' do
       @function.name = 'foo'
       @function.arguments = [
-          SSA::Argument.new(@function, Integer, 'count'),
-          SSA::Argument.new(@function, Binding, 'outer')
+          SSA::Argument.new(Integer, 'count'),
+          SSA::Argument.new(Binding, 'outer')
       ]
 
-      @basic_block.append insn_binary(@basic_block, *@function.arguments)
+      @basic_block.append insn_binary(*@function.arguments)
 
-      bb2 = SSA::BasicBlock.new(@function, 'foo')
+      bb2 = SSA::BasicBlock.new([], 'foo')
       @function.add bb2
-      bb2.append insn_unary(@basic_block, SSA::Constant.new(Integer, 1))
+      bb2.append insn_unary(SSA::Constant.new(Integer, 1))
 
       @function.awesome_print.should == <<-END
 function bottom foo (^Integer %count, ^Binding %outer) {
@@ -693,7 +749,7 @@ foo:
     it 'duplicates all its content' do
       @function.name = 'foo;1'
       @function.arguments = [
-          SSA::Argument.new(@function, Integer, 'count'),
+          SSA::Argument.new(Integer, 'count'),
       ]
 
       f1a1 = @function.arguments.first
@@ -701,20 +757,20 @@ foo:
       f1bb1 = @function.entry
       f1bb1.name = 'bb1'
 
-      f1bb2 = SSA::BasicBlock.new(@function, 'bb2')
+      f1bb2 = SSA::BasicBlock.new([], 'bb2')
       @function.add f1bb2
 
-      f1i1 = insn_unary(@basic_block, f1a1)
+      f1i1 = insn_unary(f1a1)
       @basic_block.append f1i1
 
       f1c1 = SSA::Constant.new(Array, [1])
-      f1i2 = insn_binary(@basic_block, f1i1, f1c1)
+      f1i2 = insn_binary(f1i1, f1c1)
       f1bb2.append f1i2
 
-      f1bb3 = SSA::BasicBlock.new(@function, 'bb3')
+      f1bb3 = SSA::BasicBlock.new([], 'bb3')
       @function.add f1bb3
 
-      f1phi = SSA::PhiInsn.new(f1bb3, Integer,
+      f1phi = SSA::PhiInsn.new(Integer,
           { f1bb1 => f1i1, f1bb2 => f1i2 })
       f1bb3.append f1phi
 
@@ -826,12 +882,6 @@ foo:
       end
     end
 
-    class SyntaxTypedInsn < SSA::Instruction
-      syntax do |s|
-        s.operand :foo, Integer
-      end
-    end
-
     class SyntaxSplatInsn < SSA::Instruction
       syntax do |s|
         s.operand :foo
@@ -842,45 +892,36 @@ foo:
     before do
       @iconst = SSA::Constant.new(Integer, 1)
       @fconst = SSA::Constant.new(Float, 1.0)
-      @iinsn  = DupInsn.new(@basic_block, [ @iconst ])
+      @iinsn  = DupInsn.new([ @iconst ])
     end
 
     it 'accepts operands and decomposes them' do
-      i = SyntaxUntypedInsn.new(@basic_block, [ @iconst, @fconst ])
+      i = SyntaxUntypedInsn.new([ @iconst, @fconst ])
       i.foo.should == @iconst
       i.bar.should == @fconst
     end
 
     it 'allows to change operands through accessors' do
-      i = SyntaxUntypedInsn.new(@basic_block, [ @iconst, @fconst ])
+      i = SyntaxUntypedInsn.new([ @iconst, @fconst ])
       i.foo = @iinsn
       i.operands.should == [@iinsn, @fconst]
     end
 
     it 'does not accept wrong amount of operands' do
-      -> { SyntaxUntypedInsn.new(@basic_block, [ @iconst ]) }.
+      -> { SyntaxUntypedInsn.new([ @iconst ]) }.
         should.raise ArgumentError
-      -> { SyntaxUntypedInsn.new(@basic_block, [ @iconst, @iconst, @iconst ]) }.
+      -> { SyntaxUntypedInsn.new([ @iconst, @iconst, @iconst ]) }.
         should.raise ArgumentError
-    end
-
-    it 'accepts only correct typed operands' do
-      -> { SyntaxTypedInsn.new(@basic_block, [ @fconst ]) }.
-        should.raise TypeError
-      -> { SyntaxTypedInsn.new(@basic_block, [ @iconst ]) }.
-        should.not.raise
-      -> { SyntaxTypedInsn.new(@basic_block, [ @iinsn ]) }.
-        should.not.raise
     end
 
     it 'accepts splat' do
-      i = SyntaxSplatInsn.new(@basic_block, [ @iconst, @fconst, @iinsn ])
+      i = SyntaxSplatInsn.new([ @iconst, @fconst, @iinsn ])
       i.foo.should == @iconst
       i.bars.should == [@fconst, @iinsn]
     end
 
     it 'does not accept wrong amount of operands with splat' do
-      -> { SyntaxSplatInsn.new(@basic_block, []) }.
+      -> { SyntaxSplatInsn.new([]) }.
           should.raise ArgumentError
     end
 
@@ -905,14 +946,14 @@ foo:
     end
 
     it 'allows to update splat' do
-      i = SyntaxSplatInsn.new(@basic_block, [ @iconst, @fconst, @iinsn ])
+      i = SyntaxSplatInsn.new([ @iconst, @fconst, @iinsn ])
       i.bars = [@iinsn, @fconst]
       i.bars.should == [@iinsn, @fconst]
       i.operands.should == [@iconst, @iinsn, @fconst]
     end
 
     it 'does not interfere with def-use tracking' do
-      i = SyntaxUntypedInsn.new(@basic_block, [ @iconst, @fconst ])
+      i = SyntaxUntypedInsn.new([ @iconst, @fconst ])
       @fconst.should.enumerate :each_use, [ i ]
 
       i.bar = @iinsn
@@ -921,7 +962,7 @@ foo:
     end
 
     it 'does not break on replace_uses_of' do
-      i = SyntaxUntypedInsn.new(@basic_block, [ @iconst, @fconst ])
+      i = SyntaxUntypedInsn.new([ @iconst, @fconst ])
       i.replace_uses_of @iconst, @fconst
       i.foo.should == @fconst
     end
@@ -954,10 +995,9 @@ foo:
       @fun.remove @b.block
 
       @mod.instrumentation.should ==
-      [{
-        :name=>"foo",
-        :events=>[
-          {:event=>"set_arguments", :arguments=>[]},
+      [{:name=>"foo",
+        :events=>
+         [{:event=>"set_arguments", :arguments=>[]},
           {:event=>"type", :id=>0, :kind=>"monotype", :name=>"^Float"},
           {:event=>"set_return_type", :return_type=>0},
           {:event=>"type", :id=>1, :kind=>"monotype", :name=>"^Integer"},
@@ -967,18 +1007,16 @@ foo:
             [{:kind=>"argument", :name=>"bar", :type=>1},
              {:kind=>"argument", :name=>"baz", :type=>2}]},
           {:event=>"add_basic_block", :name=>"1"},
+          {:event=>"add_instruction", :name=>"2", :basic_block=>"1", :index=>0},
           {:event=>"update_instruction",
            :name=>"2",
            :opcode=>"dup",
            :parameters=>"",
            :operands=>[{:kind=>"constant", :type=>1, :value=>"1"}],
            :type=>1},
-          {:event=>"add_instruction",
-           :name=>"2",
-           :basic_block=>"1",
-           :index=>0},
           {:event=>"rename_instruction", :name=>"2", :new_name=>"dupped"},
           {:event=>"add_basic_block", :name=>"3"},
+          {:event=>"add_instruction", :name=>"4", :basic_block=>"1", :index=>1},
           {:event=>"type", :id=>3, :kind=>"void"},
           {:event=>"update_instruction",
            :name=>"4",
@@ -986,27 +1024,17 @@ foo:
            :parameters=>"",
            :operands=>[{:kind=>"basic_block", :name=>"3"}],
            :type=>3},
-          {:event=>"add_instruction",
-           :name=>"4",
-           :basic_block=>"1",
-           :index=>1},
+          {:event=>"add_instruction", :name=>"5", :basic_block=>"3", :index=>0},
           {:event=>"update_instruction",
            :name=>"5",
            :opcode=>"return_value",
            :parameters=>"",
            :operands=>[{:kind=>"instruction", :name=>"dupped"}],
            :type=>3},
-          {:event=>"add_instruction",
-           :name=>"5",
-           :basic_block=>"3",
-           :index=>0},
-          {:event=>"transform_start",
-           :name=>"footrans"},
-          {:event=>"remove_basic_block",
-           :name=>"3"}
-        ],
-        :present=>true
-      }]
+          {:event=>"transform_start", :name=>"footrans"},
+          {:event=>"remove_basic_block", :name=>"3"}],
+          :present=>true
+        }]
     end
   end
 

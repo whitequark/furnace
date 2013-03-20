@@ -35,7 +35,6 @@ module Furnace
         value_map[value] = new_value
 
         if new_value.is_a? SSA::User
-          new_value.function = self
           new_value.operands = value.translate_operands(value_map)
         end
 
@@ -81,11 +80,17 @@ module Furnace
 
     def arguments=(arguments)
       @arguments = sanitize_arguments(arguments)
+
+      @arguments.each do |arg|
+        arg.function = self
+      end
+
       instrument { |i| i.set_arguments @arguments }
     end
 
     def return_type=(return_type)
-      @return_type = return_type.to_type if return_type
+      @return_type = return_type.to_type
+
       instrument { |i| i.set_return_type @return_type }
     end
 
@@ -127,6 +132,7 @@ module Furnace
     end
 
     def add(block)
+      block.function = self
       @basic_blocks.add block
 
       instrument { |i| i.add block }
@@ -138,7 +144,7 @@ module Furnace
       instrument { |i| i.remove block }
 
       @basic_blocks.delete block
-      block.function = nil
+      block.detach
     end
 
     def each_instruction(*types, &proc)
@@ -153,7 +159,6 @@ module Furnace
       @arguments.each do |arg|
         arg.replace_type_with(type, replacement)
       end
-      instrument { |i| i.set_arguments @arguments }
 
       each_instruction do |insn|
         insn.replace_type_with(type, replacement)
@@ -161,7 +166,7 @@ module Furnace
 
       self.return_type = return_type.replace_type_with(type, replacement)
 
-      nil
+      self
     end
 
     def predecessors_for(name)
@@ -210,7 +215,7 @@ module Furnace
         if !argument.is_a?(SSA::Argument)
           raise ArgumentError, "function #{@name} arguments: #{argument.inspect} (at #{index}) is not an Argument"
         end
-      end
+      end.dup.freeze
     end
   end
 end

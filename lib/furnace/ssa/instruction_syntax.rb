@@ -2,7 +2,7 @@ module Furnace
   class SSA::InstructionSyntax
     def initialize(klass)
       @klass    = klass
-      @operands = {}
+      @operands = []
       @splat    = nil
     end
 
@@ -12,11 +12,10 @@ module Furnace
       codegen
     end
 
-    def operand(name, type=Type::Top.new)
+    def operand(name)
       check_for_splat
 
-      type = type.to_type unless type.nil?
-      @operands[name.to_sym] = type
+      @operands << name.to_sym
     end
 
     def splat(name)
@@ -37,7 +36,7 @@ module Furnace
       operands, splat = @operands, @splat
 
       @klass.class_eval do
-        operands.each_with_index do |(operand, type), index|
+        operands.each_with_index do |operand, index|
           define_method(operand) do
             @operands[index]
           end
@@ -85,23 +84,7 @@ module Furnace
             @operands = values
           end
 
-          verify!
-
           values
-        end
-
-        define_method(:verify!) do
-          return if @operands.nil?
-
-          operands.each_with_index do |(operand, type), index|
-            value = send operand
-
-            if !value.type.subtype_of?(type)
-              raise TypeError, "Wrong type for operand ##{index + 1} `#{operand}' of #{self.class}: #{type} is expected, #{value.type} is present"
-            end
-          end
-
-          nil
         end
       end
     end

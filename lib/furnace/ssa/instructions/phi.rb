@@ -1,7 +1,7 @@
 module Furnace
   class SSA::PhiInsn < SSA::GenericInstruction
-    def initialize(basic_block, type, operands={}, name=nil)
-      super(basic_block, type, operands, name)
+    def initialize(type, operands={}, name=nil)
+      super(type, operands, name)
     end
 
     def each_operand(&block)

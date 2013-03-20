@@ -2,16 +2,16 @@ module Furnace
   class SSA::GenericInstruction < SSA::Instruction
     attr_reader :type
 
-    def initialize(basic_block, type=nil, uses=[], name=basic_block.function.make_name)
-      @type = type.to_type
+    def initialize(type, operands=[], name=nil)
+      super(operands, name)
 
-      super(basic_block, uses, name)
+      self.type = type
     end
 
     def type=(type)
-      @type = type.to_type
+      @type     = type.to_type
 
-      instrument_update
+      instrument { |i| i.update_instruction(self) }
     end
 
     def replace_type_with(type, replacement)

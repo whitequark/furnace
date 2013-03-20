@@ -1,17 +1,35 @@
 module Furnace
   class SSA::NamedValue < SSA::Value
-    attr_accessor :function
-    attr_reader   :name
+    attr_reader :function
+    attr_reader :name
 
-    def initialize(function, name)
+    def initialize(name=nil)
       super()
 
-      @function = function
-      self.name = name
+      @function = nil
+      @name     = name
     end
 
     def name=(name)
-      @name = @function.make_name(name)
+      if @function
+        @name = @function.make_name(name)
+      else
+        @name = name
+      end
+    end
+
+    def function=(function)
+      if @function != function
+        @function = function
+
+        self.name = @name
+      end
+
+      function
+    end
+
+    def detach
+      @function = nil
     end
 
     def inspect_as_value(p=AwesomePrinter.new)

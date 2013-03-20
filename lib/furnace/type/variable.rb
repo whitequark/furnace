@@ -34,7 +34,7 @@ module Furnace
     end
 
     def awesome_print(p=AwesomePrinter.new)
-      p.type_var self
+      p.type_variable self
     end
   end
 

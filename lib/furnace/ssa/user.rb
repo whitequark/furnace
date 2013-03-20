@@ -2,8 +2,8 @@ module Furnace
   class SSA::User < SSA::NamedValue
     attr_reader :operands
 
-    def initialize(function, operands=[], name=nil)
-      super(function, name)
+    def initialize(operands=[], name=nil)
+      super(name)
 
       self.operands = operands
     end
@@ -18,7 +18,7 @@ module Furnace
       end
     end
 
-    def detach
+    def drop_references
       update_use_lists do
         @operands = nil
       end

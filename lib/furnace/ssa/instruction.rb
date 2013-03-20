@@ -8,11 +8,10 @@ module Furnace
       SSA::InstructionSyntax.new(self).evaluate(&block)
     end
 
-    attr_accessor :basic_block
+    attr_reader :basic_block
 
-    def initialize(basic_block, operands=[], name=nil)
-      super(basic_block.function, operands, name)
-      @basic_block = basic_block
+    def initialize(operands=[], name=nil)
+      super(operands, name)
     end
 
     def initialize_copy(original)
@@ -21,19 +20,45 @@ module Furnace
       @operands = nil
     end
 
-    def name=(name)
-      old_name = @name
-      super
-      @function.instrument { |i| i.rename(self, old_name) }
-    end
-
     def opcode
       self.class.opcode
     end
 
+    def name=(name)
+      old_name = @name
+
+      super
+
+      instrument { |i| i.rename(self, old_name) }
+
+      name
+    end
+
+    def basic_block=(basic_block)
+      if @basic_block && @basic_block != basic_block
+        @basic_block.remove self
+      end
+
+      if basic_block
+        self.function = basic_block.function
+      end
+
+      @basic_block = basic_block
+    end
+
+    def detach
+      @basic_block = nil
+
+      super
+    end
+
     def remove
-      @basic_block.remove self
-      detach
+      @basic_block.remove self if @basic_block
+    end
+
+    def erase
+      remove
+      drop_references
     end
 
     def replace_with(value)
@@ -41,7 +66,6 @@ module Furnace
 
       if value.is_a? SSA::Instruction
         @basic_block.replace self, value
-        detach
       else
         remove
       end
@@ -82,6 +106,7 @@ module Furnace
     end
 
     def pretty_parameters(p=AwesomePrinter.new)
+      p
     end
 
     def pretty_operands(p=AwesomePrinter.new)
@@ -94,10 +119,10 @@ module Furnace
       end
     end
 
-    protected
-
-    def instrument_update
-      @function.instrument { |i| i.update_instruction(self) }
+    def instrument(&block)
+      @function.instrument(&block) if @function
     end
+
+    protected :function=
   end
 end

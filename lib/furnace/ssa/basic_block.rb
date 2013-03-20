@@ -1,7 +1,8 @@
 module Furnace
   class SSA::BasicBlock < SSA::NamedValue
-    def initialize(function, name=nil, insns=[])
-      super(function, name)
+    def initialize(insns=[], name=nil)
+      super(name)
+
       @instructions = insns.to_a
     end
 
@@ -13,6 +14,14 @@ module Furnace
 
     def to_a
       @instructions.dup
+    end
+
+    def function=(function)
+      if @function && @function != function
+        @function.remove self
+      end
+
+      super
     end
 
     def include?(instruction)
@@ -36,12 +45,14 @@ module Furnace
     alias each_instruction each
 
     def prepend(instruction)
+      instruction.basic_block = self
       @instructions.unshift instruction
 
       instrument { |i| i.add instruction }
     end
 
     def append(instruction)
+      instruction.basic_block = self
       @instructions.push instruction
 
       instrument { |i| i.add instruction }
@@ -58,6 +69,7 @@ module Furnace
         raise ArgumentError, "Instruction #{before} is not found"
       end
 
+      instruction.basic_block = self
       @instructions.insert idx, instruction
 
       instrument { |i| i.add instruction }
@@ -69,9 +81,10 @@ module Furnace
     end
 
     def remove(instruction)
-      @instructions.delete instruction
-
       instrument { |i| i.remove instruction }
+
+      @instructions.delete instruction
+      instruction.detach
     end
 
     def splice(after)

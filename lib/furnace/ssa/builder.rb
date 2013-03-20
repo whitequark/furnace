@@ -14,7 +14,7 @@ module Furnace
 
       @function = SSA::Function.new(name, [], return_type, instrumentation)
       @function.arguments = arguments.map do |(type, name)|
-        SSA::Argument.new(@function, type, name)
+        SSA::Argument.new(type, name)
       end
 
       @block = @function.entry = add_block
@@ -25,7 +25,7 @@ module Furnace
     end
 
     def add_block
-      block = SSA::BasicBlock.new(@function)
+      block = SSA::BasicBlock.new
       @function.add block
 
       if block_given?
@@ -39,7 +39,7 @@ module Furnace
     end
 
     def append(instruction, *args)
-      insn = lookup_insn(instruction).new(@block, *args)
+      insn = lookup_insn(instruction).new(*args)
       @block.append insn
 
       insn
