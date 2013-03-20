@@ -110,6 +110,10 @@ module Furnace
 
     alias each_basic_block each
 
+    def size
+      @basic_blocks.count
+    end
+
     def include?(name)
       @basic_blocks.any? { |n| n.name == name }
     end
