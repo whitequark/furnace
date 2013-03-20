@@ -32,7 +32,7 @@ module Furnace
       @function = nil
     end
 
-    def inspect_as_value(p=AwesomePrinter.new)
+    def awesome_print_as_value(p=AwesomePrinter.new)
       p.name(@name)
     end
 

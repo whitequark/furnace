@@ -91,13 +91,13 @@ module Furnace
 
       p.keyword(opcode)
 
-      pretty_parameters(p)
-      pretty_operands(p)
+      awesome_print_parameters(p)
+      awesome_print_operands(p)
 
       p
     end
 
-    def inspect_as_value(p=AwesomePrinter.new)
+    def awesome_print_as_value(p=AwesomePrinter.new)
       if type == Type::Bottom.new
         p.nest(type)
       else
@@ -105,14 +105,14 @@ module Furnace
       end
     end
 
-    def pretty_parameters(p=AwesomePrinter.new)
+    def awesome_print_parameters(p=AwesomePrinter.new)
       p
     end
 
-    def pretty_operands(p=AwesomePrinter.new)
+    def awesome_print_operands(p=AwesomePrinter.new)
       if @operands
         p.collection('', ', ', '', @operands) do |operand|
-          operand.inspect_as_value(p)
+          operand.awesome_print_as_value(p)
         end
       else
         p.text('<DETACHED>')

@@ -67,7 +67,7 @@ module Furnace
           operands = dump_all(insn.operands)
         end
 
-        params = insn.pretty_parameters(printer).to_s
+        params = insn.awesome_print_parameters(printer).to_s
 
         emit("update_instruction",
             name:       insn.name,

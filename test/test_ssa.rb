@@ -339,23 +339,23 @@ describe SSA do
       dup = DupInsn.new([SSA::Constant.new(Integer, 1)])
       dup.basic_block = @basic_block
       dup.awesome_print.should =~ /\^Integer %\d+ = dup \^Integer 1/
-      dup.inspect_as_value.should =~ /^%\d+/
+      dup.awesome_print_as_value.should =~ /^%\d+/
 
       concat = TupleConcatInsn.new(
           [SSA::Constant.new(Array, [1]), SSA::Constant.new(Array, [2,3])])
       concat.basic_block = @basic_block
       concat.awesome_print.should =~ /\^Array %\d+ = tuple_concat \^Array \[1\], \^Array \[2, 3\]/
-      concat.inspect_as_value.should =~ /^%\d+/
+      concat.awesome_print_as_value.should =~ /^%\d+/
 
       zero_arity = BindingInsn.new
       zero_arity.basic_block = @basic_block
       zero_arity.awesome_print.should =~ /\^Binding %\d+ = binding/
-      zero_arity.inspect_as_value.should =~ /^%\d+/
+      zero_arity.awesome_print_as_value.should =~ /^%\d+/
 
       zero_all = TestScope::NestedInsn.new
       zero_all.basic_block = @basic_block
       zero_all.awesome_print.should == 'nested'
-      zero_all.inspect_as_value.should == 'bottom'
+      zero_all.awesome_print_as_value.should == 'bottom'
     end
 
     describe SSA::GenericInstruction do
@@ -515,7 +515,7 @@ describe SSA do
     end
 
     it 'inspects as value' do
-      @basic_block.inspect_as_value.should == 'label %1'
+      @basic_block.awesome_print_as_value.should == 'label %1'
     end
 
     it 'is constant' do
@@ -667,7 +667,7 @@ describe SSA do
           SSA::Constant.new(SSA::Function, @function.name)
 
       @function.name = 'foo'
-      @function.to_value.inspect_as_value.should ==
+      @function.to_value.awesome_print_as_value.should ==
           'function "foo"'
     end
 

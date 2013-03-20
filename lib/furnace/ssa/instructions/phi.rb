@@ -29,11 +29,11 @@ module Furnace
 
     protected
 
-    def pretty_operands(p)
+    def awesome_print_operands(p)
       @operands.each_with_index do |(basic_block, value), index|
         p.name basic_block.name
         p.text '=>'
-        value.inspect_as_value p
+        value.awesome_print_as_value p
 
         p.append ',' if index < @operands.count - 1
       end

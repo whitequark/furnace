@@ -30,7 +30,7 @@ module Furnace
       end
     end
 
-    def inspect_as_value(p=AwesomePrinter.new)
+    def awesome_print_as_value(p=AwesomePrinter.new)
       type.awesome_print(p)
       p.text @value.inspect
       p
