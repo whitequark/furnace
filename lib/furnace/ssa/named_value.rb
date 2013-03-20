@@ -14,12 +14,12 @@ module Furnace
       @name = @function.make_name(name)
     end
 
-    def inspect_as_value(p=SSA::PrettyPrinter.new)
-      p.name name
+    def inspect_as_value(p=AwesomePrinter.new)
+      p.name(@name)
     end
 
     def inspect
-      pretty_print
+      awesome_print
     end
   end
 end

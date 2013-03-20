@@ -127,22 +127,23 @@ module Furnace
       true
     end
 
-    def pretty_print(p=SSA::PrettyPrinter.new)
-      p.text    @name, ":"
-      p.newline
+    def awesome_print(p=AwesomePrinter.new)
+      p.text(@name).
+        append(":").
+        newline
 
-      each do |insn|
-        p << '   '
-        insn.pretty_print(p)
-        p.newline
+      p.collection(@instructions) do |insn|
+        p.append('   ').
+          nest(insn).
+          newline
       end
 
-      p
+      p.newline
     end
 
-    def inspect_as_value(p=SSA::PrettyPrinter.new)
-      p.keyword 'label'
-      p.name    name
+    def inspect_as_value(p=AwesomePrinter.new)
+      p.keyword('label').
+        name(name)
     end
 
     protected

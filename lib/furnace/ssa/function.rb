@@ -184,24 +184,18 @@ module Furnace
       SSA::Constant.new(self.class.to_type, @name)
     end
 
-    def pretty_print(p=SSA::PrettyPrinter.new)
-      p.keyword 'function'
-      @return_type.pretty_print(p)
-      p.text    @name, '('
-      p.objects @arguments
-      p.text    ') {'
-      p.newline
-
-      each do |basic_block|
-        basic_block.pretty_print(p)
-        p.newline
-      end
-
-      p.text    "}"
-      p.newline
+    def awesome_print(p=AwesomePrinter.new)
+      p.keyword('function').
+        nest(@return_type).
+        text(@name).
+        collection('(', ', ', ') {', @arguments).
+        newline.
+        collection(@basic_blocks).
+        append('}').
+        newline
     end
 
-    alias inspect pretty_print
+    alias inspect awesome_print
 
     def instrument
       yield @instrumentation if @instrumentation

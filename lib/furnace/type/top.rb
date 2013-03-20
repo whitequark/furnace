@@ -65,8 +65,8 @@ module Furnace
       'top'
     end
 
-    def pretty_print(p=SSA::PrettyPrinter.new)
-      p.type self.to_s
+    def awesome_print(p=AwesomePrinter.new)
+      p.type(self)
     end
   end
 end

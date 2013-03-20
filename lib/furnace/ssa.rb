@@ -21,7 +21,6 @@ module Furnace
     end
   end
 
-  require_relative 'ssa/pretty_printer'
   require_relative 'ssa/event_stream'
 
   require_relative 'ssa/types/basic_block'

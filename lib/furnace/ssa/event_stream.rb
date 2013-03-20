@@ -133,7 +133,7 @@ module Furnace
 
       when Type::Top, Type::Variable
         desc = { kind: "monotype",
-                 name: type.pretty_print(printer).to_s }
+                 name: type.awesome_print(printer).to_s }
 
       else
         raise "Cannot dump type #{type}:#{type.class}"
@@ -166,7 +166,7 @@ module Furnace
     protected
 
     def printer
-      SSA::PrettyPrinter.new(false, @annotator)
+      AwesomePrinter.new(false, @annotator)
     end
   end
 end

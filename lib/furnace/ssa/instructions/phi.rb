@@ -35,7 +35,7 @@ module Furnace
         p.text '=>'
         value.inspect_as_value p
 
-        p << ',' if index < @operands.count - 1
+        p.append ',' if index < @operands.count - 1
       end
     end
 

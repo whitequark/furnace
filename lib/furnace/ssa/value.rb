@@ -51,11 +51,11 @@ module Furnace
           equal?(other.to_value)
     end
 
-    def pretty_print(p=SSA::PrettyPrinter.new)
+    def awesome_print(p=AwesomePrinter.new)
       inspect_as_value(p)
     end
 
-    def inspect_as_value(p=SSA::PrettyPrinter.new)
+    def inspect_as_value(p=AwesomePrinter.new)
       p.text inspect
     end
   end

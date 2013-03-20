@@ -41,17 +41,6 @@ module Furnace
       self
     end
 
-    def valid?(*args)
-      verify!(*args)
-      true
-    rescue TypeError
-      false
-    end
-
-    def verify!
-      # do nothing
-    end
-
     protected
 
     def update_use_lists

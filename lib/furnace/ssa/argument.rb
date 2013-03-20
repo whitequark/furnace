@@ -15,9 +15,9 @@ module Furnace
       self.type = self.type.replace_type_with(type, replacement)
     end
 
-    def pretty_print(p=SSA::PrettyPrinter.new)
-      @type.pretty_print(p)
-      p.name name
+    def awesome_print(p=AwesomePrinter.new)
+      p.nest(@type).
+        name(name)
     end
   end
 end

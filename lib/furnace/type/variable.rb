@@ -33,7 +33,7 @@ module Furnace
       { self => other }
     end
 
-    def pretty_print(p=SSA::PrettyPrinter.new)
+    def awesome_print(p=AwesomePrinter.new)
       p.type_var self
     end
   end

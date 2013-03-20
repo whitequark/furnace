@@ -58,18 +58,14 @@ module Furnace
       false
     end
 
-    def pretty_print(p=SSA::PrettyPrinter.new)
+    def awesome_print(p=AwesomePrinter.new)
       unless type == Type::Bottom.new
-        type.pretty_print(p)
-        p.name  name
-        p.text  '='
+        p.nest(type).
+          name(name).
+          text('=')
       end
 
-      if valid?
-        p.keyword opcode
-      else
-        p.keyword_invalid opcode
-      end
+      p.keyword(opcode)
 
       pretty_parameters(p)
       pretty_operands(p)
@@ -77,22 +73,24 @@ module Furnace
       p
     end
 
-    def inspect_as_value(p=SSA::PrettyPrinter.new)
+    def inspect_as_value(p=AwesomePrinter.new)
       if type == Type::Bottom.new
-        type.pretty_print(p)
+        p.nest(type)
       else
         super
       end
     end
 
-    def pretty_parameters(p=SSA::PrettyPrinter.new)
+    def pretty_parameters(p=AwesomePrinter.new)
     end
 
-    def pretty_operands(p=SSA::PrettyPrinter.new)
+    def pretty_operands(p=AwesomePrinter.new)
       if @operands
-        p.values @operands
+        p.collection('', ', ', '', @operands) do |operand|
+          operand.inspect_as_value(p)
+        end
       else
-        p.text '<DETACHED>'
+        p.text('<DETACHED>')
       end
     end
 

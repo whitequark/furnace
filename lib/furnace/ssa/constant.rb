@@ -30,14 +30,14 @@ module Furnace
       end
     end
 
-    def inspect_as_value(p=SSA::PrettyPrinter.new)
-      type.pretty_print(p)
+    def inspect_as_value(p=AwesomePrinter.new)
+      type.awesome_print(p)
       p.text @value.inspect
       p
     end
 
     def inspect
-      pretty_print
+      awesome_print
     end
   end
 end

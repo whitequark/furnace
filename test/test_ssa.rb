@@ -1,7 +1,7 @@
 require_relative 'helper'
 
 describe SSA do
-  SSA::PrettyPrinter.colorize = false
+  AwesomePrinter.colorize = false
 
   class BindingInsn < SSA::Instruction
     def type
@@ -83,59 +83,6 @@ describe SSA do
     SSA.opcode_to_class_name(:foo_bar).should == 'FooBarInsn'
   end
 
-  describe SSA::PrettyPrinter do
-    it 'outputs chunks' do
-      SSA::PrettyPrinter.new do |p|
-        p.text 'foo'
-      end.to_s.should == 'foo'
-
-      SSA::PrettyPrinter.new do |p|
-        Integer.to_type.pretty_print(p)
-      end.to_s.should == '^Integer'
-
-      SSA::PrettyPrinter.new do |p|
-        p.keyword 'bar'
-      end.to_s.should == 'bar'
-    end
-
-    it 'ensures space between chunks' do
-      SSA::PrettyPrinter.new do |p|
-        p.text 'foo'
-        p.keyword 'doh'
-        p.text 'bar'
-      end.to_s.should == 'foo doh bar'
-    end
-
-    it 'adds no space inside #text chunk' do
-      SSA::PrettyPrinter.new do |p|
-        p.text 'foo', 'bar'
-        p.keyword 'squick'
-      end.to_s.should == 'foobar squick'
-    end
-
-    it 'adds no space after newline' do
-      SSA::PrettyPrinter.new do |p|
-        p.text 'foo'
-        p.newline
-        p.text 'bar'
-      end.to_s.should == "foo\nbar"
-    end
-
-    it 'converts objects to chunks with to_s' do
-      SSA::PrettyPrinter.new do |p|
-        p.text :foo
-        p.text 1
-        p.keyword :bar
-      end.to_s.should == 'foo 1 bar'
-    end
-
-    it 'adds colors if requested' do
-      SSA::PrettyPrinter.new(true) do |p|
-        p.keyword :bar
-      end.to_s.should == "\e[1;37mbar\e[0m"
-    end
-  end
-
   describe SSA::Value do
     before do
       @val = SSA::Value.new
@@ -158,7 +105,7 @@ describe SSA do
     end
 
     it 'pretty prints' do
-      @val.pretty_print.should =~ %r{#<Furnace::SSA::Value}
+      @val.awesome_print.should =~ %r{#<Furnace::SSA::Value}
     end
 
     it 'has an use list' do
@@ -196,7 +143,7 @@ describe SSA do
     end
 
     it 'pretty prints' do
-      @imm.pretty_print.should == '^Integer 1'
+      @imm.awesome_print.should == '^Integer 1'
     end
 
     it 'converts to value' do
@@ -238,7 +185,7 @@ describe SSA do
     end
 
     it 'pretty prints' do
-      @val.pretty_print.
+      @val.awesome_print.
           should == '^Integer %foo'
     end
 
@@ -371,29 +318,29 @@ describe SSA do
 
     it 'pretty prints' do
       dup = DupInsn.new(@basic_block, [SSA::Constant.new(Integer, 1)])
-      dup.pretty_print.should == '^Integer %2 = dup ^Integer 1'
+      dup.awesome_print.should == '^Integer %2 = dup ^Integer 1'
       dup.inspect_as_value.should == '%2'
 
       concat = TupleConcatInsn.new(@basic_block,
           [SSA::Constant.new(Array, [1]), SSA::Constant.new(Array, [2,3])])
-      concat.pretty_print.should == '^Array %3 = tuple_concat ^Array [1], ^Array [2, 3]'
+      concat.awesome_print.should == '^Array %3 = tuple_concat ^Array [1], ^Array [2, 3]'
       concat.inspect_as_value.should == '%3'
 
       zero_arity = BindingInsn.new(@basic_block)
-      zero_arity.pretty_print.should == '^Binding %4 = binding'
+      zero_arity.awesome_print.should == '^Binding %4 = binding'
       zero_arity.inspect_as_value.should == '%4'
 
       zero_all = TestScope::NestedInsn.new(@basic_block)
-      zero_all.pretty_print.should == 'nested'
+      zero_all.awesome_print.should == 'nested'
       zero_all.inspect_as_value.should == 'bottom'
     end
 
     describe SSA::GenericInstruction do
       it 'has settable type' do
         i = GenericInsn.new(@basic_block, Integer, [])
-        i.pretty_print.should =~ /\^Integer %\d+ = generic/
+        i.awesome_print.should =~ /\^Integer %\d+ = generic/
         i.type = Binding
-        i.pretty_print.should =~ /\^Binding %\d+ = generic/
+        i.awesome_print.should =~ /\^Binding %\d+ = generic/
       end
 
       describe SSA::PhiInsn do
@@ -416,7 +363,7 @@ describe SSA do
         it 'pretty prints' do
           phi = SSA::PhiInsn.new(@basic_block, Integer,
               { @basic_block => SSA::Constant.new(Integer, 1) })
-          phi.pretty_print.should =~
+          phi.awesome_print.should =~
             /\^Integer %\d = phi %\d => \^Integer 1/
         end
 
@@ -516,8 +463,8 @@ describe SSA do
     it 'pretty prints' do
       @basic_block.append insn_noary(@basic_block)
       @basic_block.append insn_noary(@basic_block)
-      @basic_block.pretty_print.should ==
-          "1:\n   ^Binding %2 = binding\n   ^Binding %3 = binding\n"
+      @basic_block.awesome_print.should ==
+          "1:\n   ^Binding %2 = binding\n   ^Binding %3 = binding\n\n"
     end
 
     it 'inspects as value' do
@@ -715,8 +662,8 @@ describe SSA do
       @function.add bb2
       bb2.append insn_unary(@basic_block, SSA::Constant.new(Integer, 1))
 
-      @function.pretty_print.should == <<-END
-function bottom foo( ^Integer %count, ^Binding %outer ) {
+      @function.awesome_print.should == <<-END
+function bottom foo (^Integer %count, ^Binding %outer) {
 1:
    ^Array %2 = tuple_concat %count, %outer
 
@@ -794,7 +741,7 @@ foo:
       end
 
       f2.name = f1.name
-      f2.pretty_print.to_s.should == f1.pretty_print.to_s
+      f2.awesome_print.to_s.should == f1.awesome_print.to_s
     end
   end
 
@@ -946,19 +893,6 @@ foo:
       i.bars = [@iinsn, @fconst]
       i.bars.should == [@iinsn, @fconst]
       i.operands.should == [@iconst, @iinsn, @fconst]
-    end
-
-    it 'allows to inquire status' do
-      i = SyntaxTypedInsn.new(@basic_block, [ @iconst ])
-      i.should.be.valid
-      i.foo = @fconst
-      i.should.not.be.valid
-    end
-
-    it 'highlights invalid insns when pretty printing' do
-      i = SyntaxTypedInsn.new(@basic_block, [ @iconst ])
-      i.foo = @fconst
-      i.pretty_print.should =~ /!syntax_typed/
     end
 
     it 'does not interfere with def-use tracking' do
