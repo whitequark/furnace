@@ -286,6 +286,8 @@ describe SSA do
 
       i.remove
       @basic_block.to_a.should.be.empty
+
+      i.awesome_print.should =~ /\^Binding %\d+ = binding <DETACHED>/
     end
 
     it 'replaces uses of itself with instructions' do
@@ -436,16 +438,30 @@ describe SSA do
       end
 
       describe SSA::ReturnInsn do
+        before do
+          @i = SSA::ReturnInsn.new(@basic_block)
+        end
+
         it 'exits the method' do
-          i = SSA::ReturnInsn.new(@basic_block)
-          i.exits?.should == true
+          @i.exits?.should == true
+        end
+
+        it 'returns bottom in #value_type' do
+          @i.value_type.should == Type::Bottom.new
         end
       end
 
       describe SSA::ReturnValueInsn do
+        before do
+          @i = SSA::ReturnValueInsn.new(@basic_block, [SSA::Constant.new(Integer, 1)])
+        end
+
         it 'exits the method' do
-          i = SSA::ReturnValueInsn.new(@basic_block, [SSA::Constant.new(Integer, 1)])
-          i.exits?.should == true
+          @i.exits?.should == true
+        end
+
+        it 'returns value type in #value_type' do
+          @i.value_type.should == Integer.to_type
         end
       end
     end
