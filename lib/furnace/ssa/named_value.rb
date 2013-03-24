@@ -20,9 +20,8 @@ module Furnace
 
     def function=(function)
       if @function != function
+        @name     = function.make_name(@name)
         @function = function
-
-        self.name = @name
       end
 
       function
