@@ -22,7 +22,7 @@ module Furnace
       when Type::Top
         event = {
           kind:             "type",
-          name:             object.awesome_print(printer),
+          name:             object.awesome_print(printer).to_s,
         }
 
       when Type::Variable

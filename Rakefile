@@ -5,7 +5,7 @@ task :default => :test
 
 desc "Run test suite"
 task :test do
-  sh "bacon -Ilib/ -a"
+  sh "bacon -a"
 end
 
 PAGES_REPO = 'git@github.com:whitequark/furnace'
