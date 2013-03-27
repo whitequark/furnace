@@ -10,7 +10,7 @@ module Furnace
     def initialize(name=nil, arguments=[], return_type=Type::Bottom.new)
       @original_name   = name
       @name            = name
-      @return_type     = return_type
+      @return_type     = return_type.to_type
       @arguments       = arguments
 
       @basic_blocks    = Set.new

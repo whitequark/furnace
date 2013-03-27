@@ -3,9 +3,9 @@ module Furnace
     attr_reader :operands
 
     def initialize(operands=[], name=nil)
-      @operands = operands
-
       super(name)
+
+      self.operands = operands
     end
 
     def initialize_copy(original)

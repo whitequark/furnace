@@ -54,11 +54,16 @@ module Furnace
         }
 
       when SSA::PhiInsn
+        if object.operands
+          operand_ids = object.operands.
+              map do |block, value|
+                [ id(block), id(value) ]
+              end
+        end
+
         event = {
           kind:             "phi",
-          operand_ids:      object.operands.map do |block, value|
-                              [ id(block), id(value) ]
-                            end,
+          operand_ids:      operand_ids,
         }
 
       when SSA::Instruction
@@ -67,7 +72,7 @@ module Furnace
           name:             object.name,
           opcode:           object.opcode,
           type:             type(object.type),
-          operand_ids:      object.operands.map(&:object_id),
+          operand_ids:      ids(object.operands),
         }
 
       when SSA::Function
@@ -112,8 +117,10 @@ module Furnace
     end
 
     def ids(objects)
-      objects.map do |object|
-        id(object)
+      if objects
+        objects.map do |object|
+          id(object)
+        end
       end
     end
 

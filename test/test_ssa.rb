@@ -133,7 +133,7 @@ describe SSA do
     it 'can have all of its uses replaced' do
       val1, val2 = 2.times.map { SSA::Value.new }
 
-      user = SSA::User.new([val1])
+      user = SSA::User.new([val1], 'foo')
 
       val1.replace_all_uses_with(val2)
 
