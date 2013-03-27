@@ -63,6 +63,8 @@ module Furnace
 
         event = {
           kind:             "phi",
+          name:             object.name,
+          type:             type(object.type),
           operand_ids:      operand_ids,
         }
 
