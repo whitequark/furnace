@@ -10,28 +10,8 @@ module Furnace
 
     attr_reader :basic_block
 
-    def initialize(operands=[], name=nil)
-      super(operands, name)
-    end
-
-    def initialize_copy(original)
-      super
-
-      @operands = nil
-    end
-
     def opcode
       self.class.opcode
-    end
-
-    def name=(name)
-      old_name = @name
-
-      super
-
-      instrument { |i| i.rename(self, old_name) }
-
-      name
     end
 
     def basic_block=(basic_block)
@@ -44,6 +24,8 @@ module Furnace
       end
 
       @basic_block = basic_block
+
+      SSA.instrument(self)
     end
 
     def detach
@@ -117,10 +99,6 @@ module Furnace
       else
         p.text('<DETACHED>')
       end
-    end
-
-    def instrument(&block)
-      @function.instrument(&block) if @function
     end
 
     protected :function=

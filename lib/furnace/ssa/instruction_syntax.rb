@@ -49,7 +49,8 @@ module Furnace
             @operands[index].remove_use self if @operands[index]
             @operands[index] = value
             value.add_use self if value
-            instrument_update
+
+            SSA.instrument(self)
 
             value
           end

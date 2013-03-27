@@ -2,10 +2,14 @@ module Furnace
   class SSA::Value
     def initialize
       @uses = Set.new
+
+      SSA.instrument(self)
     end
 
     def initialize_copy(original)
       @uses = Set.new
+
+      SSA.instrument(self)
     end
 
     def type

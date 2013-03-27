@@ -1,7 +1,5 @@
 module Furnace
   class SSA::Function
-    attr_accessor :instrumentation
-
     attr_reader   :original_name
     attr_reader   :name
     attr_reader   :arguments
@@ -9,26 +7,23 @@ module Furnace
 
     attr_accessor :entry
 
-    def initialize(name=nil, arguments=[], return_type=Type::Bottom.new, instrument=nil)
+    def initialize(name=nil, arguments=[], return_type=Type::Bottom.new)
       @original_name   = name
-      @instrumentation = instrument
-      self.name        = name
-      self.arguments   = arguments
-      self.return_type = return_type
+      @name            = name
+      @return_type     = return_type
+      @arguments       = arguments
 
       @basic_blocks    = Set.new
 
       @name_prefixes   = [""].to_set
       @next_name       = 0
+
+      SSA.instrument(self)
     end
 
     def initialize_copy(original)
       @name_prefixes = [""].to_set
       @name          = @original_name
-
-      if @instrumentation
-        @instrumentation = SSA::EventStream.new
-      end
 
       value_map = Hash.new do |value_map, value|
         new_value = value.dup
@@ -76,6 +71,8 @@ module Furnace
 
     def name=(name)
       @name = name
+
+      SSA.instrument(self)
     end
 
     def arguments=(arguments)
@@ -85,13 +82,13 @@ module Furnace
         arg.function = self
       end
 
-      instrument { |i| i.set_arguments @arguments }
+      SSA.instrument(self)
     end
 
     def return_type=(return_type)
       @return_type = return_type.to_type
 
-      instrument { |i| i.set_return_type @return_type }
+      SSA.instrument(self)
     end
 
     def make_name(prefix=nil)
@@ -135,16 +132,16 @@ module Furnace
       block.function = self
       @basic_blocks.add block
 
-      instrument { |i| i.add block }
+      SSA.instrument(self)
     end
 
     alias << add
 
     def remove(block)
-      instrument { |i| i.remove block }
-
       @basic_blocks.delete block
       block.detach
+
+      SSA.instrument(self)
     end
 
     def each_instruction(*types, &proc)
@@ -201,12 +198,6 @@ module Furnace
     end
 
     alias inspect awesome_print
-
-    def instrument
-      yield @instrumentation if @instrumentation
-
-      nil
-    end
 
     protected
 

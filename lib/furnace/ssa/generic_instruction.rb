@@ -3,15 +3,15 @@ module Furnace
     attr_reader :type
 
     def initialize(type, operands=[], name=nil)
-      super(operands, name)
+      @type = type.to_type
 
-      self.type = type
+      super(operands, name)
     end
 
     def type=(type)
       @type     = type.to_type
 
-      instrument { |i| i.update_instruction(self) }
+      SSA.instrument(self)
     end
 
     def replace_type_with(type, replacement)

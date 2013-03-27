@@ -43,6 +43,8 @@ module Furnace
         @operands.delete use
         @operands[new_use] = value
 
+        SSA.instrument(self)
+
         true
       else
         found = false
@@ -53,6 +55,8 @@ module Furnace
             @operands[basic_block] = new_use
           end
         end
+
+        SSA.instrument(self)
 
         found
       end

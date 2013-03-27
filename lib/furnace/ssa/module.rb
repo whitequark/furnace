@@ -2,7 +2,6 @@ module Furnace
   class SSA::Module
     def initialize
       @functions = {}
-      @events    = {}
       @next_id   = 0
     end
 
@@ -37,24 +36,15 @@ module Furnace
         function.name = "#{basename};#{make_id}"
       end
 
-      if function.instrumentation
-        @events[function.name] = function.instrumentation
-      end
-
       @functions[function.name] = function
+
+      SSA.instrument(self)
     end
 
     def remove(name)
       @functions.delete name
-    end
 
-    def instrumentation
-      @events.map do |fun, stream|
-        { name:    fun,
-          events:  stream.data,
-          present: @functions.include?(fun)
-        }
-      end
+      SSA.instrument(self)
     end
 
     protected

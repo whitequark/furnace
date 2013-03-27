@@ -3,9 +3,15 @@ module Furnace
     attr_reader :operands
 
     def initialize(operands=[], name=nil)
-      super(name)
+      @operands = operands
 
-      self.operands = operands
+      super(name)
+    end
+
+    def initialize_copy(original)
+      @operands = nil
+
+      super
     end
 
     def each_operand(&block)
@@ -54,7 +60,7 @@ module Furnace
         operand.add_use(self)
       end
 
-      instrument_update
+      SSA.instrument(self)
 
       value
     end
@@ -69,12 +75,9 @@ module Furnace
         end
       end
 
-      instrument_update
+      SSA.instrument(self)
 
       found
-    end
-
-    def instrument_update
     end
   end
 end

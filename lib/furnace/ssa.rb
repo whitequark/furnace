@@ -18,6 +18,7 @@ module Furnace
   end
 
   require_relative 'ssa/event_stream'
+  require_relative 'ssa/instrumentation'
 
   require_relative 'ssa/types/basic_block'
   require_relative 'ssa/types/function'

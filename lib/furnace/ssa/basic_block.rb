@@ -1,15 +1,15 @@
 module Furnace
   class SSA::BasicBlock < SSA::NamedValue
     def initialize(insns=[], name=nil)
-      super(name)
-
       @instructions = insns.to_a
+
+      super(name)
     end
 
     def initialize_copy(original)
-      super
-
       @instructions = []
+
+      super
     end
 
     def to_a
@@ -48,14 +48,14 @@ module Furnace
       instruction.basic_block = self
       @instructions.unshift instruction
 
-      instrument { |i| i.add instruction }
+      SSA.instrument(self)
     end
 
     def append(instruction)
       instruction.basic_block = self
       @instructions.push instruction
 
-      instrument { |i| i.add instruction }
+      SSA.instrument(self)
     end
 
     alias << append
@@ -72,19 +72,19 @@ module Furnace
       instruction.basic_block = self
       @instructions.insert idx, instruction
 
-      instrument { |i| i.add instruction }
+      SSA.instrument(self)
+    end
+
+    def remove(instruction)
+      @instructions.delete instruction
+      instruction.detach
+
+      SSA.instrument(self)
     end
 
     def replace(instruction, replace_with)
       insert instruction, replace_with
       remove instruction
-    end
-
-    def remove(instruction)
-      instrument { |i| i.remove instruction }
-
-      @instructions.delete instruction
-      instruction.detach
     end
 
     def splice(after)
@@ -157,12 +157,6 @@ module Furnace
     def awesome_print_as_value(p=AwesomePrinter.new)
       p.keyword('label').
         name(name)
-    end
-
-    protected
-
-    def instrument(&block)
-      @function.instrument(&block) if @function
     end
   end
 end

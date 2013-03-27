@@ -16,6 +16,8 @@ module Furnace
       else
         @name = name
       end
+
+      SSA.instrument(self)
     end
 
     def function=(function)
@@ -24,11 +26,13 @@ module Furnace
         @function = function
       end
 
-      function
+      SSA.instrument(self)
     end
 
     def detach
       @function = nil
+
+      SSA.instrument(self)
     end
 
     def awesome_print_as_value(p=AwesomePrinter.new)

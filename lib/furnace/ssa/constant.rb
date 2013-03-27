@@ -1,17 +1,25 @@
 module Furnace
   class SSA::Constant < SSA::Value
-    attr_reader   :type
-    attr_accessor :value
+    attr_reader :type
+    attr_reader :value
 
     def initialize(type, value)
-      super()
+      @value = value
+      @type  = type.to_type
 
-      self.type = type
-      @value    = value
+      super()
     end
 
     def type=(type)
-      @type     = type.to_type
+      @type  = type.to_type
+
+      SSA.instrument(self)
+    end
+
+    def value=(value)
+      @value = value
+
+      SSA.instrument(self)
     end
 
     def constant?

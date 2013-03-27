@@ -7,12 +7,8 @@ module Furnace
       SSA
     end
 
-    def initialize(name, arguments=[], return_type=nil, options={})
-      if options[:instrument]
-        instrumentation = SSA::EventStream.new
-      end
-
-      @function = SSA::Function.new(name, [], return_type, instrumentation)
+    def initialize(name, arguments=[], return_type=nil)
+      @function = SSA::Function.new(name, [], return_type)
       @function.arguments = arguments.map do |(type, name)|
         SSA::Argument.new(type, name)
       end

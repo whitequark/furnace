@@ -3,15 +3,15 @@ module Furnace
     attr_reader :type
 
     def initialize(type, name)
-      super(name)
+      @type = type.to_type
 
-      self.type = type
+      super(name)
     end
 
     def type=(type)
       @type = type.to_type
 
-      instrument { |i| i.set_arguments @function.arguments }
+      SSA.instrument(self)
     end
 
     def replace_type_with(type, replacement)
@@ -22,10 +22,6 @@ module Furnace
     def awesome_print(p=AwesomePrinter.new)
       p.nest(@type).
         name(name)
-    end
-
-    def instrument(&block)
-      @function.instrument(&block) if @function
     end
   end
 end
