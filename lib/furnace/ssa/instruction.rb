@@ -48,8 +48,9 @@ module Furnace
 
       if value.is_a? SSA::Instruction
         @basic_block.replace self, value
+        drop_references
       else
-        remove
+        erase
       end
     end
 

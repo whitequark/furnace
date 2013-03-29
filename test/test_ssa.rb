@@ -310,10 +310,16 @@ describe SSA do
 
       i.remove
       @basic_block.to_a.should.be.empty
-      i.awesome_print.should =~ /\^Binding %\d+ = binding/
+      i.operands.should == []
+    end
+
+    it 'erases itself from basic block' do
+      i = insn_noary
+      @basic_block.append i
 
       i.erase
-      i.awesome_print.should =~ /\^Binding %\d+ = binding <DETACHED>/
+      @basic_block.to_a.should.be.empty
+      i.operands.should == nil
     end
 
     it 'replaces uses of itself with instructions' do
@@ -325,6 +331,7 @@ describe SSA do
 
       i1a = insn_noary
       i1.replace_with i1a
+      i1.operands.should == nil
 
       @basic_block.to_a.should == [i1a, i2]
       i2.operands.should == [i1a]
@@ -339,6 +346,7 @@ describe SSA do
 
       c1 = SSA::Constant.new(Integer, 1)
       i1.replace_with c1
+      i1.operands.should == nil
 
       @basic_block.to_a.should == [i2]
       i2.operands.should == [c1]
