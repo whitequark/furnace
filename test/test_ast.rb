@@ -107,6 +107,18 @@ describe AST::Node do
     var_name.should.equal :$foo
     value.should.equal s(:integer, 1)
   end
+
+  it 'should concatenate with arrays' do
+    node = s(:gasgn, :$foo)
+    (node + [s(:integer, 1)]).
+        should.equal s(:gasgn, :$foo, s(:integer, 1))
+  end
+
+  it 'should append elements' do
+    node = s(:array)
+    (node << s(:integer, 1) << s(:string, "foo")).
+        should.equal s(:array, s(:integer, 1), s(:string, "foo"))
+  end
 end
 
 describe AST::Processor do
