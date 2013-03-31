@@ -1,10 +1,18 @@
 module Furnace
   module SSA
-    class << self
-      attr_accessor :instrumentation
+    @instrumentation = nil
+
+    def self.instrumentation
+      if block_given?
+        yield @instrumentation if @instrumentation
+      else
+        @instrumentation
+      end
     end
 
-    @instrumentation = nil
+    def self.instrumentation=(instrumentation)
+      @instrumentation = instrumentation
+    end
 
     def self.start_instrumentation
       @instrumentation = SSA::EventStream.new
@@ -17,7 +25,9 @@ module Furnace
     end
 
     def self.instrument(what)
-      @instrumentation.process(what) if @instrumentation
+      instrumentation do |i|
+        i.process(what)
+      end
     end
   end
 end
