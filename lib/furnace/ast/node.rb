@@ -78,7 +78,14 @@ module Furnace::AST
     end
     protected :assign_properties
 
-    protected :dup
+    # Nodes are already frozen, so there is no harm in returning the
+    # current node as opposed to initializing from scratch and freezing
+    # another one.
+    #
+    # @return self
+    def dup
+      self
+    end
 
     # Returns a new instance of Node where non-nil arguments replace the
     # corresponding fields of `self`.
