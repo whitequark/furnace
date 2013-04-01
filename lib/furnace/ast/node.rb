@@ -78,6 +78,9 @@ module Furnace::AST
     end
     protected :assign_properties
 
+    alias   :original_dup :dup
+    private :original_dup
+
     # Nodes are already frozen, so there is no harm in returning the
     # current node as opposed to initializing from scratch and freezing
     # another one.
@@ -110,7 +113,7 @@ module Furnace::AST
           properties.nil?
         self
       else
-        dup.send :initialize, new_type, new_children, new_properties
+        original_dup.send :initialize, new_type, new_children, new_properties
       end
     end
 

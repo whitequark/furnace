@@ -26,8 +26,8 @@ describe AST::Node do
     @node.children.frozen?.should.be.true
   end
 
-  it 'should not allow duping' do
-    -> { @node.dup }.should.raise NoMethodError
+  it 'should return self when duping' do
+    @node.dup.should.equal? @node
   end
 
   it 'should return an updated node, but only if needed' do
