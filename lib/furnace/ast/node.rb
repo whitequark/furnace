@@ -136,16 +136,20 @@ module Furnace::AST
     # Concatenates `array` with `children` and returns the resulting node.
     #
     # @return [AST::Node]
-    def +(array)
+    def concat(array)
       updated(nil, @children + array.to_a)
     end
+
+    alias + concat
 
     # Appends `element` to `children` and returns the resulting node.
     #
     # @return [AST::Node]
-    def <<(element)
+    def append(element)
       updated(nil, @children + [element])
     end
+
+    alias << append
 
     # Converts `self` to a concise s-expression, omitting any children.
     #
