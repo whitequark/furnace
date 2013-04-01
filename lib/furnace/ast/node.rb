@@ -187,18 +187,6 @@ module Furnace::AST
       children.each_with_index do |child, idx|
         if child.is_a?(Node) && idx >= first_node_child
           sexp << "\n#{child.to_sexp(indent + 1)}"
-        elsif child.is_a?(Hash)
-          sexp << " {\n"
-          child.each do |key, value|
-            if value.is_a?(Node)
-              pretty_value = value.to_sexp(indent + 2).lstrip
-            else
-              pretty_value = value.inspect
-            end
-
-            sexp << "#{indented}    #{key.inspect} => #{pretty_value}\n"
-          end
-          sexp << "#{indented}  }"
         else
           sexp << " #{child.inspect}"
         end

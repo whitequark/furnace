@@ -62,17 +62,6 @@ describe AST::Node do
     AST::Node.new(:a, [ :sym,
       AST::Node.new(:b, [ @node, @node ])
     ]).to_sexp.should.equal "(a :sym\n  (b\n    (node 0 1)\n    (node 0 1)))"
-    AST::Node.new(:a, [
-      { :foo => :bar, :baz => 100, :val => AST::Node.new(:val, [ @node ]) }, @node
-    ]).to_sexp.should == <<-END.rstrip
-(a {
-    :foo => :bar
-    :baz => 100
-    :val => (val
-      (node 0 1))
-  }
-  (node 0 1))
-    END
   end
 
   it 'should return self in to_ast' do
